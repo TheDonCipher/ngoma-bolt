@@ -14,10 +14,10 @@ export function ExploreHeader() {
           Discover unique African music NFTs and support your favorite artists
         </p>
       </div>
-
+{/* 
       {!address && (
         <ConnectWalletButton className="md:w-auto w-full" />
-      )}
+      )} */}
     </div>
   );
 }

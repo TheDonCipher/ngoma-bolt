@@ -4,17 +4,28 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { ArtistCard } from "@/components/ui/artist-card";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { mockFeaturedArtists } from "@/lib/mock-data";
+import { Artist } from "@/lib/types";
 
-export function FeaturedArtists() {
+interface FeaturedArtistsProps {
+  featuredArtists: Artist[];
+}
+
+const FeaturedArtists = ({ featuredArtists }: FeaturedArtistsProps) => {
   const [currentPage, setCurrentPage] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
   const itemsPerPage = 3;
-  const totalPages = Math.ceil(mockFeaturedArtists.length / itemsPerPage);
+  const totalPages = Math.ceil(featuredArtists.length / itemsPerPage);
 
-  const currentArtists = mockFeaturedArtists.slice(
+  const currentArtists = featuredArtists.slice(
     currentPage * itemsPerPage,
     (currentPage + 1) * itemsPerPage
   );
+
+  const handlePageChange = (newPage: number) => {
+    setIsLoading(true);
+    setCurrentPage(newPage);
+    setIsLoading(false);
+  };
 
   return (
     <section>
@@ -30,16 +41,16 @@ export function FeaturedArtists() {
           <Button
             variant="outline"
             size="icon"
-            onClick={() => setCurrentPage((prev) => Math.max(0, prev - 1))}
-            disabled={currentPage === 0}
+            onClick={() => handlePageChange(Math.max(0, currentPage - 1))}
+            disabled={currentPage === 0 || isLoading}
           >
             <ChevronLeft className="w-4 h-4" />
           </Button>
           <Button
             variant="outline"
             size="icon"
-            onClick={() => setCurrentPage((prev) => Math.min(totalPages - 1, prev + 1))}
-            disabled={currentPage === totalPages - 1}
+            onClick={() => handlePageChange(Math.min(totalPages - 1, currentPage + 1))}
+            disabled={currentPage === totalPages - 1 || isLoading}
           >
             <ChevronRight className="w-4 h-4" />
           </Button>
@@ -48,9 +59,16 @@ export function FeaturedArtists() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {currentArtists.map((artist) => (
-          <ArtistCard key={artist.id} artist={artist} />
+          <ArtistCard 
+            key={artist.id} 
+            artist={artist} 
+            isPlaying={false} 
+            onPlay={() => {}} 
+          />
         ))}
       </div>
     </section>
   );
 }
+
+export default FeaturedArtists;

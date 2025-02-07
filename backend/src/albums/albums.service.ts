@@ -3,7 +3,17 @@ import { PrismaService } from '../prisma/prisma.service';
 import { ConfigService } from '@nestjs/config';
 import { create } from 'ipfs-http-client';
 import { ethers } from 'ethers';
-import { Album } from '@prisma/client';
+import AlbumNFTAbi from './AlbumNFTAbi';
+
+interface Album {
+  id: string;
+  title: string;
+  description?: string;
+  artistId: string;
+  releaseDate: Date;
+  price: number;
+  royaltyFee: number;
+}
 
 @Injectable()
 export class AlbumsService {
@@ -108,10 +118,14 @@ export class AlbumsService {
     tokenId: string,
     buyer: ethers.Signer,
   ): Promise<ethers.ContractReceipt> {
-    const album = await this.prisma.nFT.findUnique({
-      where: { tokenId },
-      include: { album: true },
+    const album = await this.prisma.album.findUnique({
+      where: { nftId: tokenId },
+      include: { nft: true },
     });
+
+    if (!album) {
+      throw new Error(`Album with tokenId ${tokenId} not found`);
+    }
 
     const contractWithSigner = this.albumContract.connect(buyer);
     const tx = await contractWithSigner.purchaseAlbum(tokenId, {

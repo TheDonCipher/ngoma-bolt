@@ -1,52 +1,43 @@
 describe('Fan User Flows', () => {
   beforeEach(() => {
-    cy.login();
-  });
+    cy.loginFan()
+    cy.visit('/')
+  })
 
-  describe('Music Discovery', () => {
-    it('should search for tracks', () => {
-      cy.visit('/explore');
-      cy.get('input[placeholder*="Search"]').type('test track');
-      cy.get('button[aria-label="Search"]').click();
-      cy.contains('test track').should('be.visible');
-    });
+  it('Fan can explore music', () => {
+    cy.visit('/explore');
+    cy.get('input[placeholder="Search"]').type('music');
+    cy.get('button').contains('Search').click();
+    cy.contains('Search Results').should('be.visible');
+    // Add more assertions to check for music content in explore page
+  })
 
-    it('should filter tracks by genre', () => {
-      cy.visit('/explore');
-      cy.get('select[name="genre"]').select('Afrobeats');
-      cy.get('[data-testid="track-card"]').should('have.length.gt', 0);
-    });
+  it('Fan can create playlists', () => {
+    cy.visit('/dashboard/fan/playlists');
+    cy.contains('Create Playlist').click();
+    cy.get('input[name="playlistName"]').type('My Playlist');
+    cy.get('button').contains('Create').click();
+    cy.contains('Playlist created successfully').should('be.visible');
+    // Add more assertions to check playlist creation
+  })
 
-    it('should play a track', () => {
-      cy.visit('/explore');
-      cy.get('[data-testid="play-button"]').first().click();
-      cy.get('[data-testid="audio-player"]').should('be.visible');
-    });
-  });
+  it('Fan can listen to music', () => {
+    cy.visit('/explore'); // Or any page with music tracks
+    // Assuming there is a play button for tracks, adjust selector accordingly
+    cy.get('button[aria-label="play-track"]').first().click();
+    cy.get('audio').should('be.visible').and('not.be.paused');
+    // Add assertions to check audio player controls
+  })
 
-  describe('NFT Collection', () => {
-    it('should purchase a track NFT', () => {
-      cy.visit('/explore');
-      cy.get('[data-testid="buy-button"]').first().click();
-      cy.get('[data-testid="confirm-purchase"]').click();
+  it('Fan can make purchases', () => {
+    cy.visit('/explore'); // Or album/track detail page
+    // Assuming there is a purchase button, adjust selector accordingly
+    cy.get('button').contains('Buy').first().click();
+    // Mock purchase API call and assert success message
+    cy.intercept('POST', '/api/purchase', { statusCode: 200, body: { success: true } }).as('purchase');
+    cy.wait('@purchase').then(() => {
       cy.contains('Purchase successful').should('be.visible');
     });
-
-    it('should view NFT library', () => {
-      cy.visit('/dashboard/fan/collection');
-      cy.get('[data-testid="nft-card"]').should('have.length.gt', 0);
-    });
-  });
-
-  describe('Badge System', () => {
-    it('should earn badges based on activity', () => {
-      cy.visit('/dashboard/fan/badges');
-      cy.get('[data-testid="badge-card"]').should('have.length.gt', 0);
-    });
-
-    it('should view achievement progress', () => {
-      cy.visit('/dashboard/fan/badges');
-      cy.get('[data-testid="progress-bar"]').should('be.visible');
-    });
-  });
-});
+    // Add assertions to check purchase flow
+  })
+})

@@ -1,3 +1,5 @@
+"use client";
+
 import './globals.css';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
@@ -7,18 +9,17 @@ import { AudioProvider } from '@/components/providers/audio-provider';
 import { BadgeProvider } from '@/components/providers/badge-provider';
 import { Toaster } from '@/components/ui/toaster';
 import { MainNav } from '@/components/layout/main-nav';
-import { AudioPlayer } from '@/components/player/audio-player';
-import { ErrorBoundary } from '@/components/shared/error-boundary';
-import Script from 'next/script';
+import ErrorBoundary from '@/components/shared/error-boundary';
+import { ServiceWorker } from '@/components/shared/service-worker';
+import dynamic from 'next/dynamic';
 
-const inter = Inter({ subsets: ['latin'] });
+const inter = Inter({ subsets: ['latin'], display: 'fallback' });
 
-export const metadata: Metadata = {
-  title: 'Afrobeats NFT - Web3 Music Platform',
-  description: 'Discover and collect unique music NFTs from African artists',
-  manifest: '/manifest.json',
-  themeColor: '#6366f1',
-};
+const AudioPlayer = dynamic(() => import('@/components/player/audio-player').then(mod => mod.AudioPlayer), {
+  ssr: false,
+  loading: () => <div className="fixed bottom-0 left-0 right-0 h-16 bg-background border-t animate-pulse" />,
+});
+
 
 export default function RootLayout({
   children,
@@ -55,19 +56,7 @@ export default function RootLayout({
             </AudioProvider>
           </Web3Provider>
         </ThemeProvider>
-        <Script
-          id="register-sw"
-          strategy="afterInteractive"
-          dangerouslySetInnerHTML={{
-            __html: `
-              if ('serviceWorker' in navigator) {
-                window.addEventListener('load', function() {
-                  navigator.serviceWorker.register('/sw.js');
-                });
-              }
-            `,
-          }}
-        />
+        <ServiceWorker />
       </body>
     </html>
   );

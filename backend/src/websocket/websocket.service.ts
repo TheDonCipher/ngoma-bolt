@@ -8,6 +8,10 @@ export class WebsocketService {
   @WebSocketServer()
   private server: Server;
 
+  emit(event: string, data: any) {
+    this.server.emit(event, data);
+  }
+
   emitTransaction(userId: string, transaction: TransactionEvent) {
     this.server
       .to(`transactions:${userId}`)

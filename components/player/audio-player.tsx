@@ -4,22 +4,22 @@ import { useAudioPlayer } from "@/lib/hooks/use-audio-player";
 import { usePlayerStore } from "@/lib/store/use-player-store";
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
-import { 
-  Play, 
-  Pause, 
-  SkipBack, 
-  SkipForward, 
+import {
+  Play,
+  Pause,
+  SkipBack,
+  SkipForward,
   Volume2,
   VolumeX,
   Repeat,
   Shuffle,
-  Music
+  Music,
 } from "lucide-react";
 import { formatDuration } from "@/lib/utils";
 import Image from "next/image";
 
 export function AudioPlayer() {
-  const { 
+  const {
     currentTrack,
     isPlaying,
     volume,
@@ -32,9 +32,11 @@ export function AudioPlayer() {
     setRepeatMode,
     playNext,
     playPrevious,
+    error,
+    setError,
   } = usePlayerStore();
 
-  const { isBuffering, error } = useAudioPlayer();
+  const { isBuffering, audioRef } = useAudioPlayer();
 
   if (!currentTrack) return null;
 
@@ -42,7 +44,6 @@ export function AudioPlayer() {
     <div className="fixed bottom-0 left-0 right-0 bg-background border-t">
       <div className="container mx-auto px-4 py-3">
         <div className="flex items-center gap-4">
-          {/* Track Info */}
           <div className="flex items-center gap-3 flex-1 min-w-0">
             <div className="relative w-12 h-12 rounded-md overflow-hidden">
               <Image
@@ -59,8 +60,6 @@ export function AudioPlayer() {
               </p>
             </div>
           </div>
-
-          {/* Controls */}
           <div className="flex flex-col items-center gap-2 flex-1">
             <div className="flex items-center gap-2">
               <Button
@@ -71,11 +70,7 @@ export function AudioPlayer() {
               >
                 <Shuffle className="w-4 h-4" />
               </Button>
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={playPrevious}
-              >
+              <Button variant="ghost" size="icon" onClick={playPrevious}>
                 <SkipBack className="w-5 h-5" />
               </Button>
               <Button
@@ -93,27 +88,28 @@ export function AudioPlayer() {
                   <Play className="w-5 h-5 ml-0.5" />
                 )}
               </Button>
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={playNext}
-              >
+              <Button variant="ghost" size="icon" onClick={playNext}>
                 <SkipForward className="w-5 h-5" />
               </Button>
               <Button
                 variant="ghost"
                 size="icon"
-                onClick={() => setRepeatMode(
-                  repeatMode === "none" ? "playlist" :
-                  repeatMode === "playlist" ? "track" : "none"
-                )}
-                className={repeatMode !== "none" ? "text-primary" : "text-muted-foreground"}
+                onClick={() =>
+                  setRepeatMode(
+                    repeatMode === "none"
+                      ? "playlist"
+                      : repeatMode === "playlist"
+                      ? "track"
+                      : "none"
+                  )
+                }
+                className={
+                  repeatMode !== "none" ? "text-primary" : "text-muted-foreground"
+                }
               >
                 <Repeat className="w-4 h-4" />
               </Button>
             </div>
-            
-            {/* Progress Bar */}
             <div className="w-full max-w-md flex items-center gap-2">
               <span className="text-xs text-muted-foreground w-10 text-right">
                 {formatDuration(playbackProgress * currentTrack.duration)}
@@ -129,8 +125,6 @@ export function AudioPlayer() {
               </span>
             </div>
           </div>
-
-          {/* Volume */}
           <div className="flex items-center gap-2 flex-1 justify-end">
             <Button
               variant="ghost"
@@ -152,11 +146,8 @@ export function AudioPlayer() {
             />
           </div>
         </div>
-
         {error && (
-          <p className="text-sm text-destructive text-center mt-2">
-            {error}
-          </p>
+          <p className="text-sm text-destructive text-center mt-2">{error}</p>
         )}
       </div>
     </div>
