@@ -130,10 +130,10 @@ export function DashboardNav() {
     : adminRoutes;
 
   return (
-    <nav className="hidden lg:block w-64 border-r min-h-screen p-6 space-y-4">
-      <div className="flex items-center gap-2 mb-8">
-        <Music className="w-6 h-6" />
-        <span className="font-bold">Dashboard</span>
+    <nav className="hidden lg:block w-72 border-r min-h-screen p-8 space-y-6 bg-gradient-to-b from-amber-500/5 to-purple-500/5">
+      <div className="flex items-center gap-3 mb-10">
+        <Music className="w-8 h-8 text-amber-500" />
+        <span className="font-bold text-xl font-display bg-clip-text text-transparent bg-gradient-to-r from-amber-500 to-purple-500">Dashboard</span>
       </div>
 
       {routes.map((route) => (
@@ -141,10 +141,10 @@ export function DashboardNav() {
           key={route.href}
           variant="ghost"
           className={cn(
-            "w-full justify-start gap-2",
+            "w-full justify-start gap-3 py-6 text-base font-medium transition-all duration-300",
             pathname === route.href
-              ? "bg-muted"
-              : "hover:bg-muted"
+              ? "bg-gradient-to-r from-amber-500/20 to-purple-500/20 text-amber-500"
+              : "hover:bg-gradient-to-r hover:from-amber-500/10 hover:to-purple-500/10 hover:text-amber-500/90"
           )}
           asChild
         >

@@ -38,15 +38,18 @@ export default function ExplorePage() {
   }, []);
 
   return (
-    <main className="min-h-screen pb-24">
-      <div className="container px-4 py-8">
-        <ExploreHeader />
-        <SearchFilters />
-        <div className="mt-12">
-          <FeaturedArtists featuredArtists={featuredArtists} />
-        </div>
-        <div className="mt-12">
-          <TrendingSongs />
+    <main className="min-h-screen pb-24 bg-gradient-to-b from-amber-500/5 via-purple-500/5 to-pink-500/5">
+      <div className="absolute inset-0 bg-[url('/patterns/afro-pattern.svg')] opacity-5 pointer-events-none" />
+      <div className="relative">
+        <div className="container px-6 py-12 space-y-8">
+          <ExploreHeader />
+          <SearchFilters />
+          <div className="mt-16 backdrop-blur-sm bg-white/5 rounded-2xl p-8 border border-white/10">
+            <FeaturedArtists featuredArtists={featuredArtists} />
+          </div>
+          <div className="mt-16 backdrop-blur-sm bg-white/5 rounded-2xl p-8 border border-white/10">
+            <TrendingSongs />
+          </div>
         </div>
       </div>
       <AudioPlayer />
