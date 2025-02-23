@@ -10,22 +10,22 @@ export default function NewsPage() {
   const [selectedFilter, setSelectedFilter] = useState<string>("all");
 
   return (
-    <div className="container px-4 py-8">
-      <div className="flex flex-col lg:flex-row gap-8">
-        <div className="flex-1 space-y-6">
-          <h1 className="text-3xl font-bold mb-6">News Feed</h1>
-          <NewsFilter
-            selected={selectedFilter}
-            onFilterChange={setSelectedFilter}
-          />
-          <NewsFeed filter={selectedFilter} />
-        </div>
-        
-        <div className="lg:w-80 space-y-6">
-          <TrendingArtists />
-          <UpcomingEvents />
+    <main className="min-h-screen pb-24 bg-gradient-to-b from-amber-500/5 via-purple-500/5 to-pink-500/5">
+      <div className="absolute inset-0 bg-[url('/patterns/mud-cloth.svg')] opacity-25 mix-blend-mode-multiply pointer-events-none z-0" />
+      <div className="relative">
+        <div className="container px-6 py-12 space-y-8">
+          <NewsFilter selectedFilter={selectedFilter} onFilterChange={setSelectedFilter} />
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div className="lg:col-span-2">
+              <NewsFeed filter={selectedFilter} />
+            </div>
+            <div className="space-y-8">
+              <TrendingArtists />
+              <UpcomingEvents />
+            </div>
+          </div>
         </div>
       </div>
-    </div>
+    </main>
   );
 }

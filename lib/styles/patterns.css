@@ -1,0 +1,98 @@
+/* African Pattern Styles with Scroll Effects */
+
+.pattern-kente {
+  background-image: url('/patterns/kente.svg');
+  background-size: 200px;
+  opacity: 0.05;
+  transform: translateZ(0);
+  animation: patternFloat 30s linear infinite;
+}
+
+.pattern-mud-cloth {
+  background-image: url('/patterns/mud-cloth.svg');
+  background-size: 180px;
+  opacity: 0.05;
+  transform: translateZ(0);
+  animation: patternSlide 40s linear infinite;
+}
+
+.pattern-adinkra {
+  background-image: url('/patterns/adinkra.svg');
+  background-size: 160px;
+  opacity: 0.05;
+  transform: translateZ(0);
+  animation: patternRotate 50s linear infinite;
+}
+
+.pattern-zulu {
+  background-image: url('/patterns/zulu.svg');
+  background-size: 220px;
+  opacity: 0.05;
+  transform: translateZ(0);
+  animation: patternScale 45s ease-in-out infinite;
+}
+
+.pattern-bogolan {
+  background-image: url('/patterns/bogolan.svg');
+  background-size: 240px;
+  opacity: 0.05;
+  transform: translateZ(0);
+  animation: patternFade 35s ease infinite;
+}
+
+.pattern-yoruba {
+  background-image: url('/patterns/yoruba.svg');
+  background-size: 200px;
+  opacity: 0.05;
+  transform: translateZ(0);
+  animation: patternWave 40s ease-in-out infinite;
+}
+
+/* Scroll-based animations */
+@keyframes patternFloat {
+  0% { background-position: 0 0; }
+  100% { background-position: 200px 200px; }
+}
+
+@keyframes patternSlide {
+  0% { background-position: 0 0; }
+  100% { background-position: -180px 180px; }
+}
+
+@keyframes patternRotate {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes patternScale {
+  0%, 100% { background-size: 220px; }
+  50% { background-size: 240px; }
+}
+
+@keyframes patternFade {
+  0%, 100% { opacity: 0.03; }
+  50% { opacity: 0.07; }
+}
+
+@keyframes patternWave {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(10px); }
+}
+
+/* Scroll-triggered effects */
+.scroll-reveal {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.6s ease-out;
+}
+
+.scroll-reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Parallax effect for patterns */
+.pattern-parallax {
+  transition: transform 0.1s ease-out;
+  will-change: transform;
+}

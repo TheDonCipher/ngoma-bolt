@@ -11,7 +11,9 @@ import { Toaster } from '@/components/ui/toaster';
 import { MainNav } from '@/components/layout/main-nav';
 import ErrorBoundary from '@/components/shared/error-boundary';
 import { ServiceWorker } from '@/components/shared/service-worker';
+import { BackgroundPattern } from '@/components/shared/background-pattern';
 import dynamic from 'next/dynamic';
+import { usePathname } from 'next/navigation';
 
 const inter = Inter({ subsets: ['latin'], display: 'fallback' });
 
@@ -20,12 +22,13 @@ const AudioPlayer = dynamic(() => import('@/components/player/audio-player').the
   loading: () => <div className="fixed bottom-0 left-0 right-0 h-16 bg-background border-t animate-pulse" />,
 });
 
-
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const pathname = usePathname();
+
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
@@ -43,20 +46,21 @@ export default function RootLayout({
             <AudioProvider>
               <BadgeProvider>
                 <ErrorBoundary>
-                  <div className="min-h-screen flex flex-col">
+                  <div className="min-h-screen flex flex-col relative bg-background">
+                    <BackgroundPattern />
                     <MainNav />
-                    <main className="flex-1">
+                    <main className="flex-1 relative z-[1]">
                       {children}
                     </main>
                     <AudioPlayer />
                   </div>
                   <Toaster />
+                  <ServiceWorker />
                 </ErrorBoundary>
               </BadgeProvider>
             </AudioProvider>
           </Web3Provider>
         </ThemeProvider>
-        <ServiceWorker />
       </body>
     </html>
   );

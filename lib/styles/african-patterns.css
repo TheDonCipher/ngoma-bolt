@@ -1,0 +1,81 @@
+/* African Pattern Styles */
+
+.pattern-kente, .pattern-mud-cloth, .pattern-adinkra, .pattern-zulu, .pattern-bogolan, .pattern-yoruba {
+  opacity: 0.25;
+  mix-blend-mode: multiply;
+  z-index: 0;
+}
+
+.pattern-kente {
+  background-image: linear-gradient(30deg, #f59e0b 12%, transparent 12.5%, transparent 87%, #f59e0b 87.5%, #f59e0b),
+    linear-gradient(150deg, #f59e0b 12%, transparent 12.5%, transparent 87%, #f59e0b 87.5%, #f59e0b),
+    linear-gradient(30deg, #f59e0b 12%, transparent 12.5%, transparent 87%, #f59e0b 87.5%, #f59e0b),
+    linear-gradient(150deg, #f59e0b 12%, transparent 12.5%, transparent 87%, #f59e0b 87.5%, #f59e0b),
+    linear-gradient(60deg, #db2777 25%, transparent 25.5%, transparent 75%, #db2777 75%, #db2777),
+    linear-gradient(60deg, #db2777 25%, transparent 25.5%, transparent 75%, #db2777 75%, #db2777);
+  background-size: 80px 140px;
+  background-position: 0 0, 0 0, 40px 70px, 40px 70px, 0 0, 40px 70px;
+  background-color: #1f2937;
+  opacity: 0.3;
+  mix-blend-mode: multiply;
+}
+
+.pattern-mud-cloth {
+  background:
+    linear-gradient(45deg, #f59e0b 25%, transparent 25%) -40px 0,
+    linear-gradient(-45deg, #f59e0b 25%, transparent 25%) -40px 0,
+    linear-gradient(45deg, transparent 75%, #f59e0b 75%),
+    linear-gradient(-45deg, transparent 75%, #f59e0b 75%);
+  background-size: 80px 80px;
+  background-color: #1f2937;
+  opacity: 0.2;
+  mix-blend-mode: overlay;
+  animation: mudClothFloat 30s linear infinite;
+}
+
+.pattern-adinkra {
+  background:
+    radial-gradient(circle at 50% 50%, #db2777 10%, transparent 10.5%) 0 0,
+    radial-gradient(circle at 50% 50%, #f59e0b 10%, transparent 10.5%) 25px 25px;
+  background-size: 50px 50px;
+  background-color: #1f2937;
+  opacity: 0.2;
+  mix-blend-mode: overlay;
+}
+
+.pattern-zulu {
+  background-image:
+    repeating-linear-gradient(45deg, #db2777 0, #db2777 2px, transparent 2px, transparent 8px),
+    repeating-linear-gradient(-45deg, #f59e0b 0, #f59e0b 2px, transparent 2px, transparent 8px);
+  background-color: #1f2937;
+  opacity: 0.2;
+  mix-blend-mode: overlay;
+}
+
+.pattern-bogolan {
+  background:
+    linear-gradient(0deg, #db2777 50%, transparent 50%),
+    linear-gradient(90deg, #f59e0b 50%, transparent 50%);
+  background-size: 20px 20px;
+  background-position: 0 0;
+  background-color: #1f2937;
+  opacity: 0.2;
+  mix-blend-mode: overlay;
+  animation: bogolan 20s linear infinite;
+}
+
+.pattern-yoruba {
+  background:
+    radial-gradient(circle at 0% 50%, transparent 9px, #db2777 10px, transparent 11px) 0 -10px,
+    radial-gradient(circle at 100% 50%, transparent 9px, #f59e0b 10px, transparent 11px) 20px 10px,
+    radial-gradient(circle at 50% 100%, transparent 9px, #db2777 10px, transparent 11px) -10px 0,
+    radial-gradient(circle at 50% 0%, transparent 9px, #f59e0b 10px, transparent 11px) 10px 20px;
+  background-size: 40px 40px;
+  background-color: #1f2937;
+  opacity: 0.3;
+  mix-blend-mode: multiply;
+}
+.pattern-mud-cloth, .pattern-adinkra, .pattern-zulu, .pattern-bogolan, .pattern-yoruba {
+  opacity: 0.4;
+  mix-blend-mode: overlay;
+}
