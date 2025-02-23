@@ -56,6 +56,7 @@ var jwt_auth_guard_1 = require("../auth/jwt-auth.guard");
 var user_profile_service_1 = require("./user-profile.service");
 var update_profile_dto_1 = require("./dto/update-profile.dto");
 var update_settings_dto_1 = require("./dto/update-settings.dto");
+var express_1 = require("express");
 var UserProfileController = /** @class */ (function () {
     function UserProfileController(profileService) {
         this.profileService = profileService;
@@ -95,12 +96,13 @@ var UserProfileController = /** @class */ (function () {
             });
         });
     };
+    var _a, _b, _c, _d, _e, _f, _g;
     __decorate([
         (0, common_1.Get)(),
         (0, swagger_1.ApiOperation)({ summary: 'Get user profile' }),
         __param(0, (0, common_1.Req)()),
         __metadata("design:type", Function),
-        __metadata("design:paramtypes", [Object]),
+        __metadata("design:paramtypes", [typeof (_a = typeof express_1.Request !== "undefined" && express_1.Request) === "function" ? _a : Object]),
         __metadata("design:returntype", Promise)
     ], UserProfileController.prototype, "getProfile", null);
     __decorate([
@@ -109,7 +111,7 @@ var UserProfileController = /** @class */ (function () {
         __param(0, (0, common_1.Req)()),
         __param(1, (0, common_1.Body)(common_1.ValidationPipe)),
         __metadata("design:type", Function),
-        __metadata("design:paramtypes", [Object, update_profile_dto_1.UpdateProfileDto]),
+        __metadata("design:paramtypes", [typeof (_b = typeof express_1.Request !== "undefined" && express_1.Request) === "function" ? _b : Object, update_profile_dto_1.UpdateProfileDto]),
         __metadata("design:returntype", Promise)
     ], UserProfileController.prototype, "updateProfile", null);
     __decorate([
@@ -118,7 +120,7 @@ var UserProfileController = /** @class */ (function () {
         __param(0, (0, common_1.Req)()),
         __param(1, (0, common_1.Body)(common_1.ValidationPipe)),
         __metadata("design:type", Function),
-        __metadata("design:paramtypes", [Object, update_settings_dto_1.UpdateSettingsDto]),
+        __metadata("design:paramtypes", [typeof (_c = typeof express_1.Request !== "undefined" && express_1.Request) === "function" ? _c : Object, update_settings_dto_1.UpdateSettingsDto]),
         __metadata("design:returntype", Promise)
     ], UserProfileController.prototype, "updateSettings", null);
     __decorate([
@@ -128,7 +130,7 @@ var UserProfileController = /** @class */ (function () {
         __param(0, (0, common_1.Req)()),
         __param(1, (0, common_1.UploadedFile)()),
         __metadata("design:type", Function),
-        __metadata("design:paramtypes", [Object, Object]),
+        __metadata("design:paramtypes", [typeof (_d = typeof express_1.Request !== "undefined" && express_1.Request) === "function" ? _d : Object, typeof (_f = typeof Express !== "undefined" && (_e = Express.Multer) !== void 0 && _e.File) === "function" ? _f : Object]),
         __metadata("design:returntype", Promise)
     ], UserProfileController.prototype, "uploadAvatar", null);
     __decorate([
@@ -136,7 +138,7 @@ var UserProfileController = /** @class */ (function () {
         (0, swagger_1.ApiOperation)({ summary: 'Delete user account' }),
         __param(0, (0, common_1.Req)()),
         __metadata("design:type", Function),
-        __metadata("design:paramtypes", [Object]),
+        __metadata("design:paramtypes", [typeof (_g = typeof express_1.Request !== "undefined" && express_1.Request) === "function" ? _g : Object]),
         __metadata("design:returntype", Promise)
     ], UserProfileController.prototype, "deleteAccount", null);
     UserProfileController = __decorate([

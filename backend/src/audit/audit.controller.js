@@ -50,6 +50,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AuditController = void 0;
 var common_1 = require("@nestjs/common");
+var express_1 = require("express");
 var audit_service_1 = require("./audit.service");
 var jwt_auth_guard_1 = require("../auth/jwt-auth.guard");
 var roles_guard_1 = require("../auth/roles.guard");
@@ -96,6 +97,7 @@ var AuditController = /** @class */ (function () {
             });
         });
     };
+    var _a;
     __decorate([
         (0, common_1.Get)('logs'),
         (0, swagger_1.ApiOperation)({ summary: 'Search audit logs' }),
@@ -111,7 +113,7 @@ var AuditController = /** @class */ (function () {
         __param(1, (0, common_1.Query)(common_1.ValidationPipe)),
         __param(2, (0, common_1.Res)()),
         __metadata("design:type", Function),
-        __metadata("design:paramtypes", [String, search_audit_logs_dto_1.SearchAuditLogsDto, Object]),
+        __metadata("design:paramtypes", [String, search_audit_logs_dto_1.SearchAuditLogsDto, typeof (_a = typeof express_1.Response !== "undefined" && express_1.Response) === "function" ? _a : Object]),
         __metadata("design:returntype", Promise)
     ], AuditController.prototype, "exportLogs", null);
     __decorate([

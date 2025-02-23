@@ -1,4 +1,14 @@
 {
+  "name": "ngoma-bolt-backend",
+  "version": "0.1.0",
+  "scripts": {
+    "dev": "nest start --watch",
+    "build": "nest build",
+    "start": "nest start",
+    "start:prod": "node dist/main",
+    "prisma:generate": "prisma generate",
+    "postinstall": "prisma generate"
+  },
   "dependencies": {
     "@nestjs/common": "^10.0.0",
     "@nestjs/config": "^3.1.1",
@@ -9,7 +19,7 @@
     "@nestjs/platform-express": "^10.0.0",
     "@nestjs/platform-socket.io": "^10.0.0",
     "@nestjs/swagger": "^7.1.17",
-    "@nestjs/testing": "^11.0.7",
+    "@nestjs/testing": "^10.0.0",
     "@nestjs/websockets": "^10.0.0",
     "@openzeppelin/contracts": "^5.0.1",
     "@prisma/client": "^5.22.0",
@@ -29,11 +39,10 @@
     "siwe": "^2.1.4",
     "socket.io": "^4.7.2"
   },
-  "scripts": {
-    "dev": "nest start --watch"
-  },
   "devDependencies": {
-    "@nestjs/cli": "^11.0.2",
-    "hardhat": "^2.22.18"
+    "@nestjs/cli": "^10.0.0",
+    "@types/node": "^20.10.5",
+    "hardhat": "^2.22.18",
+    "typescript": "^5.3.3"
   }
 }

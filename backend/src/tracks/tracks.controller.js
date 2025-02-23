@@ -84,6 +84,7 @@ var TracksController = /** @class */ (function () {
             });
         });
     };
+    var _a, _b;
     __decorate([
         (0, common_1.Post)('mint'),
         (0, roles_decorator_1.Roles)('ARTIST'),
@@ -92,7 +93,7 @@ var TracksController = /** @class */ (function () {
         __param(0, (0, common_1.UploadedFile)()),
         __param(1, (0, common_1.Body)()),
         __metadata("design:type", Function),
-        __metadata("design:paramtypes", [Object, create_track_dto_1.CreateTrackDto]),
+        __metadata("design:paramtypes", [typeof (_b = typeof Express !== "undefined" && (_a = Express.Multer) !== void 0 && _a.File) === "function" ? _b : Object, create_track_dto_1.CreateTrackDto]),
         __metadata("design:returntype", Promise)
     ], TracksController.prototype, "mintTrack", null);
     __decorate([
