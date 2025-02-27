@@ -11,9 +11,12 @@ interface NewsFilterProps {
 export function NewsFilter({ selected, onFilterChange }: NewsFilterProps) {
   const filters = [
     { id: "all", label: "All", icon: null },
-    { id: "release", label: "Releases", icon: Music },
-    { id: "event", label: "Events", icon: Calendar },
-    { id: "achievement", label: "Achievements", icon: Trophy },
+    { id: "album_release", label: "Album Releases", icon: Music },
+    { id: "festival", label: "Festivals", icon: Calendar },
+    { id: "award", label: "Awards", icon: Trophy },
+    { id: "collaboration", label: "Collaborations", icon: Music },
+    { id: "charity", label: "Charity", icon: Trophy },
+    { id: "innovation", label: "Innovation", icon: Music }
   ];
 
   return (

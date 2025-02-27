@@ -1,14 +1,13 @@
 import { Module } from '@nestjs/common';
-import { MerchandiseController } from './merchandise.controller';
 import { MerchandiseService } from './merchandise.service';
-import { PrismaModule } from '../prisma/prisma.module';
-import { CacheModule } from '../cache/cache.module';
-import { WebsocketModule } from '../websocket/websocket.module';
+import { MerchandiseController } from './merchandise.controller';
+import { ArtistMerchandiseController } from './artist-merchandise.controller';
+import { AdminMerchandiseController } from './admin-merchandise.controller';
+import { MerchandiseManagementService } from './merchandise-management.service';
 
 @Module({
-  imports: [PrismaModule, CacheModule, WebsocketModule],
-  controllers: [MerchandiseController],
-  providers: [MerchandiseService],
-  exports: [MerchandiseService],
+  imports: [],
+  controllers: [MerchandiseController, ArtistMerchandiseController, AdminMerchandiseController],
+  providers: [MerchandiseService, MerchandiseManagementService],
 })
 export class MerchandiseModule {}

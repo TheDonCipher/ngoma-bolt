@@ -2,7 +2,7 @@
 
 import './globals.css';
 import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
+import { Inter, Noto_Sans_Ethiopic } from 'next/font/google';
 import { ThemeProvider } from '@/components/providers/theme-provider';
 import { Web3Provider } from '@/components/providers/web3-provider';
 import { AudioProvider } from '@/components/providers/audio-provider';
@@ -16,6 +16,7 @@ import dynamic from 'next/dynamic';
 import { usePathname } from 'next/navigation';
 
 const inter = Inter({ subsets: ['latin'], display: 'fallback' });
+const notoSansEthiopic = Noto_Sans_Ethiopic({ subsets: ['ethiopic'], display: 'fallback' });
 
 const AudioPlayer = dynamic(() => import('@/components/player/audio-player').then(mod => mod.AudioPlayer), {
   ssr: false,

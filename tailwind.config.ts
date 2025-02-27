@@ -51,6 +51,10 @@ const config: Config = {
           foreground: "hsl(var(--card-foreground))",
         },
       },
+      fontFamily: {
+        'sans': ['Inter', 'sans-serif'],
+        'afro-decorative': ['Noto_Sans_Ethiopic', 'serif'],
+      },
       borderRadius: {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",

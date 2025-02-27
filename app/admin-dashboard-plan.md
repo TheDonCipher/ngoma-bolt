@@ -1,0 +1,554 @@
+# Admin Dashboard Plan
+
+## Features
+
+- **User Management:**
+    - View user list (Fans and Artists)
+    - Edit user profiles
+    - Delete users
+- **Platform Analytics Dashboard:**
+    - Overview of key platform metrics (e.g., total users, tracks, albums, events)
+    - Charts and graphs for data visualization
+- **Content Moderation:**
+    - Manage Tracks: View, edit, delete tracks
+    - Manage Albums: View, edit, delete albums
+    - Manage Events: View, edit, delete events
+    - Manage Merchandise: View, edit, delete merchandise
+- **Badge Management:**
+    - Create new badges
+    - Edit existing badges
+    - Delete badges
+- **News/Events Curation (Optional):**
+    - Feature news articles
+    - Feature events on the homepage
+
+## Components
+
+- **DashboardLayout:**
+    - Overall layout for the admin dashboard, including sidebar, header, and main content area.
+    - Includes navigation components (SidebarNav, HeaderNav).
+- **User Management Section:**
+    - UserList: Container component for user listing functionality.
+        - UserTable: Displays user data in a tabular format.
+        - UserTableRow: Represents a single row in the UserTable.
+        - UserListFilters:  Component for filtering and sorting user lists.
+    - UserProfileForm: Form for viewing and editing user details.
+- **Analytics Dashboard Section:**
+    - AnalyticsDashboardOverview: Container for the analytics dashboard.
+        - MetricsCard: Reusable component to display a single key metric.
+        - Chart: Reusable component for rendering various charts (line, bar, pie) to visualize data.
+- **Content Moderation Section:**
+    - ContentModerationDashboard: Container for content moderation features.
+        - ContentList (Abstract): Base component for lists of Tracks, Albums, Events, Merchandise.
+            - TrackList (extends ContentList): Component for listing tracks for moderation.
+            - AlbumList (extends ContentList): Component for listing albums for moderation.
+            - EventList (extends ContentList): Component for listing events for moderation.
+            - MerchandiseList (extends ContentList): Component for listing merchandise for moderation.
+        - ContentForm (Abstract): Base form for editing Tracks, Albums, Events, Merchandise.
+            - TrackForm (extends ContentForm): Form for editing track details.
+            - AlbumForm (extends ContentForm): Form for editing album details.
+            - EventForm (extends ContentForm): Form for editing event details.
+            - MerchandiseForm (extends ContentForm): Form for editing merchandise details.
+- **Badge Management Section:**
+    - BadgeManagementDashboard: Container for badge management features.
+        - BadgeList: Component to display a list of badges with actions.
+        - BadgeForm: Form for creating and editing badge details.
+- **News/Events Curation Section (Optional):**
+    - FeaturedContentManagement: Container for news/events curation.
+        - FeaturedContentList: List to manage featured news/events.
+        - FeaturedContentForm: Form to select and configure featured content.
+
+**Note on Component Modularity:** The dashboard is designed with reusable and modular components. For instance, `MetricsCard` and `Chart` components in the Analytics section can be reused across different dashboards. Similarly, `ContentList` and `ContentForm` are abstract components that are extended for each content type (Tracks, Albums, etc.), promoting code reuse and maintainability.
+
+This modular approach enhances code organization, testability, and scalability, as individual components can be developed, tested, and scaled independently.
+
+## Data Models
+
+- **User:**
+    - userId (string, PK)
+    - username (string)
+    - email (string)
+    - role (enum: 'admin' | 'artist' | 'fan')
+    - ...other user fields
+- **Track:**
+    - trackId (string, PK)
+    - artistId (string, FK)
+    - albumId (string, FK)
+    - title (string)
+    - ...other track fields
+- **Album:**
+    - albumId (string, PK)
+    - artistId (string, FK)
+    - title (string)
+    - ...other album fields
+- **Event:**
+    - eventId (string, PK)
+    - artistId (string, FK)
+    - eventName (string)
+    - eventDate (datetime)
+    - ...other event fields
+- **Merchandise:**
+    - merchandiseId (string, PK)
+    - artistId (string, FK)
+    - productName (string)
+    - price (number)
+    - ...other merchandise fields
+- **Badge:**
+    - badgeId (string, PK)
+    - badgeName (string)
+    - description (string)
+    - ...other badge fields
+- **PlatformMetrics:** (Potentially non-database, calculated metrics)
+    - totalUsers (number)
+    - totalTracks (number)
+    - totalAlbums (number)
+    - totalEvents (number)
+    - ...other metrics
+- **FeaturedContent:** (For optional News/Events curation)
+    - contentId (string, PK)
+    - contentType (enum: 'news' | 'event')
+    - contentReferenceId (string, FK to News or Event)
+    - featuredOrder (number)
+
+## API Endpoints
+
+- **User Management Endpoints:**
+    - `GET /admin/users`: Get a list of users (with filtering, sorting, pagination)
+        - **Method:** GET
+        - **Request:** 
+            - Query parameters for filtering, sorting, pagination (e.g., `?page=1&pageSize=20&sort=username&filter=role:artist`)
+        - **Response:** 
+            - JSON array of user objects with user details.
+            - Pagination metadata in headers or response body (e.g., `totalPages`, `currentPage`, `totalItems`).
+        - **Authentication:** Admin role required (JWT protected).
+        - **Error Handling:** 
+            - 401 Unauthorized if not admin.
+            - 500 Internal Server Error for database or server errors.
+    - `GET /admin/users/{userId}`: Get details of a specific user
+        - **Method:** GET
+        - **Request:** 
+            - `userId` path parameter.
+        - **Response:** 
+            - JSON object with user details.
+        - **Authentication:** Admin role required (JWT protected).
+        - **Error Handling:** 
+            - 401 Unauthorized if not admin.
+            - 404 Not Found if user with `userId` does not exist.
+            - 500 Internal Server Error for database or server errors.
+    - `POST /admin/users`: Create a new user (potentially for admin-created users)
+        - **Method:** POST
+        - **Request:** 
+            - JSON request body with user details (username, email, password, role, etc.).
+        - **Response:** 
+            - 201 Created status code.
+            - JSON object with the newly created user details.
+        - **Authentication:** Admin role required (JWT protected).
+        - **Error Handling:** 
+            - 400 Bad Request for invalid input data (e.g., missing fields, invalid email format).
+            - 401 Unauthorized if not admin.
+            - 409 Conflict if user with the same email or username already exists.
+            - 500 Internal Server Error for database or server errors.
+    - `PUT /admin/users/{userId}`: Update user details
+        - **Method:** PUT
+        - **Request:** 
+            - `userId` path parameter.
+            - JSON request body with user details to update.
+        - **Response:** 
+            - 200 OK status code.
+            - JSON object with the updated user details.
+        - **Authentication:** Admin role required (JWT protected).
+        - **Error Handling:** 
+            - 400 Bad Request for invalid input data.
+            - 401 Unauthorized if not admin.
+            - 404 Not Found if user with `userId` does not exist.
+            - 500 Internal Server Error for database or server errors.
+    - `DELETE /admin/users/{userId}`: Delete a user
+        - **Method:** DELETE
+        - **Request:** 
+            - `userId` path parameter.
+        - **Response:** 
+            - 204 No Content status code (successful deletion).
+        - **Authentication:** Admin role required (JWT protected).
+        - **Error Handling:** 
+            - 401 Unauthorized if not admin.
+            - 404 Not Found if user with `userId` does not exist.
+            - 500 Internal Server Error for database or server errors.
+
+- **Analytics Endpoints:**
+    - `GET /admin/metrics/platform-overview`: Get platform-wide metrics
+        - **Method:** GET
+        - **Response:** 
+            - JSON object containing platform-wide metrics (total users, tracks, albums, events, etc.).
+        - **Authentication:** Admin role required (JWT protected).
+        - **Error Handling:** 
+            - 401 Unauthorized if not admin.
+            - 500 Internal Server Error for data aggregation or server errors.
+    - `GET /admin/metrics/users`: Get user-related metrics
+        - **Method:** GET
+        - **Response:** 
+            - JSON object containing metrics related to users (e.g., new users, active users, user roles distribution).
+        - **Authentication:** Admin role required (JWT protected).
+        - **Error Handling:** 
+            - 401 Unauthorized if not admin.
+            - 500 Internal Server Error for data aggregation or server errors.
+    - `GET /admin/metrics/content`: Get content-related metrics
+        - **Method:** GET
+        - **Response:** 
+            - JSON object containing metrics related to content (e.g., total tracks, albums, events, merchandise, content engagement stats).
+        - **Authentication:** Admin role required (JWT protected).
+        - **Error Handling:** 
+            - 401 Unauthorized if not admin.
+            - 500 Internal Server Error for data aggregation or server errors.
+
+- **Content Moderation Endpoints:**
+    - **Tracks:**
+        - `GET /admin/tracks`: Get a list of tracks (with filtering, sorting, pagination)
+            - **Method:** GET
+            - **Request:**
+                - Query parameters for filtering, sorting, pagination (e.g., `?page=1&pageSize=20&sort=title&filter=artist:artistId`).
+            - **Response:** 
+                - JSON array of track objects, each containing track details.
+                - Pagination metadata (e.g., `totalPages`, `currentPage`).
+            - **Authentication:** Admin role required (JWT protected).
+            - **Error Handling:** 
+                - 401 Unauthorized - if the user is not an admin.
+                - 500 Internal Server Error - for any backend errors.
+        - `GET /admin/tracks/{trackId}`: Get details of a specific track
+            - **Method:** GET
+            - **Request:** 
+                - `trackId` path parameter.
+            - **Response:** 
+                - JSON object with detailed track information.
+            - **Authentication:** Admin role required.
+            - **Error Handling:** 
+                - 401 Unauthorized - if the user is not an admin.
+                - 404 Not Found - if the track with the given `trackId` is not found.
+                - 500 Internal Server Error - for backend errors.
+        - `PUT /admin/tracks/{trackId}`: Update track details
+            - **Method:** PUT
+            - **Request:** 
+                - `trackId` path parameter.
+                - JSON request body containing fields to update (e.g., `title`, `genre`, `nftPricing`).
+            - **Response:** 
+                - 200 OK - Track updated successfully.
+                - JSON object with updated track details.
+            - **Authentication:** Admin role required.
+            - **Error Handling:** 
+                - 400 Bad Request - if the request body is invalid or missing required fields.
+                - 401 Unauthorized - if the user is not an admin.
+                - 404 Not Found - if the track with the given `trackId` is not found.
+                - 500 Internal Server Error - for backend errors.
+        - `DELETE /admin/tracks/{trackId}`: Delete a track
+            - **Method:** DELETE
+            - **Request:** 
+                - `trackId` path parameter.
+            - **Response:** 
+                - 204 No Content - Track successfully deleted.
+            - **Authentication:** Admin role required.
+            - **Error Handling:** 
+                - 401 Unauthorized - if the user is not an admin.
+                - 404 Not Found - if the track with `trackId` was not found.
+                - 500 Internal Server Error - for backend errors.
+    - **Albums:**
+        - `GET /admin/albums`: Get a list of albums (with filtering, sorting, pagination)
+            - **Method:** GET
+            - **Request:**
+                - Query parameters for filtering, sorting, pagination.
+            - **Response:**
+                - JSON array of album objects with details.
+                - Pagination metadata.
+            - **Authentication:** Admin role required.
+            - **Error Handling:**
+                - 401 Unauthorized.
+                - 500 Internal Server Error.
+        - `GET /admin/albums/{albumId}`: Get details of a specific album
+            - **Method:** GET
+            - **Request:**
+                - `albumId` path parameter.
+            - **Response:**
+                - JSON object with album details.
+            - **Authentication:** Admin role required.
+            - **Error Handling:**
+                - 401 Unauthorized.
+                - 404 Not Found.
+                - 500 Internal Server Error.
+        - `PUT /admin/albums/{albumId}`: Update album details
+            - **Method:** PUT
+            - **Request:**
+                - `albumId` path parameter.
+                - JSON request body with album details.
+            - **Response:**
+                - 200 OK.
+                - JSON object with updated album details.
+            - **Authentication:** Admin role required.
+            - **Error Handling:**
+                - 400 Bad Request.
+                - 401 Unauthorized.
+                - 404 Not Found.
+                - 500 Internal Server Error.
+        - `DELETE /admin/albums/{albumId}`: Delete an album
+            - **Method:** DELETE
+            - **Request:**
+                - `albumId` path parameter.
+            - **Response:**
+                - 204 No Content.
+            - **Authentication:** Admin role required.
+            - **Error Handling:**
+                - 401 Unauthorized.
+                - 404 Not Found.
+                - 500 Internal Server Error.
+    - **Events:**
+        - `GET /admin/events`: Get a list of events (with filtering, sorting, pagination)
+            - **Method:** GET
+            - **Request:**
+                - Query parameters for filtering, sorting, pagination.
+            - **Response:**
+                - JSON array of event objects with event details.
+                - Pagination metadata.
+            - **Authentication:** Admin role required.
+            - **Error Handling:**
+                - 401 Unauthorized.
+                - 500 Internal Server Error.
+        - `GET /admin/events/{eventId}`: Get details of a specific event
+            - **Method:** GET
+            - **Request:**
+                - `eventId` path parameter.
+            - **Response:**
+                - JSON object with event details.
+            - **Authentication:** Admin role required.
+            - **Error Handling:**
+                - 401 Unauthorized.
+                - 404 Not Found.
+                - 500 Internal Server Error.
+        - `PUT /admin/events/{eventId}`: Update event details
+            - **Method:** PUT
+            - **Request:**
+                - `eventId` path parameter.
+                - JSON request body with event details.
+            - **Response:**
+                - 200 OK.
+                - JSON object with updated event details.
+            - **Authentication:** Admin role required.
+            - **Error Handling:**
+                - 400 Bad Request.
+                - 401 Unauthorized.
+                - 404 Not Found.
+                - 500 Internal Server Error.
+        - `DELETE /admin/events/{eventId}`: Delete an event
+            - **Method:** DELETE
+            - **Request:**
+                - `eventId` path parameter.
+            - **Response:**
+                - 204 No Content.
+            - **Authentication:** Admin role required.
+            - **Error Handling:**
+                - 401 Unauthorized.
+                - 404 Not Found.
+                - 500 Internal Server Error.
+    - **Merchandise:**
+        - `GET /admin/merchandise`: Get a list of merchandise (with filtering, sorting, pagination)
+            - **Method:** GET
+            - **Request:**
+                - Query parameters for filtering, sorting, pagination.
+            - **Response:**
+                - JSON array of merchandise objects with details.
+                - Pagination metadata.
+            - **Authentication:** Admin role required.
+            - **Error Handling:**
+                - 401 Unauthorized.
+                - 500 Internal Server Error.
+        - `GET /admin/merchandise/{merchandiseId}`: Get details of specific merchandise item
+            - **Method:** GET
+            - **Request:**
+                - `merchandiseId` path parameter.
+            - **Response:**
+                - JSON object with merchandise details.
+            - **Authentication:** Admin role required.
+            - **Error Handling:**
+                - 401 Unauthorized.
+                - 404 Not Found.
+                - 500 Internal Server Error.
+        - `PUT /admin/merchandise/{merchandiseId}`: Update merchandise details
+            - **Method:** PUT
+            - **Request:**
+                - `merchandiseId` path parameter.
+                - JSON request body with merchandise details.
+            - **Response:**
+                - 200 OK.
+                - JSON object with updated merchandise details.
+            - **Authentication:** Admin role required.
+            - **Error Handling:**
+                - 400 Bad Request.
+                - 401 Unauthorized.
+                - 404 Not Found.
+            - 500 Internal Server Error.
+        - `DELETE /admin/merchandise/{merchandiseId}`: Delete merchandise
+            - **Method:** DELETE
+            - **Request:**
+                - `merchandiseId` path parameter.
+            - **Response:**
+                - 204 No Content.
+            - **Authentication:** Admin role required.
+            - **Error Handling:**
+                - 401 Unauthorized.
+                - 404 Not Found.
+                - 500 Internal Server Error.
+
+- **Badge Management Endpoints:**
+    - `GET /admin/badges`: Get a list of badges (with filtering, sorting, pagination)
+        - **Method:** GET
+        - **Request:**
+            - Query parameters for filtering, sorting, pagination.
+        - **Response:**
+            - JSON array of badge objects with badge details.
+            - Pagination metadata.
+        - **Authentication:** Admin role required.
+        - **Error Handling:**
+            - 401 Unauthorized.
+            - 500 Internal Server Error.
+    - `GET /admin/badges/{badgeId}`: Get details of a specific badge
+        - **Method:** GET
+        - **Request:**
+            - `badgeId` path parameter.
+        - **Response:**
+            - JSON object with badge details.
+        - **Authentication:** Admin role required.
+        - **Error Handling:**
+            - 401 Unauthorized.
+            - 404 Not Found.
+            - 500 Internal Server Error.
+    - `POST /admin/badges`: Create a new badge
+        - **Method:** POST
+        - **Request:**
+            - JSON request body with badge details (badgeName, description, awardCriteria, image URL, etc.).
+        - **Response:**
+            - 201 Created.
+            - JSON object with newly created badge details.
+        - **Authentication:** Admin role required.
+        - **Error Handling:**
+            - 400 Bad Request.
+            - 401 Unauthorized.
+            - 409 Conflict - if badge with the same name already exists.
+            - 500 Internal Server Error.
+    - `PUT /admin/badges/{badgeId}`: Update badge details
+        - **Method:** PUT
+        - **Request:**
+            - `badgeId` path parameter.
+            - JSON request body with badge details to update.
+        - **Response:**
+            - 200 OK.
+            - JSON object with updated badge details.
+        - **Authentication:** Admin role required.
+        - **Error Handling:**
+            - 400 Bad Request.
+            - 401 Unauthorized.
+            - 404 Not Found.
+            - 500 Internal Server Error.
+    - `DELETE /admin/badges/{badgeId}`: Delete a badge
+        - **Method:** DELETE
+        - **Request:**
+            - `badgeId` path parameter.
+        - **Response:**
+            - 204 No Content.
+        - **Authentication:** Admin role required.
+        - **Error Handling:**
+            - 401 Unauthorized.
+            - 404 Not Found.
+            - 500 Internal Server Error.
+
+- **Featured Content Endpoints (Optional):**
+    - `GET /admin/featured-content`: Get a list of featured content
+        - **Method:** GET
+        - **Request:**
+            - No request body or parameters.
+            - Optional query parameters for filtering or pagination.
+        - **Response:**
+            - JSON array of featured content objects.
+        - **Authentication:** Admin role required.
+        - **Error Handling:**
+            - 401 Unauthorized.
+            - 500 Internal Server Error.
+    - `POST /admin/featured-content`: Add featured content
+        - **Method:** POST
+        - **Request:**
+            - JSON request body with details of content to be featured (contentId, contentType, featuredOrder).
+        - **Response:**
+            - 201 Created.
+            - JSON object with details of the newly featured content.
+        - **Authentication:** Admin role required.
+        - **Error Handling:**
+            - 400 Bad Request.
+            - 401 Unauthorized.
+            - 409 Conflict - if content is already featured.
+            - 500 Internal Server Error.
+    - `PUT /admin/featured-content/{contentId}`: Update featured content order/details
+        - **Method:** PUT
+        - **Request:**
+            - `contentId` path parameter.
+            - JSON request body with fields to update (e.g., `featuredOrder`).
+        - **Response:**
+            - 200 OK.
+            - JSON object with updated featured content details.
+        - **Authentication:** Admin role required.
+        - **Error Handling:**
+            - 400 Bad Request.
+            - 401 Unauthorized.
+            - 404 Not Found.
+            - 500 Internal Server Error.
+    - `DELETE /admin/featured-content/{contentId}`: Delete featured content
+        - **Method:** DELETE
+        - **Request:**
+            - `contentId` path parameter.
+        - **Response:**
+            - 204 No Content.
+        - **Authentication:** Admin role required.
+        - **Error Handling:**
+            - 401 Unauthorized.
+            - 404 Not Found.
+            - 500 Internal Server Error.
+
+## Code Readability and Coding Standards
+
+- **Code Style Guide:** Adhere to a consistent code style (e.g., Airbnb JavaScript Style Guide, Google Java Style Guide) for better readability and maintainability.
+- **Meaningful Names:** Use descriptive and meaningful names for variables, functions, and components.
+- **Code Comments:** Add comments to explain complex logic or non-obvious code sections.
+- **Code Formatting:**  Use code formatters (e.g., Prettier) to ensure consistent code formatting.
+- **Keep functions and components small and focused:** Follow the Single Responsibility Principle.
+
+## Documentation Quality
+
+- **Component Documentation:** Document each component's purpose, props, and usage.
+- **API Documentation:** Use Swagger or similar tools to document API endpoints, request/response formats, and authentication/authorization requirements.
+- **Architecture Documentation:**  Maintain high-level documentation of the system architecture, module interactions, and data flow (like these diagrams and plans).
+- **Code Comments:**  Include JSDoc or similar comments for functions and methods to explain their parameters, return values, and purpose.
+- **README Files:**  Provide README files for each module or package explaining its functionality and usage.
+
+## Testability
+
+- **Unit Tests:** Write unit tests for services, utility functions, and components to ensure business logic correctness and isolate issues.
+- **Integration Tests:** Implement integration tests to verify API endpoints and interactions between different modules or services.
+- **End-to-End Tests (Optional):** Consider end-to-end tests for critical user flows to ensure the entire system works correctly.
+- **Test Coverage:** Aim for reasonable test coverage to catch regressions and ensure code quality.
+- **Mocking and Stubbing:** Use mocking and stubbing to isolate dependencies and test components in isolation.
+
+## Scalability Considerations
+
+- **Stateless Services:** Design services to be stateless to allow horizontal scaling.
+- **Caching:** Implement caching mechanisms (e.g., Redis, Memcached) to reduce database load and improve response times for frequently accessed data (like platform metrics).
+- **Load Balancing:** Use load balancers to distribute traffic across multiple instances of services for high availability and performance.
+- **Database Optimization:** Optimize database queries, indexing, and connection pooling for efficient data access.
+- **Asynchronous Operations:** Use asynchronous operations and message queues (e.g., Kafka, RabbitMQ) for long-running tasks and background processing.
+- **CDN for Static Assets:** Use CDNs to serve static assets (images, CSS, JS) to reduce latency and improve page load times.
+
+## Security Considerations
+
+- **Authentication and Authorization:** Implement robust authentication (e.g., JWT) and authorization (RBAC/ABAC) mechanisms to secure API endpoints and protect sensitive data.
+- **Input Validation:** Validate all user inputs on both the client and server sides to prevent injection attacks (e.g., XSS, SQL injection).
+- ** защита от CSRF:** Implement CSRF protection to prevent cross-site request forgery attacks.
+- ** защита от XSS:** Protect against cross-site scripting (XSS) vulnerabilities by sanitizing user inputs and using appropriate templating engines.
+- ** защита от SQL Injection:** Use parameterized queries or ORM to prevent SQL injection attacks.
+- **HTTPS:** Enforce HTTPS to encrypt communication between the client and server.
+- **Regular Security Audits:** Conduct regular security audits and penetration testing to identify and address potential vulnerabilities.
+- **Dependency Management:** Keep dependencies up-to-date and monitor for security vulnerabilities.
+- **Rate Limiting and Throttling:** Implement rate limiting and throttling to protect against brute-force attacks and DoS attacks.
+- **Secure Storage of Sensitive Data:**  Store sensitive data (e.g., API keys, passwords) securely using encryption and environment variables (and ideally a secrets management system).

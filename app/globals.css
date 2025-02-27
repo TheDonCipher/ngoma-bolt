@@ -1,3 +1,4 @@
+/* These are Tailwind directives - ignore linting warnings */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -6,33 +7,37 @@
   :root {
     --background: 270 50% 8%;
     --foreground: 0 0% 98%;
-    
+
     --card: 270 50% 10%;
     --card-foreground: 0 0% 98%;
-    
+
     --popover: 270 50% 10%;
     --popover-foreground: 0 0% 98%;
-    
+
     --primary: 270 75% 60%;
     --primary-foreground: 0 0% 98%;
-    
+
     --secondary: 35 90% 60%;
     --secondary-foreground: 0 0% 9%;
-    
+
     --muted: 270 50% 15%;
     --muted-foreground: 0 0% 63.9%;
-    
+
     --accent: 15 90% 65%;
     --accent-foreground: 0 0% 98%;
-    
+
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 0 0% 98%;
-    
+
     --border: 270 50% 15%;
     --input: 270 50% 15%;
     --ring: 270 75% 60%;
-    
+
     --radius: 0.5rem;
+  }
+
+  html {
+    scroll-behavior: smooth;
   }
 }
 
@@ -43,6 +48,46 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+@layer components {
+  .animate-gradient {
+    background-size: 200% 200%;
+    animation: gradient-shift 15s ease infinite;
+  }
+
+  .animate-pulse-slow {
+    animation: pulse-slow 3s ease-in-out infinite;
+  }
+
+  @keyframes pulse-slow {
+    0%,
+    100% {
+      opacity: 1;
+      transform: scale(1);
+      box-shadow: 0 0 40px rgba(217, 70, 219, 0.6);
+    }
+    50% {
+      opacity: 0.85;
+      transform: scale(0.95);
+      box-shadow: 0 0 20px rgba(217, 70, 219, 0.3);
+    }
+  }
+
+  @keyframes gradient-shift {
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
+  }
+}
+
+@layer utilities {
 }
 
 .hero-gradient {
@@ -56,5 +101,8 @@
 .text-gradient {
   background: linear-gradient(to right, hsl(35 90% 60%), hsl(15 90% 65%));
   -webkit-background-clip: text;
+  background-clip: text; /* Standard property */
   -webkit-text-fill-color: transparent;
+  /* text-fill-color is non-standard and can be removed - the -webkit version is sufficient */
+  /* text-fill-color: transparent; */
 }

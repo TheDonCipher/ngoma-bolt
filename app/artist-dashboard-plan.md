@@ -1,0 +1,483 @@
+# Artist Dashboard Plan
+
+## Features
+
+- **Track Management:**
+    - Upload new tracks (audio files, metadata)
+    - View track list
+    - Edit track details (metadata, NFT settings)
+    - Delete tracks
+- **Album Management:**
+    - Create new albums
+    - View album list
+    - Edit album details (metadata, tracks in album, NFT settings)
+    - Delete albums
+- **Event Management:**
+    - Create new events (live streams, concerts, etc.)
+    - View event list
+    - Edit event details (date, time, venue, tickets, NFT settings)
+    - Delete events
+- **Merchandise Management:**
+    - Create new merchandise items
+    - View merchandise list
+    - Edit merchandise details (product info, pricing, NFT settings)
+    - Delete merchandise
+- **Dashboard Overview:**
+    - Display key stats for the artist (e.g., track plays, album sales, merchandise sales, event attendance)
+    - Performance charts and graphs
+- **NFT Settings Management:**
+    - Configure NFT settings for tracks, albums, events, merchandise (pricing, royalties, etc.)
+    - View NFT sales and earnings
+- **Profile Management:**
+    - Edit artist profile details (bio, social links, profile picture)
+    - View public artist profile
+- **Analytics & Reporting:**
+    - Detailed analytics on track plays, album streams, merchandise sales, event attendance
+    - Downloadable reports
+
+## Components
+
+- **DashboardLayout:**
+    - Overall dashboard layout, similar to Admin Dashboard, with sidebar and content area.
+- **Track Management Section:**
+    - TrackUploadForm component: Form for uploading new tracks with metadata inputs.
+    - TrackListComponent (ArtistDashboard version): Displays a list of artist's tracks with edit/delete actions.
+    - TrackEditForm component: Form for editing track details and NFT settings.
+- **Album Management Section:**
+    - AlbumCreateForm component: Form for creating new albums.
+    - AlbumListComponent (ArtistDashboard version): Displays a list of artist's albums with edit/delete actions.
+    - AlbumEditForm component: Form for editing album details, adding/removing tracks, and NFT settings.
+- **Event Management Section:**
+    - EventCreateForm component: Form for creating new events.
+    - EventListComponent (ArtistDashboard version): Displays a list of artist's events with edit/delete actions.
+    - EventEditForm component: Form for editing event details and NFT settings.
+- **Merchandise Management Section:**
+    - MerchandiseCreateForm component: Form for creating new merchandise items.
+    - MerchandiseListComponent (ArtistDashboard version): Displays a list of artist's merchandise with edit/delete actions.
+    - MerchandiseEditForm component: Form for editing merchandise details and NFT settings.
+- **Dashboard Overview Section:**
+    - ArtistStatsCard components: Display key performance indicators (KPIs) for the artist.
+    - PerformanceChart components: Charts to visualize artist performance data.
+- **NFT Settings Section:**
+    - NFTSettingsForm component: Reusable form for configuring NFT settings for various content types.
+    - NFTSalesReport component: Displays a report of NFT sales and earnings.
+- **Profile Management Section:**
+    - ArtistProfileEditForm component: Form for editing artist profile information.
+    - ArtistPublicProfilePreview component: Preview of the public artist profile.
+- **Analytics & Reporting Section:**
+    - AnalyticsDashboard component:  Container for displaying various analytics reports.
+    - ReportDownloadButton component: Button to download analytics reports.
+
+## Data Models
+
+- **Track (Extends common Track model):**
+    - nftPricing (object): NFT specific pricing details
+    - royalties (object): Royalty settings
+    - ... (other NFT related fields)
+- **Album (Extends common Album model):**
+    - nftPricing (object): NFT specific pricing details
+    - royalties (object): Royalty settings
+    - ... (other NFT related fields)
+- **Event (Extends common Event model):**
+    - ticketNFTDetails (object): NFT details for event tickets
+    - ... (other NFT related fields)
+- **Merchandise (Extends common Merchandise model):**
+    - merchandiseNFTDetails (object): NFT details for merchandise items
+    - ... (other NFT related fields)
+- **ArtistDashboardStats:** (Potentially non-database, calculated metrics)
+    - trackPlays (number)
+    - albumSales (number)
+    - merchandiseSales (number)
+    - eventAttendance (number)
+    - nftSales (number)
+    - earnings (number)
+    - ... other artist specific metrics
+- **ArtistProfile:** (Extends common User profile)
+    - artistBio (string)
+    - socialLinks (array of strings)
+    - profilePicture (string)
+    - ... other artist profile fields
+
+## API Endpoints
+
+- **Track Management Endpoints:**
+    - `POST /artist/tracks`: Upload a new track
+        - **Method:** POST
+        - **Request:** 
+            - `multipart/form-data` request with audio file and metadata fields (title, genre, etc.)
+        - **Response:** 
+            - 201 Created status code.
+            - JSON object with the newly created track details.
+        - **Authentication:** Artist role required (JWT protected).
+        - **Error Handling:**
+            - 400 Bad Request for invalid form data or file upload issues.
+            - 401 Unauthorized if not artist.
+            - 500 Internal Server Error for upload failures or server errors.
+    - `GET /artist/tracks`: Get a list of artist's tracks (with filtering, sorting, pagination)
+        - **Method:** GET
+        - **Request:** 
+            - Query parameters for filtering, sorting, pagination (e.g., `?page=1&pageSize=20&sort=title`).
+        - **Response:** 
+            - JSON array of track objects with track details.
+            - Pagination metadata in headers or response body.
+        - **Authentication:** Artist role required (JWT protected).
+        - **Error Handling:**
+            - 401 Unauthorized if not artist.
+            - 500 Internal Server Error for database or server errors.
+    - `GET /artist/tracks/{trackId}`: Get details of a specific track
+        - **Method:** GET
+        - **Request:** 
+            - `trackId` path parameter.
+        - **Response:** 
+            - JSON object with track details including NFT settings.
+        - **Authentication:** Artist role required (JWT protected).
+        - **Error Handling:**
+            - 401 Unauthorized if not artist.
+            - 404 Not Found if track with `trackId` not found.
+            - 500 Internal Server Error for database or server errors.
+    - `PUT /artist/tracks/{trackId}`: Update track details
+        - **Method:** PUT
+        - **Request:** 
+            - `trackId` path parameter.
+            - JSON request body with track details to update (metadata, NFT settings).
+        - **Response:** 
+            - 200 OK status code.
+            - JSON object with updated track details.
+        - **Authentication:** Artist role required (JWT protected).
+        - **Error Handling:**
+            - 400 Bad Request for invalid input data.
+            - 401 Unauthorized if not artist.
+            - 404 Not Found if track with `trackId` not found.
+            - 500 Internal Server Error for database or server errors.
+    - `DELETE /artist/tracks/{trackId}`: Delete a track
+        - **Method:** DELETE
+        - **Request:** 
+            - `trackId` path parameter.
+        - **Response:** 
+            - 204 No Content status code (successful deletion).
+        - **Authentication:** Artist role required (JWT protected).
+        - **Error Handling:**
+            - 401 Unauthorized if not artist.
+            - 404 Not Found if track with `trackId` not found.
+            - 500 Internal Server Error for database or server errors.
+
+- **Album Management Endpoints:**
+    - `POST /artist/albums`: Create a new album
+        - **Method:** POST
+        - **Request:** 
+            - JSON request body with album metadata (title, genre, release date, etc.) and album art file.
+        - **Response:** 
+            - 201 Created status code.
+            - JSON object with the newly created album details.
+        - **Authentication:** Artist role required (JWT protected).
+        - **Error Handling:**
+            - 400 Bad Request for invalid input data or file upload errors.
+            - 401 Unauthorized if not artist.
+            - 500 Internal Server Error for database or server errors.
+    - `GET /artist/albums`: Get a list of artist's albums (with filtering, sorting, pagination)
+        - **Method:** GET
+        - **Request:** 
+            - Query parameters for filtering, sorting, pagination.
+        - **Response:** 
+            - JSON array of album objects with album details.
+            - Pagination metadata.
+        - **Authentication:** Artist role required (JWT protected).
+        - **Error Handling:**
+            - 401 Unauthorized if not artist.
+            - 500 Internal Server Error for database or server errors.
+    - `GET /artist/albums/{albumId}`: Get details of a specific album
+        - **Method:** GET
+        - **Request:** 
+            - `albumId` path parameter.
+        - **Response:** 
+            - JSON object with detailed album details, including tracks and NFT settings.
+        - **Authentication:** Artist role required (JWT protected).
+        - **Error Handling:**
+            - 401 Unauthorized if not artist.
+            - 404 Not Found if album with `albumId` not found.
+            - 500 Internal Server Error for database or server errors.
+    - `PUT /artist/albums/{albumId}`: Update album details
+        - **Method:** PUT
+        - **Request:** 
+            - `albumId` path parameter.
+            - JSON request body with album details to update (metadata, NFT settings, track list reordering).
+        - **Response:** 
+            - 200 OK status code.
+            - JSON object with updated album details.
+        - **Authentication:** Artist role required (JWT protected).
+        - **Error Handling:**
+            - 400 Bad Request for invalid input data.
+            - 401 Unauthorized if not artist.
+            - 404 Not Found if album with `albumId` not found.
+            - 500 Internal Server Error for database or server errors.
+    - `DELETE /artist/albums/{albumId}`: Delete an album
+        - **Method:** DELETE
+        - **Request:** 
+            - `albumId` path parameter.
+        - **Response:** 
+            - 204 No Content status code (successful deletion).
+        - **Authentication:** Artist role required (JWT protected).
+        - **Error Handling:**
+            - 401 Unauthorized if not artist.
+            - 404 Not Found if album with `albumId` not found.
+            - 500 Internal Server Error for database or server errors.
+
+- **Event Management Endpoints:**
+    - `POST /artist/events`: Create a new event
+        - **Method:** POST
+        - **Request:** 
+            - JSON request body with event details (name, date, venue, ticket details, NFT settings).
+        - **Response:** 
+            - 201 Created status code.
+            - JSON object with the newly created event details.
+        - **Authentication:** Artist role required (JWT protected).
+        - **Error Handling:**
+            - 400 Bad Request for invalid input data.
+            - 401 Unauthorized if not artist.
+            - 500 Internal Server Error for database or server errors.
+    - `GET /artist/events`: Get a list of artist's events (with filtering, sorting, pagination)
+        - **Method:** GET
+        - **Request:** 
+            - Query parameters for filtering, sorting, pagination.
+        - **Response:** 
+            - JSON array of event objects with event details.
+            - Pagination metadata.
+        - **Authentication:** Artist role required (JWT protected).
+        - **Error Handling:**
+            - 401 Unauthorized if not artist.
+            - 500 Internal Server Error for database or server errors.
+    - `GET /artist/events/{eventId}`: Get details of a specific event
+        - **Method:** GET
+        - **Request:** 
+            - `eventId` path parameter.
+        - **Response:** 
+            - JSON object with detailed event details including ticket NFT settings.
+        - **Authentication:** Artist role required (JWT protected).
+        - **Error Handling:**
+            - 401 Unauthorized if not artist.
+            - 404 Not Found if event with `eventId` not found.
+            - 500 Internal Server Error for database or server errors.
+    - `PUT /artist/events/{eventId}`: Update event details
+        - **Method:** PUT
+        - **Request:** 
+            - `eventId` path parameter.
+            - JSON request body with event details to update (date, venue, ticket settings, NFT configuration).
+        - **Response:** 
+            - 200 OK status code.
+            - JSON object with updated event details.
+        - **Authentication:** Artist role required (JWT protected).
+        - **Error Handling:**
+            - 400 Bad Request for invalid input data.
+            - 401 Unauthorized if not artist.
+            - 404 Not Found if event with `eventId` not found.
+            - 500 Internal Server Error for database or server errors.
+    - `DELETE /artist/events/{eventId}`: Delete an event
+        - **Method:** DELETE
+        - **Request:** 
+            - `eventId` path parameter.
+        - **Response:** 
+            - 204 No Content status code (successful deletion).
+        - **Authentication:** Artist role required (JWT protected).
+        - **Error Handling:**
+            - 401 Unauthorized if not artist.
+            - 404 Not Found if event with `eventId` not found.
+            - 500 Internal Server Error for database or server errors.
+
+- **Merchandise Management Endpoints:**
+    - `POST /artist/merchandise`: Create new merchandise
+        - **Method:** POST
+        - **Request:** 
+            - `multipart/form-data` request with merchandise details (productName, description, price, stock, images) and NFT settings.
+        - **Response:** 
+            - 201 Created status code.
+            - JSON object with the newly created merchandise details.
+        - **Authentication:** Artist role required (JWT protected).
+        - **Error Handling:**
+            - 400 Bad Request for invalid form data or file upload errors.
+            - 401 Unauthorized if not artist.
+            - 500 Internal Server Error for upload failures or server errors.
+    - `GET /artist/merchandise`: Get a list of artist's merchandise (with filtering, sorting, pagination)
+        - **Method:** GET
+        - **Request:** 
+            - Query parameters for filtering, sorting, pagination.
+        - **Response:** 
+            - JSON array of merchandise objects with merchandise details.
+            - Pagination metadata.
+        - **Authentication:** Artist role required (JWT protected).
+        - **Error Handling:**
+            - 401 Unauthorized if not artist.
+            - 500 Internal Server Error for database or server errors.
+    - `GET /artist/merchandise/{merchandiseId}`: Get details of specific merchandise
+        - **Method:** GET
+        - **Request:** 
+            - `merchandiseId` path parameter.
+        - **Response:** 
+            - JSON object with merchandise details including NFT settings.
+        - **Authentication:** Artist role required (JWT protected).
+        - **Error Handling:**
+            - 401 Unauthorized if not artist.
+            - 404 Not Found if merchandise with `merchandiseId` not found.
+            - 500 Internal Server Error for database or server errors.
+    - `PUT /artist/merchandise/{merchandiseId}`: Update merchandise details
+        - **Method:** PUT
+        - **Request:** 
+            - `merchandiseId` path parameter.
+            - JSON request body with merchandise details to update (productName, description, price, stock, NFT settings).
+        - **Response:** 
+            - 200 OK status code.
+            - JSON object with updated merchandise details.
+        - **Authentication:** Artist role required (JWT protected).
+        - **Error Handling:**
+            - 400 Bad Request for invalid input data.
+            - 401 Unauthorized if not artist.
+            - 404 Not Found if merchandise with `merchandiseId` not found.
+            - 500 Internal Server Error for database or server errors.
+    - `DELETE /artist/merchandise/{merchandiseId}`: Delete merchandise
+        - **Method:** DELETE
+        - **Request:** 
+            - `merchandiseId` path parameter.
+        - **Response:** 
+            - 204 No Content status code (successful deletion).
+        - **Authentication:** Artist role required (JWT protected).
+        - **Error Handling:**
+            - 401 Unauthorized if not artist.
+            - 404 Not Found if merchandise with `merchandiseId` not found.
+            - 500 Internal Server Error for database or server errors.
+
+- **Dashboard Analytics Endpoints:**
+    - `GET /artist/dashboard/stats`: Get artist dashboard statistics
+        - **Method:** GET
+        - **Response:** 
+            - JSON object containing artist dashboard statistics (track plays, album sales, etc.).
+        - **Authentication:** Artist role required (JWT protected).
+        - **Error Handling:**
+            - 401 Unauthorized if not artist.
+            - 500 Internal Server Error for data retrieval errors.
+    - `GET /artist/dashboard/analytics/tracks`: Get track analytics data
+        - **Method:** GET
+        - **Response:** 
+            - JSON object containing analytics data for artist's tracks (plays, streams, etc.).
+        - **Authentication:** Artist role required (JWT protected).
+        - **Error Handling:**
+            - 401 Unauthorized if not artist.
+            - 500 Internal Server Error for data retrieval errors.
+    - `GET /artist/dashboard/analytics/albums`: Get album analytics data
+        - **Method:** GET
+        - **Response:** 
+            - JSON object containing analytics data for artist's albums (sales, streams, etc.).
+        - **Authentication:** Artist role required (JWT protected).
+        - **Error Handling:**
+            - 401 Unauthorized if not artist.
+        - 500 Internal Server Error for data retrieval errors.
+    - `GET /artist/dashboard/analytics/merchandise`: Get merchandise analytics data
+        - **Method:** GET
+        - **Response:** 
+            - JSON object containing analytics data for artist's merchandise (sales, etc.).
+        - **Authentication:** Artist role required (JWT protected).
+        - **Error Handling:**
+            - 401 Unauthorized if not artist.
+            - 500 Internal Server Error for data retrieval errors.
+    - `GET /artist/dashboard/analytics/events`: Get event analytics data
+        - **Method:** GET
+        - **Response:** 
+            - JSON object containing analytics data for artist's events (attendance, ticket sales, etc.).
+        - **Authentication:** Artist role required (JWT protected).
+        - **Error Handling:**
+            - 401 Unauthorized if not artist.
+            - 500 Internal Server Error for data retrieval errors.
+
+- **NFT Settings Endpoints:**
+    - `GET /artist/nft-settings`: Get NFT settings for artist's content (might be combined with content endpoints)
+        - **Method:** GET
+        - **Response:** 
+            - JSON object containing NFT settings for all content types.
+        - **Authentication:** Artist role required (JWT protected).
+        - **Error Handling:**
+            - 401 Unauthorized if not artist.
+            - 500 Internal Server Error for data retrieval errors.
+    - `PUT /artist/nft-settings`: Update NFT settings (might be combined with content endpoints)
+        - **Method:** PUT
+        - **Request:** 
+            - JSON request body with NFT settings to update for different content types.
+        - **Response:** 
+            - 200 OK status code.
+            - JSON object with updated NFT settings.
+        - **Authentication:** Artist role required (JWT protected).
+        - **Error Handling:**
+            - 400 Bad Request for invalid input data.
+            - 401 Unauthorized if not artist.
+            - 500 Internal Server Error for update errors.
+    - `GET /artist/nft-sales-report`: Get NFT sales report
+        - **Method:** GET
+        - **Response:** 
+            - JSON object containing NFT sales report data.
+        - **Authentication:** Artist role required (JWT protected).
+        - **Error Handling:**
+            - 401 Unauthorized if not artist.
+            - 500 Internal Server Error for report generation errors.
+
+- **Profile Management Endpoints:**
+    - `GET /artist/profile`: Get artist profile details
+        - **Method:** GET
+        - **Response:** 
+            - JSON object containing artist profile details.
+        - **Authentication:** Artist role required (JWT protected).
+        - **Error Handling:**
+            - 401 Unauthorized if not artist.
+            - 404 Not Found if artist profile not found.
+            - 500 Internal Server Error for data retrieval errors.
+    - `PUT /artist/profile`: Update artist profile details
+        - **Method:** PUT
+        - **Request:** 
+            - JSON request body with artist profile details to update (bio, social links, etc.).
+        - **Response:** 
+            - 200 OK status code.
+            - JSON object with updated artist profile details.
+        - **Authentication:** Artist role required (JWT protected).
+        - **Error Handling:**
+            - 400 Bad Request for invalid input data.
+            - 401 Unauthorized if not artist.
+            - 500 Internal Server Error for update errors.
+
+## Code Readability and Coding Standards
+
+- **Code Style Guide:** Follow project's style guide (e.g., Airbnb JavaScript Style Guide, Google Java Style Guide).
+- **Component Structure:** Organize components in dedicated directories under `components/dashboard/artist`.
+- **Meaningful Names:** Use descriptive and consistent names for components, props, functions, and variables.
+- **Code Comments:** Add comments for complex logic and component usage, especially for dashboard-specific functionalities.
+- **Single Responsibility Principle:** Keep components and functions focused on single, well-defined tasks to improve readability and maintainability.
+- **Code Formatting:** Use code formatters (e.g., Prettier) to maintain consistent code formatting across the dashboard codebase.
+
+## Documentation Quality
+
+- **Component Documentation:** Document each component in the Artist Dashboard, detailing its purpose, props, specific usage within the dashboard context, and any relevant business logic.
+- **API Documentation:** Use Swagger or similar tools to document all Artist Dashboard API endpoints comprehensively, including request/response schemas, authentication, and specific error handling scenarios relevant to artists.
+- **Dashboard Feature Guide:** Maintain high-level documentation (like this plan) specifically for the Artist Dashboard, outlining its features, component architecture, data flow, and API endpoints unique to artist functionalities.
+- **README Files:** Include README files in each section directory within the Artist Dashboard (e.g., `app/dashboard/artist/tracks`, `app/dashboard/artist/albums`) to explain section-specific functionality and component organization.
+
+## Testability
+
+- **Unit Tests:** Write unit tests for components, services, and utility functions.
+- **Integration Tests:** Implement integration tests for API endpoints and module interactions.
+- **End-to-End Tests (Optional):** Consider E2E tests for critical user flows.
+- **Test Coverage:** Aim for good test coverage to prevent regressions.
+- **Mocking/Stubbing:** Use mocking to isolate dependencies during testing.
+
+## Scalability Considerations
+
+- **Stateless Services:** Design Artist Dashboard services (TrackManagementService, AlbumManagementService, etc.) to be stateless to facilitate horizontal scaling and handle a growing number of artists.
+- **Caching Artist Data:** Implement caching mechanisms (e.g., Redis, Memcached) to cache frequently accessed artist-specific data, such as dashboard statistics, track lists, and album lists, to reduce database load and improve dashboard performance for artists.
+- **Optimize Data Queries:** Optimize database queries specifically for artist-related data retrieval to ensure efficient loading of artist dashboards and management interfaces. Pay attention to indexing and query performance for artist-specific data.
+- **Dedicated Analytics Pipeline:** Consider a dedicated analytics pipeline for artist-specific analytics data to handle potentially high volumes of artist activity and reporting data without impacting general platform analytics.
+- **Asynchronous Processing:** Implement asynchronous processing for long-running artist dashboard tasks, such as track uploads, album creation, and report generation, using message queues (e.g., Kafka, RabbitMQ) to maintain dashboard responsiveness.
+- **CDN for Static Assets:** Use CDN to serve static assets (images, CSS, JS).
+
+## Security Considerations
+
+- **Authentication & Authorization:** Implement robust JWT auth and RBAC/ABAC for API endpoint security.
+- **Input Validation:** Validate all user inputs to prevent injection vulnerabilities (XSS, SQLi).
+- **CSRF & XSS Protection:** Implement CSRF protection and prevent XSS vulnerabilities.
+- **Secure API Keys:** Store API keys and sensitive data securely (encryption, environment variables, secrets management).
+- **Rate Limiting & Throttling:** Implement rate limiting to protect against brute-force and DoS attacks.
+- **Regular Security Audits:** Conduct security audits and penetration testing regularly.
+- **Dependency Management:** Keep dependencies updated and monitor for vulnerabilities.

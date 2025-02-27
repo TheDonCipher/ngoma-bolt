@@ -8,20 +8,19 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MerchandiseModule = void 0;
 var common_1 = require("@nestjs/common");
-var merchandise_controller_1 = require("./merchandise.controller");
 var merchandise_service_1 = require("./merchandise.service");
-var prisma_module_1 = require("../prisma/prisma.module");
-var cache_module_1 = require("../cache/cache.module");
-var websocket_module_1 = require("../websocket/websocket.module");
+var merchandise_controller_1 = require("./merchandise.controller");
+var artist_merchandise_controller_1 = require("./artist-merchandise.controller");
+var admin_merchandise_controller_1 = require("./admin-merchandise.controller");
+var merchandise_management_service_1 = require("./merchandise-management.service");
 var MerchandiseModule = /** @class */ (function () {
     function MerchandiseModule() {
     }
     MerchandiseModule = __decorate([
         (0, common_1.Module)({
-            imports: [prisma_module_1.PrismaModule, cache_module_1.CacheModule, websocket_module_1.WebsocketModule],
-            controllers: [merchandise_controller_1.MerchandiseController],
-            providers: [merchandise_service_1.MerchandiseService],
-            exports: [merchandise_service_1.MerchandiseService],
+            imports: [],
+            controllers: [merchandise_controller_1.MerchandiseController, artist_merchandise_controller_1.ArtistMerchandiseController, admin_merchandise_controller_1.AdminMerchandiseController],
+            providers: [merchandise_service_1.MerchandiseService, merchandise_management_service_1.MerchandiseManagementService],
         })
     ], MerchandiseModule);
     return MerchandiseModule;

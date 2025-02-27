@@ -8,20 +8,18 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.EventsModule = void 0;
 var common_1 = require("@nestjs/common");
-var events_controller_1 = require("./events.controller");
 var events_service_1 = require("./events.service");
-var prisma_module_1 = require("../prisma/prisma.module");
-var cache_module_1 = require("../cache/cache.module");
-var websocket_module_1 = require("../websocket/websocket.module");
+var events_controller_1 = require("./events.controller");
+var artist_events_controller_1 = require("./artist-events.controller");
+var admin_events_controller_1 = require("./admin-events.controller");
 var EventsModule = /** @class */ (function () {
     function EventsModule() {
     }
     EventsModule = __decorate([
         (0, common_1.Module)({
-            imports: [prisma_module_1.PrismaModule, cache_module_1.CacheModule, websocket_module_1.WebsocketModule],
-            controllers: [events_controller_1.EventsController],
-            providers: [events_service_1.EventsService],
-            exports: [events_service_1.EventsService],
+            imports: [],
+            controllers: [events_controller_1.EventsController, artist_events_controller_1.ArtistEventsController, admin_events_controller_1.AdminEventsController],
+            providers: [events_service_1.EventManagementService],
         })
     ], EventsModule);
     return EventsModule;

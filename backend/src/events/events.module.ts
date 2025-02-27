@@ -1,14 +1,12 @@
 import { Module } from '@nestjs/common';
+import { EventManagementService } from './events.service';
 import { EventsController } from './events.controller';
-import { EventsService } from './events.service';
-import { PrismaModule } from '../prisma/prisma.module';
-import { CacheModule } from '../cache/cache.module';
-import { WebsocketModule } from '../websocket/websocket.module';
+import { ArtistEventsController } from './artist-events.controller';
+import { AdminEventsController } from './admin-events.controller';
 
 @Module({
-  imports: [PrismaModule, CacheModule, WebsocketModule],
-  controllers: [EventsController],
-  providers: [EventsService],
-  exports: [EventsService],
+  imports: [],
+  controllers: [EventsController, ArtistEventsController, AdminEventsController],
+  providers: [EventManagementService],
 })
 export class EventsModule {}

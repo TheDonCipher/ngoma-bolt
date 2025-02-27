@@ -1,14 +1,13 @@
 import { Module } from '@nestjs/common';
-import { BadgesController } from './badges.controller';
 import { BadgesService } from './badges.service';
-import { PrismaModule } from '../prisma/prisma.module';
-import { WebsocketModule } from '../websocket/websocket.module';
-import { CacheModule } from '../cache/cache.module';
+import { BadgesController } from './badges.controller';
+import { AdminBadgesController } from './admin-badges.controller';
+import { FanBadgesController } from './fan-badges.controller';
+import { BadgeService } from './badge.service';
 
 @Module({
-  imports: [PrismaModule, WebsocketModule, CacheModule],
-  controllers: [BadgesController],
-  providers: [BadgesService],
-  exports: [BadgesService],
+  imports: [],
+  controllers: [BadgesController, AdminBadgesController, FanBadgesController],
+  providers: [BadgesService, BadgeService],
 })
 export class BadgesModule {}

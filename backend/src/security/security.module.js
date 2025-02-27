@@ -8,15 +8,11 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.SecurityModule = void 0;
 var common_1 = require("@nestjs/common");
-var rate_limiter_service_1 = require("./rate-limiter.service");
 var SecurityModule = /** @class */ (function () {
     function SecurityModule() {
     }
     SecurityModule = __decorate([
-        (0, common_1.Module)({
-            providers: [rate_limiter_service_1.RateLimiterService],
-            exports: [rate_limiter_service_1.RateLimiterService],
-        })
+        (0, common_1.Module)({})
     ], SecurityModule);
     return SecurityModule;
 }());
