@@ -1,0 +1,47 @@
+:root {
+  /* Filter gradient colors */
+  --all-from: #4b5563;
+  --all-to: #1f2937;
+  --albums-from: #f59e0b;
+  --albums-to: #b45309;
+  --festivals-from: #8b5cf6;
+  --festivals-to: #4338ca;
+  --awards-from: #fcd34d;
+  --awards-to: #d97706;
+  --collaborations-from: #3b82f6;
+  --collaborations-to: #0e7490;
+  --charity-from: #ec4899;
+  --charity-to: #be185d;
+  --innovation-from: #10b981;
+  --innovation-to: #047857;
+}
+
+/* Loader animation */
+@keyframes pulse-glow {
+  0%,
+  100% {
+    opacity: 0.3;
+    transform: scale(0.95);
+  }
+  50% {
+    opacity: 0.5;
+    transform: scale(1.05);
+  }
+}
+
+/* News category active filters */
+.category-filter-active {
+  position: relative;
+}
+
+.category-filter-active::after {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border-radius: inherit;
+  opacity: 0.3;
+  z-index: -1;
+  animation: pulse-glow 2s infinite ease-in-out;
+}
+
+/* ...existing CSS... */
