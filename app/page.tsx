@@ -1,153 +1,95 @@
 'use client';
 
 import { HeroSection } from '@/components/sections/hero-section';
-import { ProblemStatement } from '@/components/sections/problem-statement';
-import { ValueProposition } from '@/components/sections/value-proposition';
 import { FeaturesSection } from '@/components/sections/features-section';
+import { ValueProposition } from '@/components/sections/value-proposition';
+import { ProblemStatement } from '@/components/sections/problem-statement';
 import { HowItWorks } from '@/components/sections/how-it-works';
 import { CommunitySection } from '@/components/sections/community-section';
 import { CTASection } from '@/components/sections/cta-section';
-import { Footer } from '@/components/layout/footer';
-
-import { motion } from 'framer-motion';
+import { ImmersiveCanvas } from '@/components/ui/immersive-canvas';
+import { ScrollProgress } from '@/components/ui/scroll-progress';
+import { MusicParticles } from '@/components/ui/music-particles';
+import { AdaptiveThemes } from '@/components/ui/adaptive-themes';
+import { MouseResponsivePattern } from '@/components/ui/mouse-responsive-pattern';
+import { Footer } from '@/components/sections/footer';
 
 export default function Home() {
   return (
-    <>
-      <main className="min-h-screen overflow-hidden bg-gradient-to-b from-amber-500/5 via-purple-500/5 to-pink-500/5 relative">
-        {/* Animated background patterns */}
-        <motion.div
-          className="absolute inset-0 pattern-kente pattern-parallax pointer-events-none"
-          animate={{
-            scale: [1, 1.02, 1],
-            opacity: [0.2, 0.15, 0.2],
-          }}
-          transition={{
-            duration: 30,
-            repeat: Infinity,
-            ease: 'linear',
-          }}
-        />
-        <motion.div
-          className="absolute inset-0 pattern-adinkra pattern-parallax pointer-events-none"
-          animate={{
-            scale: [1, 1.01, 1],
-            opacity: [0.15, 0.1, 0.15],
-            rotate: [0, 360],
-          }}
-          transition={{
-            scale: { duration: 20, ease: 'easeInOut', repeat: Infinity },
-            opacity: { duration: 20, ease: 'easeInOut', repeat: Infinity },
-            rotate: { duration: 240, ease: 'linear', repeat: Infinity },
-          }}
-        />
-        <div className="absolute inset-0 bg-gradient-radial from-transparent via-background/50 to-background pointer-events-none" />
-        <motion.div
-          className="relative z-10 container mx-auto px-4 py-12 space-y-32"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.5 }}
-        >
-          {/* Hero Section */}
-          <motion.div
-            className="section-wrapper font-afro-decorative relative overflow-hidden rounded-[2rem] border-0 before:absolute before:inset-0 before:rounded-[2rem] before:bg-gradient-to-r before:from-amber-500/40 before:via-purple-500/40 before:to-pink-500/40 before:-z-[1] hover:before:from-amber-500/60 hover:before:via-purple-500/60 hover:before:to-pink-500/60 transition-all duration-1000 shadow-[0_0_35px_rgba(0,0,0,0.15)] hover:shadow-[0_0_50px_rgba(0,0,0,0.2)] after:absolute after:inset-0 after:rounded-[2rem] after:bg-gradient-to-br after:from-white/10 after:to-black/10 after:backdrop-blur-md"
-            whileHover={{ scale: 1.02 }}
-            transition={{ type: 'spring', stiffness: 300 }}
-          >
+    <main className="relative min-h-screen">
+      {/* Background & UI elements */}
+      <AdaptiveThemes />
+      <ImmersiveCanvas />
+      <ScrollProgress />
+      <MusicParticles />
+
+      {/* Global leteisi pattern background with subtle mouse-responsive movement (no bounce) */}
+      <MouseResponsivePattern
+        opacity={0.2}
+        intensity={0.005}
+        patternType="leteisi"
+        limitRange={10}
+      />
+
+      {/* Global gradient overlay for better readability */}
+      <div className="fixed inset-0 bg-gradient-to-b from-background/80 via-transparent to-background/80 pointer-events-none z-0"></div>
+
+      {/* Main content sections with completely clear backgrounds */}
+      <div className="relative z-10">
+        {/* Hero section */}
+        <section id="hero" className="relative pt-24 py-24 overflow-hidden">
+          <div className="container px-4 relative z-10">
             <HeroSection />
-          </motion.div>
-
-          {/* Problem Statement Section */}
-          <div
-            id="problem"
-            className="section-wrapper font-afro-decorative relative p-6 rounded-[2rem] border-0 before:absolute before:inset-0 before:rounded-[2rem] before:bg-gradient-to-r before:from-amber-500/40 before:via-purple-500/40 before:to-pink-500/40 before:-z-[1] hover:before:from-amber-500/60 hover:before:via-purple-500/60 hover:before:to-pink-500/60 transition-all duration-1000 shadow-[0_0_35px_rgba(0,0,0,0.15)] hover:shadow-[0_0_50px_rgba(0,0,0,0.2)] after:absolute after:inset-0 after:rounded-[2rem] after:bg-gradient-to-br after:from-white/10 after:to-black/10 after:backdrop-blur-md"
-          >
-            <motion.div
-              initial={{ opacity: 0, y: 20, scale: 0.95 }}
-              whileInView={{ opacity: 1, y: 0, scale: 1 }}
-              transition={{ duration: 1.2, ease: 'easeOut' }}
-              viewport={{ once: true, margin: '-100px' }}
-            >
-              <ProblemStatement />
-            </motion.div>
           </div>
+        </section>
 
-          {/* Value Proposition Section */}
-          <div className="section-wrapper font-afro-decorative relative p-6 rounded-[2rem] border-0 before:absolute before:inset-0 before:rounded-[2rem] before:bg-gradient-to-r before:from-amber-500/40 before:via-purple-500/40 before:to-pink-500/40 before:-z-[1] hover:before:from-amber-500/60 hover:before:via-purple-500/60 hover:before:to-pink-500/60 transition-all duration-1000 shadow-[0_0_35px_rgba(0,0,0,0.15)] hover:shadow-[0_0_50px_rgba(0,0,0,0.2)] after:absolute after:inset-0 after:rounded-[2rem] after:bg-gradient-to-br after:from-white/10 after:to-black/10 after:backdrop-blur-md">
-            <motion.div
-              initial={{ opacity: 0, y: 20, scale: 0.95 }}
-              whileInView={{ opacity: 1, y: 0, scale: 1 }}
-              transition={{ duration: 1.2, ease: 'easeOut' }}
-              viewport={{ once: true, margin: '-100px' }}
-            >
-              <ValueProposition />
-            </motion.div>
+        {/* Features section */}
+        <section id="features" className="relative py-24 overflow-hidden">
+          <div className="container px-4 relative z-10">
+            <FeaturesSection />
           </div>
+        </section>
 
-          {/* Features Section */}
-          <div
-            id="features"
-            className="section-wrapper font-afro-decorative relative p-6 rounded-[2rem] border-0 before:absolute before:inset-0 before:rounded-[2rem] before:bg-gradient-to-r before:from-amber-500/40 before:via-purple-500/40 before:to-pink-500/40 before:-z-[1] hover:before:from-amber-500/60 hover:before:via-purple-500/60 hover:before:to-pink-500/60 transition-all duration-1000 shadow-[0_0_35px_rgba(0,0,0,0.15)] hover:shadow-[0_0_50px_rgba(0,0,0,0.2)] after:absolute after:inset-0 after:rounded-[2rem] after:bg-gradient-to-br after:from-white/10 after:to-black/10 after:backdrop-blur-md"
-          >
-            <motion.div
-              initial={{ opacity: 0, y: 20, scale: 0.95 }}
-              whileInView={{ opacity: 1, y: 0, scale: 1 }}
-              transition={{ duration: 1.2, ease: 'easeOut' }}
-              viewport={{ once: true, margin: '-100px' }}
-            >
-              <FeaturesSection />
-            </motion.div>
+        {/* Value proposition section */}
+        <section id="solutions" className="relative py-24 overflow-hidden">
+          <div className="container px-4 relative z-10">
+            <ValueProposition />
           </div>
+        </section>
 
-          {/* How It Works Section */}
-          <div
-            id="how-it-works"
-            className="section-wrapper font-afro-decorative relative p-6 rounded-[2rem] border-0 before:absolute before:inset-0 before:rounded-[2rem] before:bg-gradient-to-r before:from-amber-500/40 before:via-purple-500/40 before:to-pink-500/40 before:-z-[1] hover:before:from-amber-500/60 hover:before:via-purple-500/60 hover:before:to-pink-500/60 transition-all duration-1000 shadow-[0_0_35px_rgba(0,0,0,0.15)] hover:shadow-[0_0_50px_rgba(0,0,0,0.2)] after:absolute after:inset-0 after:rounded-[2rem] after:bg-gradient-to-br after:from-white/10 after:to-black/10 after:backdrop-blur-md"
-          >
-            <motion.div
-              initial={{ opacity: 0, y: 20, scale: 0.95 }}
-              whileInView={{ opacity: 1, y: 0, scale: 1 }}
-              transition={{ duration: 1.2, ease: 'easeOut' }}
-              viewport={{ once: true, margin: '-100px' }}
-            >
-              <HowItWorks />
-            </motion.div>
+        {/* Problems statement section */}
+        <section id="problems" className="relative py-24 overflow-hidden">
+          <div className="container px-4 relative z-10">
+            <ProblemStatement />
           </div>
+        </section>
 
-          {/* Community Section */}
-          <div
-            id="community"
-            className="section-wrapper font-afro-decorative relative p-6 rounded-[2rem] border-0 before:absolute before:inset-0 before:rounded-[2rem] before:bg-gradient-to-r before:from-amber-500/40 before:via-purple-500/40 before:to-pink-500/40 before:-z-[1] hover:before:from-amber-500/60 hover:before:via-purple-500/60 hover:before:to-pink-500/60 transition-all duration-1000 shadow-[0_0_35px_rgba(0,0,0,0.15)] hover:shadow-[0_0_50px_rgba(0,0,0,0.2)] after:absolute after:inset-0 after:rounded-[2rem] after:bg-gradient-to-br after:from-white/10 after:to-black/10 after:backdrop-blur-md"
-          >
-            <motion.div
-              initial={{ opacity: 0, y: 20, scale: 0.95 }}
-              whileInView={{ opacity: 1, y: 0, scale: 1 }}
-              transition={{ duration: 1.2, ease: 'easeOut' }}
-              viewport={{ once: true, margin: '-100px' }}
-            >
-              <CommunitySection />
-            </motion.div>
+        {/* How it works section */}
+        <section id="how-it-works" className="relative py-24 overflow-hidden">
+          <div className="container px-4 relative z-10">
+            <HowItWorks />
           </div>
+        </section>
 
-          {/* CTA Section */}
-          <div
-            id="join"
-            className="section-wrapper font-afro-decorative relative p-6 rounded-[2rem] border-0 before:absolute before:inset-0 before:rounded-[2rem] before:bg-gradient-to-r before:from-amber-500/40 before:via-purple-500/40 before:to-pink-500/40 before:-z-[1] hover:before:from-amber-500/60 hover:before:via-purple-500/60 hover:before:to-pink-500/60 transition-all duration-1000 shadow-[0_0_35px_rgba(0,0,0,0.15)] hover:shadow-[0_0_50px_rgba(0,0,0,0.2)] after:absolute after:inset-0 after:rounded-[2rem] after:bg-gradient-to-br after:from-white/10 after:to-black/10 after:backdrop-blur-md"
-          >
-            <motion.div
-              initial={{ opacity: 0, y: 20, scale: 0.95 }}
-              whileInView={{ opacity: 1, y: 0, scale: 1 }}
-              transition={{ duration: 1.2, ease: 'easeOut' }}
-              viewport={{ once: true, margin: '-100px' }}
-            >
-              <CTASection />
-            </motion.div>
+        {/* Community section */}
+        <section id="community" className="relative py-24 overflow-hidden">
+          <div className="container px-4 relative z-10">
+            <CommunitySection />
           </div>
-        </motion.div>
-      </main>
+        </section>
 
-      {/* Footer */}
-      <Footer />
-    </>
+        {/* CTA section */}
+        <section id="cta" className="relative py-24 overflow-hidden">
+          <div className="container px-4 relative z-10">
+            <CTASection />
+          </div>
+        </section>
+
+        {/* Footer */}
+        <footer className="relative bg-background/90 border-t border-white/10">
+          <Footer />
+        </footer>
+      </div>
+    </main>
   );
 }

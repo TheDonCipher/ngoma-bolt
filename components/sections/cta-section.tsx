@@ -4,12 +4,11 @@ import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { ConnectWalletButton } from '@/components/web3/connect-wallet-button';
 import Link from 'next/link';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, Music2, WalletCards } from 'lucide-react';
 
 export function CTASection() {
   return (
     <section className="py-24 relative overflow-hidden">
-      <div className="absolute inset-0 pattern-kente pattern-parallax pointer-events-none rounded-[2rem]" />
       <div className="container px-4 relative z-10">
         <motion.div
           className="max-w-4xl mx-auto text-center"
@@ -25,9 +24,16 @@ export function CTASection() {
             viewport={{ once: true, margin: '-100px' }}
             className="mb-8"
           >
-            <div className="mx-auto w-32 h-32 bg-gradient-to-br from-amber-400 via-purple-400 to-pink-400 rounded-full flex items-center justify-center mb-6 shadow-[0_0_40px_rgba(217,70,219,0.6)] animate-pulse-slow">
-              <div className="w-24 h-24 bg-background rounded-full flex items-center justify-center">
-                <span className="text-5xl">🎵</span>
+            <div className="mx-auto w-32 h-32 bg-gradient-to-br from-amber-300 via-purple-300 to-pink-300 rounded-full flex items-center justify-center mb-6 shadow-[0_0_60px_rgba(217,70,219,0.8)] animate-pulse-slow">
+              <div className="w-24 h-24 bg-background rounded-full flex items-center justify-center shadow-inner">
+                <span
+                  className="text-5xl"
+                  style={{
+                    filter: 'drop-shadow(0 0 8px rgba(255,255,255,0.6))',
+                  }}
+                >
+                  🎵
+                </span>
               </div>
             </div>
           </motion.div>
@@ -55,24 +61,45 @@ export function CTASection() {
             space.
           </motion.p>
 
+          {/* Updated button design */}
           <motion.div
-            className="flex flex-col sm:flex-row items-center justify-center gap-4"
+            className="flex flex-col sm:flex-row items-center justify-center gap-6"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.4 }}
             viewport={{ once: true, margin: '-100px' }}
           >
-            <ConnectWalletButton className="w-full sm:w-auto text-base px-8 py-6 bg-gradient-to-r from-amber-500 to-purple-600 hover:from-amber-600 hover:to-purple-700 text-white rounded-full shadow-lg hover:shadow-xl transition-all duration-300" />
-            <Link href="/marketplace">
-              <Button
-                variant="outline"
-                size="lg"
-                className="w-full sm:w-auto text-base px-8 py-6 group border-white/10 hover:bg-white/10 rounded-full"
-              >
-                Explore Marketplace
-                <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
-              </Button>
-            </Link>
+            {/* Connect Wallet Button with improved design */}
+            <motion.div
+              className="w-full sm:w-auto"
+              whileHover={{ scale: 1.03, y: -2 }}
+              whileTap={{ scale: 0.98 }}
+              transition={{ type: 'spring', stiffness: 300 }}
+            >
+              <div className="wallet-button-wrapper">
+                <ConnectWalletButton className="premium-connect-button" />
+              </div>
+            </motion.div>
+
+            {/* Explore Marketplace Button with matching design */}
+            <motion.div
+              className="w-full sm:w-auto"
+              whileHover={{ scale: 1.03, y: -2 }}
+              whileTap={{ scale: 0.98 }}
+              transition={{ type: 'spring', stiffness: 300 }}
+            >
+              <Link href="/marketplace" className="block">
+                <Button
+                  variant="outline"
+                  size="lg"
+                  className="premium-outline-button"
+                >
+                  <Music2 className="w-5 h-5 mr-2" />
+                  <span>Explore Marketplace</span>
+                  <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                </Button>
+              </Link>
+            </motion.div>
           </motion.div>
         </motion.div>
       </div>

@@ -23,14 +23,14 @@ const bodyFont = Inter({
 export function HeroSection() {
   return (
     <motion.section
-      className={`relative flex items-center justify-center overflow-hidden ${headingFont.variable} ${bodyFont.variable}`}
+      className={`relative flex items-center justify-center overflow-hidden min-h-[85vh] ${headingFont.variable} ${bodyFont.variable}`}
       initial={{ opacity: 0, scale: 0.95 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{ duration: 0.5 }}
     >
-      <div className="container relative z-10 px-4 py-16 sm:py-24 lg:py-32 text-center">
+      <div className="container relative z-10 px-4 py-8 sm:py-16 lg:py-24 text-center">
         <motion.div
-          className="mb-8"
+          className="mb-6 sm:mb-8"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
@@ -44,7 +44,7 @@ export function HeroSection() {
         </motion.div>
 
         <motion.h1
-          className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-bold mb-4 sm:mb-6 max-w-4xl mx-auto leading-tight font-space-grotesk tracking-tight"
+          className="text-2xl sm:text-3xl md:text-5xl lg:text-6xl xl:text-7xl font-bold mb-4 sm:mb-6 max-w-4xl mx-auto leading-tight tracking-tight"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
@@ -68,7 +68,7 @@ export function HeroSection() {
         </motion.h1>
 
         <motion.p
-          className="max-w-2xl mx-auto mb-8 text-lg text-gray-300"
+          className="max-w-2xl mx-auto mb-6 sm:mb-8 text-base sm:text-lg text-gray-300 px-2"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4 }}
@@ -85,12 +85,12 @@ export function HeroSection() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.5 }}
         >
-          <ConnectWalletButton className="w-full sm:w-auto bg-gradient-to-r from-amber-500 to-purple-600 hover:from-amber-600 hover:to-purple-700 text-primary-foreground" />
-          <Link href="#features">
+          <ConnectWalletButton className="w-full sm:w-auto bg-gradient-to-r from-amber-500 to-purple-600 hover:from-amber-600 hover:to-purple-700 text-primary-foreground font-medium text-base py-2.5" />
+          <Link href="#features" className="w-full sm:w-auto">
             <Button
               variant="outline"
               size="lg"
-              className="w-full sm:w-auto group hover:bg-white/10"
+              className="w-full group hover:bg-white/10 font-medium text-base py-2.5"
             >
               Explore Features
               <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
