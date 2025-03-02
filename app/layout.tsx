@@ -1,8 +1,7 @@
-"use client";
+'use client';
 
 import './globals.css';
-import type { Metadata } from 'next';
-import { Inter, Noto_Sans_Ethiopic } from 'next/font/google';
+import { Inter, Poppins } from 'next/font/google';
 import { ThemeProvider } from '@/components/providers/theme-provider';
 import { Web3Provider } from '@/components/providers/web3-provider';
 import { AudioProvider } from '@/components/providers/audio-provider';
@@ -15,13 +14,30 @@ import { BackgroundPattern } from '@/components/shared/background-pattern';
 import dynamic from 'next/dynamic';
 import { usePathname } from 'next/navigation';
 
-const inter = Inter({ subsets: ['latin'], display: 'fallback' });
-const notoSansEthiopic = Noto_Sans_Ethiopic({ subsets: ['ethiopic'], display: 'fallback' });
-
-const AudioPlayer = dynamic(() => import('@/components/player/audio-player').then(mod => mod.AudioPlayer), {
-  ssr: false,
-  loading: () => <div className="fixed bottom-0 left-0 right-0 h-16 bg-background border-t animate-pulse" />,
+const inter = Inter({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-inter',
 });
+const poppins = Poppins({
+  weight: ['400', '500', '600', '700'],
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-poppins',
+});
+
+const AudioPlayer = dynamic(
+  () =>
+    import('@/components/player/audio-player').then((mod) => mod.AudioPlayer),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="fixed bottom-0 left-0 right-0 h-16 bg-background border-t animate-pulse" />
+    ),
+  }
+);
+
+// Removed metadata export
 
 export default function RootLayout({
   children,
@@ -31,7 +47,11 @@ export default function RootLayout({
   const pathname = usePathname();
 
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html
+      lang="en"
+      className={`${inter.variable} ${poppins.variable}`}
+      suppressHydrationWarning
+    >
       <head>
         <meta name="application-name" content="Afrobeats NFT" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -50,9 +70,7 @@ export default function RootLayout({
                   <div className="min-h-screen flex flex-col relative bg-background">
                     <BackgroundPattern />
                     <MainNav />
-                    <main className="flex-1 relative z-[1]">
-                      {children}
-                    </main>
+                    <main className="flex-1 relative z-[1]">{children}</main>
                     <AudioPlayer />
                   </div>
                   <Toaster />

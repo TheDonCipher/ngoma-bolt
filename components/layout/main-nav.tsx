@@ -264,11 +264,17 @@ export function MainNav() {
                       <ChevronRight className="h-4 w-4" />
                     </div>
                   </Link>
-                  
+
                   {/* Additional content for demonstration of scrolling */}
                   <div className="space-y-4 mb-8">
                     <h3 className="font-medium text-white">Resources</h3>
-                    {['Documentation', 'Tutorials', 'Support', 'FAQ', 'Community'].map((item, i) => (
+                    {[
+                      'Documentation',
+                      'Tutorials',
+                      'Support',
+                      'FAQ',
+                      'Community',
+                    ].map((item, i) => (
                       <Link
                         key={i}
                         href="#"
@@ -281,7 +287,7 @@ export function MainNav() {
                     ))}
                   </div>
                 </div>
-                
+
                 {/* Fixed footer with wallet connection */}
                 <div className="p-6 border-t border-white/10">
                   <ConnectWalletButton className="w-full" />
