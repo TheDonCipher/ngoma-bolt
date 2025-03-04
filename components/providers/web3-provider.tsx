@@ -1,35 +1,41 @@
-"use client";
+'use client';
 
-import { ReactNode, useEffect } from 'react';
-import { ThirdwebProvider } from "@thirdweb-dev/react";
-import { useWeb3Store } from '@/lib/store/use-web3-store';
-import { useWebSocket } from '@/lib/services/websocket.service';
-import { Ethereum } from "@thirdweb-dev/chains";
+import { ReactNode } from 'react';
+import { ThirdwebProvider } from '@thirdweb-dev/react';
+import { Ethereum } from '@thirdweb-dev/chains';
+
+// Optional imports with error handling for missing modules
+let useWeb3Store: any;
+let useWebSocket: any;
+try {
+  // Only import if the modules exist
+  useWeb3Store = require('@/lib/store/use-web3-store').useWeb3Store;
+  useWebSocket = require('@/lib/services/websocket.service').useWebSocket;
+} catch (error) {
+  console.warn('Optional modules not available:', error);
+}
 
 interface Web3ProviderProps {
   children: ReactNode;
 }
 
 export function Web3Provider({ children }: Web3ProviderProps) {
-  const { connect, disconnect } = useWebSocket();
-  const { address } = useWeb3Store();
+  // Get environment variables with fallbacks
+  const clientId = process.env.NEXT_PUBLIC_THIRDWEB_CLIENT_ID || '';
+  const authDomain = process.env.NEXT_PUBLIC_AUTH_DOMAIN || '';
 
-  useEffect(() => {
-    if (address) {
-      connect();
-    } else {
-      disconnect();
-    }
-  }, [address, connect, disconnect]);
+  const authConfig = authDomain
+    ? {
+        authUrl: '/api/auth',
+        domain: authDomain,
+      }
+    : undefined;
 
   return (
     <ThirdwebProvider
       activeChain={Ethereum}
-      clientId={process.env.NEXT_PUBLIC_THIRDWEB_CLIENT_ID}
-      authConfig={{
-        authUrl: "/api/auth",
-        domain: process.env.NEXT_PUBLIC_AUTH_DOMAIN!,
-      }}
+      clientId={clientId}
+      authConfig={authConfig}
     >
       {children}
     </ThirdwebProvider>

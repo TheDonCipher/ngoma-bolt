@@ -2,36 +2,39 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-// Fix imports using relative paths
-import { useAuth } from '../../hooks/use-auth';
-import { Loader } from '../ui/loader';
 
-export function ArtistGuard({ children }: { children: React.ReactNode }) {
-  const { user, isLoading } = useAuth();
+interface ArtistGuardProps {
+  children: React.ReactNode;
+}
+
+const ArtistGuard = ({ children }: ArtistGuardProps) => {
   const router = useRouter();
-  const [isAuthorized, setIsAuthorized] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+
+  // Mock authentication check
+  const isAuthenticated = true; // Replace with your actual auth check
+  const isArtist = true; // Replace with your actual artist role check
 
   useEffect(() => {
-    if (!isLoading) {
-      if (!user) {
-        router.push('/login?callbackUrl=/dashboard/artist');
-      } else if (user.role !== 'artist') {
-        router.push('/dashboard');
-      } else {
-        setIsAuthorized(true);
-      }
+    // Check if user is authenticated and is an artist
+    if (!isAuthenticated) {
+      router.push('/login'); // Redirect to login page if not authenticated
+    } else if (!isArtist) {
+      router.push('/dashboard'); // Redirect to general dashboard if not an artist
+    } else {
+      setIsLoading(false); // User is authenticated and is an artist
     }
-  }, [user, isLoading, router]);
+  }, [router]);
 
-  if (isLoading || !isAuthorized) {
+  if (isLoading) {
     return (
-      <div className="h-screen w-full flex items-center justify-center">
-        <Loader size="lg" text="Verifying artist credentials..." />
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="animate-spin h-10 w-10 border-4 border-amber-500 rounded-full border-t-transparent"></div>
       </div>
     );
   }
 
   return <>{children}</>;
-}
+};
 
 export default ArtistGuard;

@@ -1,159 +1,163 @@
-"use client";
+'use client';
 
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { Button } from "@/components/ui/button";
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import {
-  Music,
   LayoutDashboard,
-  Upload,
-  Album,
-  CalendarDays,
-  Package,
-  BarChart,
+  Music2,
+  Calendar,
+  ShoppingBag,
   Users,
   Settings,
-  Medal,
-} from "lucide-react";
-import { cn } from "@/lib/utils";
+  LineChart,
+  MessageSquare,
+  HelpCircle,
+  LogOut,
+} from 'lucide-react';
+import { cn } from '@/lib/utils';
 
-const artistRoutes = [
-  {
-    href: "/dashboard/artist",
-    label: "Overview",
-    icon: LayoutDashboard,
-  },
-  {
-    href: "/dashboard/artist/tracks",
-    label: "Tracks",
-    icon: Music,
-  },
-  {
-    href: "/dashboard/artist/upload",
-    label: "Upload",
-    icon: Upload,
-  },
-  {
-    href: "/dashboard/artist/albums",
-    label: "Albums",
-    icon: Album,
-  },
-  {
-    href: "/dashboard/artist/events",
-    label: "Events",
-    icon: CalendarDays,
-  },
-  {
-    href: "/dashboard/artist/merchandise",
-    label: "Merchandise",
-    icon: Package,
-  },
-  {
-    href: "/dashboard/artist/analytics",
-    label: "Analytics",
-    icon: BarChart,
-  },
-  {
-    href: "/dashboard/artist/collaborations",
-    label: "Collaborations",
-    icon: Users,
-  },
-  {
-    href: "/dashboard/artist/settings",
-    label: "Settings",
-    icon: Settings,
-  },
-];
-
-const fanRoutes = [
-  {
-    href: "/dashboard/fan",
-    label: "Overview",
-    icon: LayoutDashboard,
-  },
-  {
-    href: "/dashboard/fan/collection",
-    label: "Collection",
-    icon: Music,
-  },
-  {
-    href: "/dashboard/fan/following",
-    label: "Following",
-    icon: Users,
-  },
-  {
-    href: "/dashboard/fan/badges",
-    label: "Badges",
-    icon: Medal,
-  },
-  {
-    href: "/dashboard/fan/achievements",
-    label: "Achievements",
-    icon: Album,
-  },
-  {
-    href: "/dashboard/fan/settings",
-    label: "Settings",
-    icon: Settings,
-  },
-];
-
-const adminRoutes = [
-  {
-    href: "/dashboard/admin",
-    label: "Overview",
-    icon: LayoutDashboard,
-  },
-  {
-    href: "/dashboard/admin/users",
-    label: "Users",
-    icon: Users,
-  },
-  {
-    href: "/dashboard/admin/content",
-    label: "Content",
-    icon: Music,
-  },
-  {
-    href: "/dashboard/admin/settings",
-    label: "Settings",
-    icon: Settings,
-  },
-];
+interface NavItem {
+  title: string;
+  href: string;
+  icon: React.ReactNode;
+  isActive?: boolean;
+  children?: NavItem[];
+}
 
 export function DashboardNav() {
   const pathname = usePathname();
-  const routes = pathname.includes("/artist")
-    ? artistRoutes
-    : pathname.includes("/fan")
-    ? fanRoutes
-    : adminRoutes;
+
+  const navItems: NavItem[] = [
+    {
+      title: 'Overview',
+      href: '/dashboard/artist',
+      icon: <LayoutDashboard className="mr-3 h-5 w-5" />,
+      isActive: pathname === '/dashboard/artist',
+    },
+    {
+      title: 'Music',
+      href: '/dashboard/artist/music',
+      icon: <Music2 className="mr-3 h-5 w-5" />,
+      isActive: pathname.startsWith('/dashboard/artist/music'),
+    },
+    {
+      title: 'Events',
+      href: '/dashboard/artist/events',
+      icon: <Calendar className="mr-3 h-5 w-5" />,
+      isActive: pathname.startsWith('/dashboard/artist/events'),
+    },
+    {
+      title: 'Merchandise',
+      href: '/dashboard/artist/merchandise',
+      icon: <ShoppingBag className="mr-3 h-5 w-5" />,
+      isActive: pathname.startsWith('/dashboard/artist/merchandise'),
+    },
+    {
+      title: 'Analytics',
+      href: '/dashboard/artist/analytics/overview',
+      icon: <LineChart className="mr-3 h-5 w-5" />,
+      isActive: pathname.startsWith('/dashboard/artist/analytics'),
+      children: [
+        {
+          title: 'Overview',
+          href: '/dashboard/artist/analytics/overview',
+          isActive: pathname === '/dashboard/artist/analytics/overview',
+        },
+        {
+          title: 'Audience',
+          href: '/dashboard/artist/analytics/audience',
+          isActive: pathname === '/dashboard/artist/analytics/audience',
+        },
+        {
+          title: 'Revenue',
+          href: '/dashboard/artist/analytics/revenue',
+          isActive: pathname === '/dashboard/artist/analytics/revenue',
+        },
+      ],
+    },
+    {
+      title: 'Fans',
+      href: '/dashboard/artist/fans',
+      icon: <Users className="mr-3 h-5 w-5" />,
+      isActive: pathname.startsWith('/dashboard/artist/fans'),
+    },
+    {
+      title: 'Messages',
+      href: '/dashboard/artist/messages',
+      icon: <MessageSquare className="mr-3 h-5 w-5" />,
+      isActive: pathname.startsWith('/dashboard/artist/messages'),
+    },
+    {
+      title: 'Settings',
+      href: '/dashboard/artist/settings',
+      icon: <Settings className="mr-3 h-5 w-5" />,
+      isActive: pathname.startsWith('/dashboard/artist/settings'),
+    },
+    {
+      title: 'Help & Support',
+      href: '/dashboard/artist/help',
+      icon: <HelpCircle className="mr-3 h-5 w-5" />,
+      isActive: pathname.startsWith('/dashboard/artist/help'),
+    },
+  ];
 
   return (
-    <nav className="hidden lg:block w-72 border-r min-h-screen p-8 space-y-6 bg-gradient-to-b from-amber-500/5 to-purple-500/5">
-      <div className="flex items-center gap-3 mb-10">
-        <Music className="w-8 h-8 text-amber-500" />
-        <span className="font-bold text-xl font-display bg-clip-text text-transparent bg-gradient-to-r from-amber-500 to-purple-500">Dashboard</span>
-      </div>
+    <div className="dashboard-nav scrollbar-custom h-full py-4">
+      <div className="flex flex-col h-full">
+        <div className="flex-1">
+          <nav className="px-2">
+            <ul className="space-y-1">
+              {navItems.map((item, index) => (
+                <li key={index}>
+                  <Link
+                    href={item.href}
+                    className={cn(
+                      'flex items-center rounded-md px-3 py-2 text-sm font-medium transition-colors',
+                      item.isActive
+                        ? 'bg-amber-50 text-amber-800 dark:bg-amber-900/30 dark:text-amber-100'
+                        : 'text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800'
+                    )}
+                  >
+                    {item.icon}
+                    {item.title}
+                  </Link>
 
-      {routes.map((route) => (
-        <Button
-          key={route.href}
-          variant="ghost"
-          className={cn(
-            "w-full justify-start gap-3 py-6 text-base font-medium transition-all duration-300",
-            pathname === route.href
-              ? "bg-gradient-to-r from-amber-500/20 to-purple-500/20 text-amber-500"
-              : "hover:bg-gradient-to-r hover:from-amber-500/10 hover:to-purple-500/10 hover:text-amber-500/90"
-          )}
-          asChild
-        >
-          <Link href={route.href}>
-            <route.icon className="w-4 h-4" />
-            {route.label}
+                  {/* Sub navigation items */}
+                  {item.children && item.isActive && (
+                    <ul className="mt-1 pl-8 space-y-1">
+                      {item.children.map((child, childIndex) => (
+                        <li key={childIndex}>
+                          <Link
+                            href={child.href}
+                            className={cn(
+                              'flex items-center rounded-md py-1.5 px-3 text-sm transition-colors',
+                              child.isActive
+                                ? 'bg-amber-50/50 text-amber-700 dark:bg-amber-900/20 dark:text-amber-200'
+                                : 'text-gray-700 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800'
+                            )}
+                          >
+                            {child.title}
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </nav>
+        </div>
+
+        <div className="px-4 mt-6 border-t pt-4 dark:border-gray-700">
+          <Link
+            href="/auth/signout"
+            className="flex items-center rounded-md px-3 py-2 text-sm font-medium text-red-600 hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-900/20 transition-colors"
+          >
+            <LogOut className="mr-3 h-5 w-5" />
+            Sign Out
           </Link>
-        </Button>
-      ))}
-    </nav>
+        </div>
+      </div>
+    </div>
   );
 }

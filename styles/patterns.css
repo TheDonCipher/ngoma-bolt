@@ -1,0 +1,240 @@
+/* African-inspired patterns using CSS */
+.pattern-kente-sm {
+  background-image:
+    repeating-linear-gradient(
+      45deg,
+      currentColor,
+      currentColor 2px,
+      transparent 2px,
+      transparent 8px
+    ),
+    repeating-linear-gradient(
+      -45deg,
+      currentColor,
+      currentColor 2px,
+      transparent 2px,
+      transparent 8px
+    );
+}
+
+.pattern-kente-lg {
+  background-image:
+    repeating-linear-gradient(
+      45deg,
+      currentColor,
+      currentColor 4px,
+      transparent 4px,
+      transparent 16px
+    ),
+    repeating-linear-gradient(
+      -45deg,
+      currentColor,
+      currentColor 4px,
+      transparent 4px,
+      transparent 16px
+    );
+}
+
+.pattern-mud-cloth-sm {
+  background-image:
+    radial-gradient(currentColor 1px, transparent 1px),
+    radial-gradient(currentColor 1px, transparent 1px);
+  background-size: 10px 10px;
+  background-position:
+    0 0,
+    5px 5px;
+}
+
+.pattern-mud-cloth-lg {
+  background-image:
+    radial-gradient(currentColor 2px, transparent 2px),
+    radial-gradient(currentColor 2px, transparent 2px);
+  background-size: 20px 20px;
+  background-position:
+    0 0,
+    10px 10px;
+}
+
+.pattern-zigzag-sm {
+  background-image: linear-gradient(
+    135deg,
+    currentColor 10%,
+    transparent 10%,
+    transparent 50%,
+    currentColor 50%,
+    currentColor 60%,
+    transparent 60%,
+    transparent 100%
+  );
+  background-size: 8px 8px;
+}
+
+.pattern-zigzag-md {
+  background-image: linear-gradient(
+    135deg,
+    currentColor 10%,
+    transparent 10%,
+    transparent 50%,
+    currentColor 50%,
+    currentColor 60%,
+    transparent 60%,
+    transparent 100%
+  );
+  background-size: 16px 16px;
+}
+
+.pattern-zigzag-lg {
+  background-image: linear-gradient(
+    135deg,
+    currentColor 10%,
+    transparent 10%,
+    transparent 50%,
+    currentColor 50%,
+    currentColor 60%,
+    transparent 60%,
+    transparent 100%
+  );
+  background-size: 24px 24px;
+}
+
+.pattern-zigzag-xl {
+  background-image: linear-gradient(
+    135deg,
+    currentColor 10%,
+    transparent 10%,
+    transparent 50%,
+    currentColor 50%,
+    currentColor 60%,
+    transparent 60%,
+    transparent 100%
+  );
+  background-size: 32px 32px;
+}
+
+.pattern-dots-sm {
+  background-image: radial-gradient(currentColor 1px, transparent 1px);
+  background-size: 8px 8px;
+}
+
+.pattern-dots-md {
+  background-image: radial-gradient(currentColor 1.5px, transparent 1.5px);
+  background-size: 16px 16px;
+}
+
+.pattern-dots-lg {
+  background-image: radial-gradient(currentColor 2px, transparent 2px);
+  background-size: 20px 20px;
+}
+
+.pattern-dots-xl {
+  background-image: radial-gradient(currentColor 3px, transparent 3px);
+  background-size: 24px 24px;
+}
+
+.pattern-triangles-sm {
+  background-image:
+    linear-gradient(45deg, transparent 50%, currentColor 50%),
+    linear-gradient(-45deg, transparent 50%, currentColor 50%);
+  background-size: 10px 10px;
+}
+
+.pattern-triangles-md {
+  background-image:
+    linear-gradient(45deg, transparent 50%, currentColor 50%),
+    linear-gradient(-45deg, transparent 50%, currentColor 50%);
+  background-size: 20px 20px;
+}
+
+.pattern-grid-sm {
+  background-image:
+    linear-gradient(to right, currentColor 1px, transparent 1px),
+    linear-gradient(to bottom, currentColor 1px, transparent 1px);
+  background-size: 10px 10px;
+}
+
+.pattern-grid-md {
+  background-image:
+    linear-gradient(to right, currentColor 1px, transparent 1px),
+    linear-gradient(to bottom, currentColor 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
+/* Pattern classes for the cards */
+.pattern-1 {
+  background-image:
+    linear-gradient(135deg, currentColor 25%, transparent 25%),
+    linear-gradient(225deg, currentColor 25%, transparent 25%),
+    linear-gradient(45deg, currentColor 25%, transparent 25%),
+    linear-gradient(315deg, currentColor 25%, transparent 25%);
+  background-position:
+    10px 0,
+    10px 0,
+    0 0,
+    0 0;
+  background-size: 20px 20px;
+  background-repeat: repeat;
+}
+
+.pattern-2 {
+  background-image:
+    radial-gradient(circle at 50% 0, currentColor 10%, transparent 10.5%),
+    radial-gradient(circle at 0% 50%, currentColor 10%, transparent 10.5%),
+    radial-gradient(circle at 50% 100%, currentColor 10%, transparent 10.5%),
+    radial-gradient(circle at 100% 50%, currentColor 10%, transparent 10.5%);
+  background-position:
+    0px 0px,
+    0px 0px,
+    0px 0px,
+    0px 0px;
+  background-size: 20px 20px;
+  background-repeat: repeat;
+}
+
+.pattern-3 {
+  background-image:
+    linear-gradient(currentColor 2px, transparent 2px),
+    linear-gradient(to right, currentColor 2px, transparent 2px);
+  background-size: 20px 20px;
+}
+
+.pattern-4 {
+  background-image:
+    linear-gradient(
+      45deg,
+      currentColor 25%,
+      transparent 25%,
+      transparent 75%,
+      currentColor 75%,
+      currentColor
+    ),
+    linear-gradient(
+      -45deg,
+      currentColor 25%,
+      transparent 25%,
+      transparent 75%,
+      currentColor 75%,
+      currentColor
+    );
+  background-size: 20px 20px;
+}
+
+.pattern-5 {
+  background-image:
+    radial-gradient(currentColor 3px, transparent 3px),
+    radial-gradient(currentColor 3px, transparent 3px);
+  background-position:
+    0 0,
+    10px 10px;
+  background-size: 20px 20px;
+}
+
+.pattern-6 {
+  background-image: repeating-linear-gradient(
+    0deg,
+    currentColor,
+    currentColor 3px,
+    transparent 3px,
+    transparent 8px
+  );
+  background-size: 20px 20px;
+}

@@ -97,7 +97,7 @@ const AlbumEditForm: React.FC<AlbumEditFormProps> = ({
                 name="coverArt"
                 value={formData.coverArt}
                 onChange={handleChange}
-                className="w-full pl-10 pr-3 py-2 border rounded-md"
+                className="w-full pl-10 pr-3 py-2 border rounded-md focus:ring-indigo-500 focus:border-indigo-500"
                 placeholder="Enter cover art URL"
               />
               <div className="absolute left-3 top-2.5 text-gray-400">
@@ -118,7 +118,7 @@ const AlbumEditForm: React.FC<AlbumEditFormProps> = ({
                 name="title"
                 value={formData.title}
                 onChange={handleChange}
-                className="w-full pl-10 pr-3 py-2 border rounded-md"
+                className="w-full pl-10 pr-3 py-2 border rounded-md focus:ring-indigo-500 focus:border-indigo-500"
                 placeholder="Enter album title"
                 required
               />
@@ -138,7 +138,7 @@ const AlbumEditForm: React.FC<AlbumEditFormProps> = ({
                 name="releaseDate"
                 value={formData.releaseDate}
                 onChange={handleChange}
-                className="w-full pl-10 pr-3 py-2 border rounded-md"
+                className="w-full pl-10 pr-3 py-2 border rounded-md focus:ring-indigo-500 focus:border-indigo-500"
                 required
               />
               <div className="absolute left-3 top-2.5 text-gray-400">
@@ -153,7 +153,7 @@ const AlbumEditForm: React.FC<AlbumEditFormProps> = ({
               name="status"
               value={formData.status}
               onChange={handleChange}
-              className="w-full p-2 border rounded-md"
+              className="w-full p-2 border rounded-md focus:ring-indigo-500 focus:border-indigo-500"
             >
               <option value="draft">Draft</option>
               <option value="scheduled">Scheduled</option>
@@ -177,19 +177,19 @@ const AlbumEditForm: React.FC<AlbumEditFormProps> = ({
             value={trackTitle}
             onChange={(e) => setTrackTitle(e.target.value)}
             placeholder="Track title"
-            className="flex-1 p-2 border rounded-md"
+            className="flex-1 p-2 border rounded-md focus:ring-indigo-500 focus:border-indigo-500"
           />
           <input
             type="text"
             value={trackDuration}
             onChange={(e) => setTrackDuration(e.target.value)}
             placeholder="Duration (e.g. 3:45)"
-            className="w-24 p-2 border rounded-md"
+            className="w-24 p-2 border rounded-md focus:ring-indigo-500 focus:border-indigo-500"
           />
           <button
             type="button"
             onClick={addTrack}
-            className="bg-indigo-600 text-white px-4 py-2 rounded flex items-center"
+            className="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700 focus:ring-2 focus:ring-indigo-500 flex items-center"
           >
             <Plus className="h-4 w-4 mr-1" /> Add
           </button>
@@ -228,13 +228,13 @@ const AlbumEditForm: React.FC<AlbumEditFormProps> = ({
         <button
           type="button"
           onClick={onCancel}
-          className="px-4 py-2 bg-gray-200 dark:bg-gray-700 rounded-md hover:bg-gray-300 dark:hover:bg-gray-600"
+          className="px-4 py-2 bg-gray-200 dark:bg-gray-700 rounded-md hover:bg-gray-300 dark:hover:bg-gray-600 focus:ring-2 focus:ring-gray-500"
         >
           Cancel
         </button>
         <button
           type="submit"
-          className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700"
+          className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 focus:ring-2 focus:ring-indigo-500"
         >
           Save Changes
         </button>

@@ -87,7 +87,7 @@ const AlbumCreateForm: React.FC<AlbumCreateFormProps> = ({
             name="title"
             value={albumData.title}
             onChange={handleChange}
-            className="w-full pl-10 pr-3 py-2 border rounded-md"
+            className="w-full pl-10 pr-3 py-2 border rounded-md focus:ring-indigo-500 focus:border-indigo-500"
             placeholder="Enter album title"
             required
           />
@@ -105,7 +105,7 @@ const AlbumCreateForm: React.FC<AlbumCreateFormProps> = ({
             name="releaseDate"
             value={albumData.releaseDate}
             onChange={handleChange}
-            className="w-full pl-10 pr-3 py-2 border rounded-md"
+            className="w-full pl-10 pr-3 py-2 border rounded-md focus:ring-indigo-500 focus:border-indigo-500"
             required
           />
           <div className="absolute left-3 top-2.5 text-gray-400">
@@ -122,7 +122,7 @@ const AlbumCreateForm: React.FC<AlbumCreateFormProps> = ({
             name="coverArt"
             value={albumData.coverArt}
             onChange={handleChange}
-            className="w-full pl-10 pr-3 py-2 border rounded-md"
+            className="w-full pl-10 pr-3 py-2 border rounded-md focus:ring-indigo-500 focus:border-indigo-500"
             placeholder="Enter cover art URL"
           />
           <div className="absolute left-3 top-2.5 text-gray-400">
@@ -146,7 +146,7 @@ const AlbumCreateForm: React.FC<AlbumCreateFormProps> = ({
           name="status"
           value={albumData.status}
           onChange={handleChange}
-          className="w-full p-2 border rounded-md"
+          className="w-full p-2 border rounded-md focus:ring-indigo-500 focus:border-indigo-500"
         >
           <option value="draft">Draft</option>
           <option value="scheduled">Scheduled</option>
@@ -162,19 +162,19 @@ const AlbumCreateForm: React.FC<AlbumCreateFormProps> = ({
             value={trackTitle}
             onChange={(e) => setTrackTitle(e.target.value)}
             placeholder="Track title"
-            className="flex-1 p-2 border rounded-md"
+            className="flex-1 p-2 border rounded-md focus:ring-indigo-500 focus:border-indigo-500"
           />
           <input
             type="text"
             value={trackDuration}
             onChange={(e) => setTrackDuration(e.target.value)}
             placeholder="Duration (e.g. 3:45)"
-            className="w-24 p-2 border rounded-md"
+            className="w-24 p-2 border rounded-md focus:ring-indigo-500 focus:border-indigo-500"
           />
           <button
             type="button"
             onClick={addTrack}
-            className="bg-indigo-600 text-white px-4 py-2 rounded"
+            className="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700 focus:ring-2 focus:ring-indigo-500"
           >
             Add
           </button>
@@ -213,13 +213,13 @@ const AlbumCreateForm: React.FC<AlbumCreateFormProps> = ({
         <button
           type="button"
           onClick={onCancel}
-          className="px-4 py-2 bg-gray-200 dark:bg-gray-700 rounded-md hover:bg-gray-300 dark:hover:bg-gray-600"
+          className="px-4 py-2 bg-gray-200 dark:bg-gray-700 rounded-md hover:bg-gray-300 dark:hover:bg-gray-600 focus:ring-2 focus:ring-gray-500"
         >
           Cancel
         </button>
         <button
           type="submit"
-          className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700"
+          className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 focus:ring-2 focus:ring-indigo-500"
         >
           Create Album
         </button>

@@ -290,6 +290,12 @@
 @layer utilities {
 }
 
+/* Dashboard layout overrides */
+.dashboard-sidebar {
+  display: block !important;
+  visibility: visible !important;
+}
+
 .hero-gradient {
   background: radial-gradient(
     circle at center,

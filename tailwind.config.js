@@ -2,9 +2,9 @@
 module.exports = {
   darkMode: ['class'],
   content: [
-    './pages/**/*.{ts,tsx}',
-    './components/**/*.{ts,tsx}',
-    './app/**/*.{ts,tsx}',
+    './pages/**/*.{js,ts,jsx,tsx}',
+    './components/**/*.{js,ts,jsx,tsx}',
+    './app/**/*.{js,ts,jsx,tsx}',
     './src/**/*.{ts,tsx}',
   ],
   theme: {
@@ -50,6 +50,21 @@ module.exports = {
           DEFAULT: 'hsl(var(--card))',
           foreground: 'hsl(var(--card-foreground))',
         },
+        // African-inspired color palette
+        kente: {
+          gold: '#FFC300',
+          green: '#118B4B',
+          red: '#E63946',
+          black: '#1D1E18',
+          purple: '#6F4E7C',
+        },
+        terracotta: '#CF5C36',
+        sanddune: '#E8AA9B',
+        savanna: {
+          light: '#F1D6B8',
+          DEFAULT: '#D0A98F',
+          dark: '#8B786D',
+        },
       },
       borderRadius: {
         lg: 'var(--radius)',
@@ -61,9 +76,14 @@ module.exports = {
       },
       animation: {
         'spin-slow': 'spin 240s linear infinite',
+        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+        'accordion-down': 'accordion-down 0.2s ease-out',
+        'accordion-up': 'accordion-up 0.2s ease-out',
       },
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
+        'gradient-conic':
+          'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
       },
       keyframes: {
         'accordion-down': {
@@ -75,15 +95,17 @@ module.exports = {
           to: { height: 0 },
         },
       },
-      animation: {
-        'accordion-down': 'accordion-down 0.2s ease-out',
-        'accordion-up': 'accordion-up 0.2s ease-out',
-      },
       fontFamily: {
         sans: ['var(--font-inter)'],
         poppins: ['var(--font-poppins)'],
       },
     },
   },
-  plugins: [require('tailwindcss-animate')],
+  plugins: [
+    require('tailwindcss-animate'),
+    require('@tailwindcss/forms'),
+    require('@tailwindcss/typography'),
+    require('@tailwindcss/aspect-ratio'),
+    // Note: line-clamp is now part of Tailwind Core in v3.3+
+  ],
 };

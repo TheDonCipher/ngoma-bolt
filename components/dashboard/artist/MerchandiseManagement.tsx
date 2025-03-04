@@ -1,442 +1,386 @@
 import React, { useState } from 'react';
 import {
   ShoppingBag,
-  DollarSign,
-  Tag,
   Plus,
   Edit,
   Trash,
-  Image,
+  ArrowUpDown,
+  Tag,
+  PackageOpen,
+  Clock,
+  DollarSign,
+  ShoppingCart,
 } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
-interface Product {
+// Mock merchandise data
+const mockMerchandise = [
+  {
+    id: 1,
+    name: 'African Rhythms T-Shirt',
+    price: 0.05,
+    currency: 'ETH',
+    image:
+      'https://images.unsplash.com/photo-1562157873-818bc0726f68?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+    category: 'Clothing',
+    inStock: 25,
+    sold: 18,
+    status: 'Active',
+  },
+  {
+    id: 2,
+    name: 'Limited Edition Vinyl',
+    price: 0.12,
+    currency: 'ETH',
+    image:
+      'https://images.unsplash.com/photo-1603048588665-711bd67905b6?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+    category: 'Music',
+    inStock: 10,
+    sold: 5,
+    status: 'Active',
+  },
+  {
+    id: 3,
+    name: 'Signed Poster',
+    price: 0.03,
+    currency: 'ETH',
+    image:
+      'https://images.unsplash.com/photo-1559373098-b4e5455ed2e7?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+    category: 'Collectible',
+    inStock: 15,
+    sold: 12,
+    status: 'Low Stock',
+  },
+  {
+    id: 4,
+    name: 'Concert Hoodie',
+    price: 0.08,
+    currency: 'ETH',
+    image:
+      'https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+    category: 'Clothing',
+    inStock: 30,
+    sold: 7,
+    status: 'Active',
+  },
+  {
+    id: 5,
+    name: 'Digital Artwork',
+    price: 0.15,
+    currency: 'ETH',
+    image:
+      'https://images.unsplash.com/photo-1633512423730-8aa5af312de8?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+    category: 'Digital',
+    inStock: 100,
+    sold: 25,
+    status: 'Active',
+  },
+  {
+    id: 6,
+    name: 'Tour Mug',
+    price: 0.02,
+    currency: 'ETH',
+    image:
+      'https://images.unsplash.com/photo-1577222512383-ed8bb23c0f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+    category: 'Accessories',
+    inStock: 0,
+    sold: 40,
+    status: 'Sold Out',
+  },
+];
+
+// Type definitions
+type MerchandiseItem = {
   id: number;
   name: string;
-  price: string;
+  price: number;
+  currency: string;
   image: string;
-  description: string;
-  inventory: number;
   category: string;
-  status: 'active' | 'draft' | 'sold-out';
-}
+  inStock: number;
+  sold: number;
+  status: string;
+};
+
+type FilterOptions = {
+  category: string;
+  status: string;
+  sortBy: string;
+};
 
 const MerchandiseManagement = () => {
-  const initialProducts: Product[] = [
-    {
-      id: 1,
-      name: 'Classic Logo T-Shirt',
-      price: '29.99',
-      image:
-        'https://images.unsplash.com/photo-1576566588028-4147f3842f27?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=300&q=80',
-      description: 'Premium cotton t-shirt with our classic logo design.',
-      inventory: 45,
-      category: 'clothing',
-      status: 'active',
-    },
-    {
-      id: 2,
-      name: 'Signed CD - "Celestial"',
-      price: '19.99',
-      image:
-        'https://images.unsplash.com/photo-1526218626217-dc65a29bb444?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=300&q=80',
-      description:
-        'Limited edition signed copy of the "Celestial" album with exclusive booklet.',
-      inventory: 12,
-      category: 'music',
-      status: 'active',
-    },
-    {
-      id: 3,
-      name: 'Tour Poster - 2023',
-      price: '14.99',
-      image:
-        'https://images.unsplash.com/photo-1593810450967-f9c42742e326?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=300&q=80',
-      description: 'High-quality glossy print of the 2023 tour artwork.',
-      inventory: 30,
-      category: 'accessories',
-      status: 'active',
-    },
-    {
-      id: 4,
-      name: 'Limited Edition Vinyl',
-      price: '39.99',
-      image:
-        'https://images.unsplash.com/photo-1603733975097-b5db235254f5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=300&q=80',
-      description:
-        'Colored vinyl edition of the latest album with special packaging.',
-      inventory: 0,
-      category: 'music',
-      status: 'sold-out',
-    },
-  ];
-
-  const [products, setProducts] = useState<Product[]>(initialProducts);
-  const [showForm, setShowForm] = useState(false);
-  const [currentProduct, setCurrentProduct] = useState<Product | null>(null);
-  const [productForm, setProductForm] = useState<Omit<Product, 'id'>>({
-    name: '',
-    price: '',
-    image: '',
-    description: '',
-    inventory: 0,
-    category: 'clothing',
-    status: 'active',
+  const [merchandise, setMerchandise] =
+    useState<MerchandiseItem[]>(mockMerchandise);
+  const [isAddingItem, setIsAddingItem] = useState(false);
+  const [filters, setFilters] = useState<FilterOptions>({
+    category: 'All',
+    status: 'All',
+    sortBy: 'newest',
   });
 
-  const handleInputChange = (
-    e: React.ChangeEvent<
-      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-    >
-  ) => {
-    const { name, value } = e.target;
-    setProductForm({
-      ...productForm,
-      [name]: name === 'inventory' ? parseInt(value, 10) : value,
-    });
-  };
+  // Filter categories and statuses for dropdown
+  const categories = [
+    'All',
+    ...Array.from(new Set(merchandise.map((item) => item.category))),
+  ];
+  const statuses = [
+    'All',
+    ...Array.from(new Set(merchandise.map((item) => item.status))),
+  ];
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+  // Apply filters
+  const filteredMerchandise = merchandise.filter((item) => {
+    return (
+      (filters.category === 'All' || item.category === filters.category) &&
+      (filters.status === 'All' || item.status === filters.status)
+    );
+  });
 
-    if (currentProduct) {
-      // Update existing product
-      setProducts(
-        products.map((product) =>
-          product.id === currentProduct.id
-            ? { ...productForm, id: currentProduct.id }
-            : product
-        )
-      );
-    } else {
-      // Add new product
-      const newProduct = {
-        ...productForm,
-        id: Math.max(0, ...products.map((p) => p.id)) + 1,
-      };
-      setProducts([...products, newProduct]);
+  // Apply sorting
+  const sortedMerchandise = [...filteredMerchandise].sort((a, b) => {
+    switch (filters.sortBy) {
+      case 'price-asc':
+        return a.price - b.price;
+      case 'price-desc':
+        return b.price - a.price;
+      case 'name-asc':
+        return a.name.localeCompare(b.name);
+      case 'name-desc':
+        return b.name.localeCompare(a.name);
+      case 'stock-asc':
+        return a.inStock - b.inStock;
+      case 'stock-desc':
+        return b.inStock - a.inStock;
+      case 'sales-asc':
+        return a.sold - b.sold;
+      case 'sales-desc':
+        return b.sold - a.sold;
+      default:
+        return b.id - a.id; // newest first
     }
+  });
 
-    // Reset form
-    setShowForm(false);
-    setCurrentProduct(null);
-    setProductForm({
-      name: '',
-      price: '',
-      image: '',
-      description: '',
-      inventory: 0,
-      category: 'clothing',
-      status: 'active',
-    });
-  };
-
-  const editProduct = (product: Product) => {
-    setCurrentProduct(product);
-    setProductForm({
-      name: product.name,
-      price: product.price,
-      image: product.image,
-      description: product.description,
-      inventory: product.inventory,
-      category: product.category,
-      status: product.status,
-    });
-    setShowForm(true);
-  };
-
-  const deleteProduct = (id: number) => {
-    if (confirm('Are you sure you want to delete this product?')) {
-      setProducts(products.filter((product) => product.id !== id));
-    }
-  };
-
-  // Filter products by status
-  const activeProducts = products.filter(
-    (product) => product.status === 'active'
+  // Summary stats
+  const totalItems = merchandise.length;
+  const totalSold = merchandise.reduce((sum, item) => sum + item.sold, 0);
+  const totalValue = merchandise.reduce(
+    (sum, item) => sum + item.price * item.sold,
+    0
   );
-  const soldOutProducts = products.filter(
-    (product) => product.status === 'sold-out'
-  );
-  const draftProducts = products.filter(
-    (product) => product.status === 'draft'
-  );
+  const lowStockItems = merchandise.filter(
+    (item) => item.status === 'Low Stock'
+  ).length;
+
+  const handleFilterChange = (field: keyof FilterOptions, value: string) => {
+    setFilters((prev) => ({
+      ...prev,
+      [field]: value,
+    }));
+  };
 
   return (
     <div className="space-y-6">
-      <div className="flex justify-between items-center">
-        <h2 className="text-2xl font-bold">Merchandise</h2>
-        <button
-          onClick={() => {
-            setCurrentProduct(null);
-            setShowForm(true);
-          }}
-          className="flex items-center bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700"
-        >
-          <Plus className="h-4 w-4 mr-2" /> Add New Product
-        </button>
-      </div>
-
-      {/* Product Form */}
-      {showForm && (
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
-          <h3 className="text-xl font-bold mb-4">
-            {currentProduct ? 'Edit Product' : 'Add New Product'}
-          </h3>
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium mb-1">
-                  Product Name
-                </label>
-                <input
-                  type="text"
-                  name="name"
-                  value={productForm.name}
-                  onChange={handleInputChange}
-                  className="w-full p-2 border rounded-md"
-                  placeholder="Product name"
-                  required
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium mb-1">
-                  Price ($)
-                </label>
-                <div className="relative">
-                  <input
-                    type="text"
-                    name="price"
-                    value={productForm.price}
-                    onChange={handleInputChange}
-                    className="w-full pl-10 pr-3 py-2 border rounded-md"
-                    placeholder="Price (e.g. 29.99)"
-                    required
-                  />
-                  <div className="absolute left-3 top-2.5 text-gray-400">
-                    <DollarSign className="h-4 w-4" />
-                  </div>
-                </div>
-              </div>
-            </div>
-
+      {/* Summary Cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="bg-white dark:bg-gray-800 p-5 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm">
+          <div className="flex justify-between items-center">
             <div>
-              <label className="block text-sm font-medium mb-1">
-                Image URL
-              </label>
-              <div className="relative">
-                <input
-                  type="text"
-                  name="image"
-                  value={productForm.image}
-                  onChange={handleInputChange}
-                  className="w-full pl-10 pr-3 py-2 border rounded-md"
-                  placeholder="Image URL"
-                />
-                <div className="absolute left-3 top-2.5 text-gray-400">
-                  <Image className="h-4 w-4" />
-                </div>
-              </div>
-              {productForm.image && (
-                <div className="mt-2 relative w-20 h-20">
-                  <img
-                    src={productForm.image}
-                    alt="Product preview"
-                    className="w-full h-full object-cover rounded"
-                  />
-                </div>
-              )}
+              <p className="text-sm text-gray-500 dark:text-gray-400">
+                Total Items
+              </p>
+              <h3 className="text-2xl font-bold">{totalItems}</h3>
             </div>
-
-            <div>
-              <label className="block text-sm font-medium mb-1">
-                Description
-              </label>
-              <textarea
-                name="description"
-                value={productForm.description}
-                onChange={handleInputChange}
-                rows={3}
-                className="w-full p-2 border rounded-md"
-                placeholder="Product description"
-              ></textarea>
+            <div className="bg-purple-100 dark:bg-purple-900/20 p-3 rounded-full">
+              <PackageOpen className="h-5 w-5 text-purple-600 dark:text-purple-400" />
             </div>
-
-            <div className="grid grid-cols-3 gap-4">
-              <div>
-                <label className="block text-sm font-medium mb-1">
-                  Inventory
-                </label>
-                <input
-                  type="number"
-                  name="inventory"
-                  value={productForm.inventory}
-                  onChange={handleInputChange}
-                  className="w-full p-2 border rounded-md"
-                  min="0"
-                  required
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium mb-1">
-                  Category
-                </label>
-                <div className="relative">
-                  <select
-                    name="category"
-                    value={productForm.category}
-                    onChange={handleInputChange}
-                    className="w-full pl-10 pr-3 py-2 border rounded-md"
-                  >
-                    <option value="clothing">Clothing</option>
-                    <option value="music">Music</option>
-                    <option value="accessories">Accessories</option>
-                    <option value="other">Other</option>
-                  </select>
-                  <div className="absolute left-3 top-2.5 text-gray-400">
-                    <Tag className="h-4 w-4" />
-                  </div>
-                </div>
-              </div>
-              <div>
-                <label className="block text-sm font-medium mb-1">Status</label>
-                <select
-                  name="status"
-                  value={productForm.status}
-                  onChange={handleInputChange}
-                  className="w-full p-2 border rounded-md"
-                >
-                  <option value="active">Active</option>
-                  <option value="draft">Draft</option>
-                  <option value="sold-out">Sold Out</option>
-                </select>
-              </div>
-            </div>
-
-            <div className="flex justify-end space-x-3 pt-4">
-              <button
-                type="button"
-                onClick={() => setShowForm(false)}
-                className="px-4 py-2 bg-gray-200 dark:bg-gray-700 rounded-md hover:bg-gray-300 dark:hover:bg-gray-600"
-              >
-                Cancel
-              </button>
-              <button
-                type="submit"
-                className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700"
-              >
-                {currentProduct ? 'Update Product' : 'Add Product'}
-              </button>
-            </div>
-          </form>
-        </div>
-      )}
-
-      {/* Active Products */}
-      <div>
-        <h3 className="text-xl font-bold mb-4">Active Products</h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {activeProducts.map((product) => (
-            <div
-              key={product.id}
-              className="bg-white dark:bg-gray-800 rounded-lg shadow overflow-hidden"
-            >
-              <div className="h-48 overflow-hidden">
-                <img
-                  src={product.image}
-                  alt={product.name}
-                  className="w-full h-full object-cover"
-                />
-              </div>
-              <div className="p-4">
-                <div className="flex justify-between items-center mb-2">
-                  <h4 className="text-lg font-semibold">{product.name}</h4>
-                  <span className="text-lg font-bold text-green-600">
-                    ${product.price}
-                  </span>
-                </div>
-                <p className="text-sm text-gray-600 dark:text-gray-400 mb-3 line-clamp-2">
-                  {product.description}
-                </p>
-                <div className="flex justify-between items-center">
-                  <span className="text-sm text-gray-600 dark:text-gray-400">
-                    Inventory: {product.inventory}
-                  </span>
-                  <div className="flex space-x-2">
-                    <button
-                      onClick={() => editProduct(product)}
-                      className="p-1 text-indigo-600 hover:text-indigo-800"
-                    >
-                      <Edit className="h-4 w-4" />
-                    </button>
-                    <button
-                      onClick={() => deleteProduct(product.id)}
-                      className="p-1 text-red-600 hover:text-red-800"
-                    >
-                      <Trash className="h-4 w-4" />
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-        {activeProducts.length === 0 && (
-          <p className="text-gray-500 dark:text-gray-400">
-            No active products.
-          </p>
-        )}
-      </div>
-
-      {/* Sold Out Products */}
-      {soldOutProducts.length > 0 && (
-        <div>
-          <h3 className="text-xl font-bold mb-4">Sold Out Products</h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {soldOutProducts.map((product) => (
-              <div
-                key={product.id}
-                className="bg-white dark:bg-gray-800 rounded-lg shadow overflow-hidden opacity-70"
-              >
-                <div className="h-48 overflow-hidden relative">
-                  <img
-                    src={product.image}
-                    alt={product.name}
-                    className="w-full h-full object-cover"
-                  />
-                  <div className="absolute inset-0 bg-black bg-opacity-30 flex items-center justify-center">
-                    <span className="bg-red-600 text-white px-3 py-1 rounded-full text-sm font-semibold">
-                      SOLD OUT
-                    </span>
-                  </div>
-                </div>
-                <div className="p-4">
-                  <div className="flex justify-between items-center mb-2">
-                    <h4 className="text-lg font-semibold">{product.name}</h4>
-                    <span className="text-lg font-bold">${product.price}</span>
-                  </div>
-                  <p className="text-sm text-gray-600 dark:text-gray-400 mb-3 line-clamp-2">
-                    {product.description}
-                  </p>
-                  <div className="flex justify-end space-x-2">
-                    <button
-                      onClick={() => editProduct(product)}
-                      className="p-1 text-indigo-600 hover:text-indigo-800"
-                    >
-                      <Edit className="h-4 w-4" />
-                    </button>
-                    <button
-                      onClick={() => deleteProduct(product.id)}
-                      className="p-1 text-red-600 hover:text-red-800"
-                    >
-                      <Trash className="h-4 w-4" />
-                    </button>
-                  </div>
-                </div>
-              </div>
-            ))}
           </div>
         </div>
+
+        <div className="bg-white dark:bg-gray-800 p-5 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm">
+          <div className="flex justify-between items-center">
+            <div>
+              <p className="text-sm text-gray-500 dark:text-gray-400">
+                Items Sold
+              </p>
+              <h3 className="text-2xl font-bold">{totalSold}</h3>
+            </div>
+            <div className="bg-green-100 dark:bg-green-900/20 p-3 rounded-full">
+              <ShoppingCart className="h-5 w-5 text-green-600 dark:text-green-400" />
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-white dark:bg-gray-800 p-5 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm">
+          <div className="flex justify-between items-center">
+            <div>
+              <p className="text-sm text-gray-500 dark:text-gray-400">
+                Total Revenue
+              </p>
+              <h3 className="text-2xl font-bold">
+                {totalValue.toFixed(2)} ETH
+              </h3>
+            </div>
+            <div className="bg-blue-100 dark:bg-blue-900/20 p-3 rounded-full">
+              <DollarSign className="h-5 w-5 text-blue-600 dark:text-blue-400" />
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-white dark:bg-gray-800 p-5 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm">
+          <div className="flex justify-between items-center">
+            <div>
+              <p className="text-sm text-gray-500 dark:text-gray-400">
+                Low Stock Items
+              </p>
+              <h3 className="text-2xl font-bold">{lowStockItems}</h3>
+            </div>
+            <div className="bg-amber-100 dark:bg-amber-900/20 p-3 rounded-full">
+              <Clock className="h-5 w-5 text-amber-600 dark:text-amber-400" />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Filters and Actions Row */}
+      <div className="flex flex-col sm:flex-row justify-between gap-4">
+        <div className="flex flex-wrap gap-2">
+          {/* Category Filter */}
+          <select
+            className="px-3 py-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-md text-sm"
+            value={filters.category}
+            onChange={(e) => handleFilterChange('category', e.target.value)}
+          >
+            {categories.map((category) => (
+              <option key={category} value={category}>
+                {category}
+              </option>
+            ))}
+          </select>
+
+          {/* Status Filter */}
+          <select
+            className="px-3 py-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-md text-sm"
+            value={filters.status}
+            onChange={(e) => handleFilterChange('status', e.target.value)}
+          >
+            {statuses.map((status) => (
+              <option key={status} value={status}>
+                {status}
+              </option>
+            ))}
+          </select>
+
+          {/* Sort By */}
+          <select
+            className="px-3 py-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-md text-sm"
+            value={filters.sortBy}
+            onChange={(e) => handleFilterChange('sortBy', e.target.value)}
+          >
+            <option value="newest">Newest</option>
+            <option value="price-asc">Price: Low to High</option>
+            <option value="price-desc">Price: High to Low</option>
+            <option value="name-asc">Name: A to Z</option>
+            <option value="name-desc">Name: Z to A</option>
+            <option value="stock-asc">Stock: Low to High</option>
+            <option value="stock-desc">Stock: High to Low</option>
+            <option value="sales-asc">Sales: Low to High</option>
+            <option value="sales-desc">Sales: High to Low</option>
+          </select>
+        </div>
+
+        <Button
+          onClick={() => setIsAddingItem(true)}
+          className="bg-amber-600 hover:bg-amber-700"
+        >
+          <Plus className="h-4 w-4 mr-2" /> Add Merchandise
+        </Button>
+      </div>
+
+      {/* Merchandise Grid */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {sortedMerchandise.map((item) => (
+          <div
+            key={item.id}
+            className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden shadow-sm hover:shadow-md transition-shadow"
+          >
+            {/* Item Image */}
+            <div className="aspect-[4/3] relative overflow-hidden">
+              <img
+                src={item.image}
+                alt={item.name}
+                className="object-cover w-full h-full"
+              />
+              <div
+                className={`absolute top-2 right-2 px-2 py-1 text-xs font-semibold rounded-full 
+                ${
+                  item.status === 'Active'
+                    ? 'bg-green-100 text-green-800 dark:bg-green-900/50 dark:text-green-300'
+                    : item.status === 'Low Stock'
+                      ? 'bg-amber-100 text-amber-800 dark:bg-amber-900/50 dark:text-amber-300'
+                      : 'bg-red-100 text-red-800 dark:bg-red-900/50 dark:text-red-300'
+                }`}
+              >
+                {item.status}
+              </div>
+            </div>
+
+            {/* Item Info */}
+            <div className="p-4">
+              <div className="flex justify-between items-start">
+                <div>
+                  <h3 className="font-semibold text-lg mb-1">{item.name}</h3>
+                  <p className="text-gray-600 dark:text-gray-400 text-sm flex items-center">
+                    <Tag className="h-3.5 w-3.5 mr-1" /> {item.category}
+                  </p>
+                </div>
+                <p className="font-bold text-lg">
+                  {item.price} {item.currency}
+                </p>
+              </div>
+
+              <div className="flex justify-between items-center mt-4 text-sm text-gray-600 dark:text-gray-400">
+                <p>{item.inStock} in stock</p>
+                <p>{item.sold} sold</p>
+              </div>
+
+              {/* Action buttons */}
+              <div className="flex gap-2 mt-4">
+                <Button variant="outline" size="sm" className="flex-1">
+                  <Edit className="h-4 w-4 mr-1" /> Edit
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="flex-1 hover:bg-red-100 hover:text-red-600 dark:hover:bg-red-900/20 dark:hover:text-red-400"
+                >
+                  <Trash className="h-4 w-4 mr-1" /> Delete
+                </Button>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Empty state */}
+      {sortedMerchandise.length === 0 && (
+        <div className="text-center py-12">
+          <ShoppingBag className="h-12 w-12 mx-auto text-gray-400" />
+          <h3 className="mt-4 text-lg font-medium text-gray-900 dark:text-white">
+            No merchandise found
+          </h3>
+          <p className="mt-2 text-gray-500 dark:text-gray-400">
+            Try adjusting your filters or add new merchandise items.
+          </p>
+          <Button
+            onClick={() => setIsAddingItem(true)}
+            className="mt-6 bg-amber-600 hover:bg-amber-700"
+          >
+            <Plus className="h-4 w-4 mr-2" /> Add Merchandise
+          </Button>
+        </div>
       )}
+
+      {/* Add Merchandise Item Modal would go here */}
     </div>
   );
 };

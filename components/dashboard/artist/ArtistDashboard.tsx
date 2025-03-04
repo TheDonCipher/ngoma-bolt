@@ -1,210 +1,213 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
-  Home,
-  User,
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+  CardFooter,
+} from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import {
+  BarChart3,
   Music,
-  Calendar,
-  ShoppingBag,
-  BarChart2,
-  Settings,
-  Menu,
-  X,
-  ChevronRight,
-  PlusCircle,
+  Upload,
+  Users,
+  Plus,
+  PlayCircle,
+  TrendingUp,
 } from 'lucide-react';
-import ArtistStatsCard from './ArtistStatsCard';
-import ArtistPublicProfilePreview from './ArtistPublicProfilePreview';
-import ArtistProfileEditForm from './ArtistProfileEditForm';
-import AlbumListComponent from './AlbumListComponent';
-import AnalyticsDashboard from './AnalyticsDashboard';
-import MerchandiseManagement from './MerchandiseManagement';
-import EventManagement from './EventManagement';
+import Link from 'next/link';
 
-const ArtistDashboard = () => {
-  const [activeSection, setActiveSection] = useState<string>('overview');
-  const [sidebarOpen, setSidebarOpen] = useState<boolean>(true);
+// Type definitions
+type StatCard = {
+  title: string;
+  value: string | number | React.ReactNode;
+  trend?: string;
+  icon: React.ReactNode;
+};
 
-  const renderContent = () => {
-    switch (activeSection) {
-      case 'overview':
-        return (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <ArtistStatsCard />
-            <div className="md:col-span-2 lg:col-span-1">
-              <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-4 h-full">
-                <h3 className="text-xl font-bold mb-3">Quick Actions</h3>
-                <div className="space-y-2">
-                  <button
-                    onClick={() => setActiveSection('music')}
-                    className="w-full flex items-center justify-between p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md"
-                  >
-                    <span className="flex items-center">
-                      <Music className="h-5 w-5 mr-2 text-indigo-500" />
-                      Upload New Music
-                    </span>
-                    <ChevronRight className="h-4 w-4" />
-                  </button>
-                  <button
-                    onClick={() => setActiveSection('events')}
-                    className="w-full flex items-center justify-between p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md"
-                  >
-                    <span className="flex items-center">
-                      <Calendar className="h-5 w-5 mr-2 text-indigo-500" />
-                      Schedule Event
-                    </span>
-                    <ChevronRight className="h-4 w-4" />
-                  </button>
-                  <button
-                    onClick={() => setActiveSection('merchandise')}
-                    className="w-full flex items-center justify-between p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md"
-                  >
-                    <span className="flex items-center">
-                      <ShoppingBag className="h-5 w-5 mr-2 text-indigo-500" />
-                      Add Merchandise
-                    </span>
-                    <ChevronRight className="h-4 w-4" />
-                  </button>
-                </div>
-              </div>
-            </div>
-            <div className="md:col-span-3">
-              <div className="bg-gradient-to-r from-purple-600 to-indigo-600 rounded-lg shadow p-6">
-                <div className="flex justify-between items-center mb-4">
-                  <h3 className="text-2xl font-bold text-white">
-                    Your Artist Profile
-                  </h3>
-                  <button
-                    onClick={() => setActiveSection('profile')}
-                    className="bg-white text-indigo-600 px-4 py-2 rounded-md text-sm font-medium hover:bg-opacity-90"
-                  >
-                    Edit Profile
-                  </button>
-                </div>
-                <p className="text-white text-opacity-90 mb-4">
-                  Showcase your brand, music, and connect with fans. Complete
-                  your profile for better visibility.
-                </p>
-                <div className="bg-white bg-opacity-10 rounded-lg p-4">
-                  <ArtistPublicProfilePreview />
-                </div>
-              </div>
-            </div>
-          </div>
-        );
-      case 'profile':
-        return (
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
-              <h2 className="text-2xl font-bold mb-6">Edit Your Profile</h2>
-              <ArtistProfileEditForm />
-            </div>
-            <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
-              <h2 className="text-2xl font-bold mb-6">Profile Preview</h2>
-              <ArtistPublicProfilePreview />
-            </div>
-          </div>
-        );
-      case 'music':
-        return <AlbumListComponent />;
-      case 'events':
-        return <EventManagement />;
-      case 'merchandise':
-        return <MerchandiseManagement />;
-      case 'analytics':
-        return <AnalyticsDashboard />;
-      default:
-        return <div>Select a section</div>;
-    }
-  };
+// Data arrays
+const statCards: StatCard[] = [
+  {
+    title: 'Total Streams',
+    value: '127,532',
+    trend: '+12.4%',
+    icon: <BarChart3 className="h-5 w-5 text-blue-600" />,
+  },
+  {
+    title: 'Monthly Listeners',
+    value: '4,827',
+    trend: '+8.7%',
+    icon: <Users className="h-5 w-5 text-green-600" />,
+  },
+  {
+    title: 'Track Count',
+    value: 32,
+    icon: <Music className="h-5 w-5 text-purple-600" />,
+  },
+  {
+    title: 'View Profile',
+    value: <p>View your public profile</p>,
+    icon: <Users className="h-5 w-5 text-blue-600" />,
+  },
+];
 
-  const navItems = [
-    { name: 'Overview', icon: <Home size={20} />, id: 'overview' },
-    { name: 'Profile', icon: <User size={20} />, id: 'profile' },
-    { name: 'Music', icon: <Music size={20} />, id: 'music' },
-    { name: 'Events', icon: <Calendar size={20} />, id: 'events' },
-    { name: 'Merchandise', icon: <ShoppingBag size={20} />, id: 'merchandise' },
-    { name: 'Analytics', icon: <BarChart2 size={20} />, id: 'analytics' },
-    { name: 'Settings', icon: <Settings size={20} />, id: 'settings' },
-  ];
-
+export default function ArtistDashboard() {
   return (
-    <div className="flex h-screen bg-gray-50 dark:bg-gray-900">
-      {/* Sidebar */}
-      <div
-        className={`${
-          sidebarOpen ? 'translate-x-0' : '-translate-x-full'
-        } fixed z-30 inset-y-0 left-0 w-64 transition duration-300 transform bg-white dark:bg-gray-800 overflow-y-auto lg:translate-x-0 lg:static lg:inset-0`}
-      >
-        <div className="flex items-center justify-between px-6 py-4">
-          <div className="flex items-center">
-            <span className="text-2xl font-bold text-indigo-600">Ngoma</span>
-          </div>
-          <button onClick={() => setSidebarOpen(false)} className="lg:hidden">
-            <X size={24} />
-          </button>
+    <div className="w-full max-w-7xl mx-auto">
+      <div className="px-2 md:px-4 py-4">
+        {/* Header section */}
+        <div className="mb-6">
+          <h1 className="text-3xl font-bold mb-2">Artist Dashboard</h1>
+          <p className="text-slate-600 dark:text-slate-400">
+            Welcome back! Here's an overview of your music performance.
+          </p>
         </div>
-        <nav className="mt-8 px-4">
-          <div className="space-y-1">
-            {navItems.map((item) => (
-              <button
-                key={item.id}
-                onClick={() => setActiveSection(item.id)}
-                className={`${
-                  activeSection === item.id
-                    ? 'bg-indigo-100 text-indigo-600 dark:bg-indigo-900 dark:text-indigo-200'
-                    : 'text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700'
-                } group flex items-center px-4 py-3 text-base font-medium rounded-md w-full`}
-              >
-                <div className="mr-3">{item.icon}</div>
-                {item.name}
-              </button>
-            ))}
-          </div>
-        </nav>
-      </div>
 
-      {/* Main content */}
-      <div className="flex-1 flex flex-col overflow-hidden">
-        {/* Topbar */}
-        <header className="bg-white dark:bg-gray-800 shadow">
-          <div className="px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
-            <button onClick={() => setSidebarOpen(true)} className="lg:hidden">
-              <Menu size={24} />
-            </button>
-            <div className="flex items-center space-x-4">
-              <button className="bg-indigo-600 hover:bg-indigo-700 text-white flex items-center px-4 py-2 rounded-md">
-                <PlusCircle className="h-4 w-4 mr-2" />
-                Create New
-              </button>
-              <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center overflow-hidden">
-                <img
-                  src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=100&q=80"
-                  alt="Profile"
-                  className="w-full h-full object-cover"
-                />
+        {/* Tabs for different views */}
+        <Tabs defaultValue="overview" className="mb-8">
+          <TabsList className="mb-6">
+            <TabsTrigger value="overview">Overview</TabsTrigger>
+            <TabsTrigger value="analytics">Analytics</TabsTrigger>
+            <TabsTrigger value="catalog">Catalog</TabsTrigger>
+            <TabsTrigger value="fans">Fans</TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="overview" className="space-y-8">
+            {/* Stats Section */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+              {statCards.map((stat, i) => (
+                <Link key={i} href="/artist/123"> {/* Replace 123 with the actual artist ID */}
+                  <Card
+                    className="border border-slate-200 dark:border-slate-800 transition-all hover:shadow-md"
+                  >
+                    <CardContent className="p-6 flex justify-between items-center">
+                      <div>
+                        <p className="text-sm font-medium text-slate-500 dark:text-slate-400">
+                          {stat.title}
+                        </p>
+                        <h3 className="text-2xl font-bold mt-1">{stat.value}</h3>
+                        {stat.trend && (
+                          <p className="text-xs font-medium text-emerald-600 mt-1 flex items-center">
+                            <TrendingUp className="h-3 w-3 mr-1" /> {stat.trend}
+                          </p>
+                        )}
+                      </div>
+                      <div className="bg-slate-100 dark:bg-slate-800 p-3 rounded-full">
+                        {stat.icon}
+                      </div>
+                    </CardContent>
+                  </Card>
+                </Link>
+              ))}
+            </div>
+
+            {/* Recent Tracks */}
+            <section>
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-xl font-bold">Recent Tracks</h2>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="flex items-center gap-1"
+                  asChild
+                >
+                  <Link href="/dashboard/artist/upload">
+                    <Plus className="h-4 w-4" /> Add Track
+                  </Link>
+                </Button>
               </div>
-            </div>
-          </div>
-        </header>
+              <Card>
+                <CardHeader>
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <CardTitle>Your Music</CardTitle>
+                      <CardDescription>
+                        Manage and monitor your music catalog
+                      </CardDescription>
+                    </div>
+                    <Button variant="ghost" size="sm">
+                      View All
+                    </Button>
+                  </div>
+                </CardHeader>
+                <CardContent>
+                  <div className="text-center text-slate-500 dark:text-slate-400 py-8">
+                    <PlayCircle className="h-12 w-12 mx-auto mb-4 text-slate-300" />
+                    <p className="mb-4">Your tracks will appear here</p>
+                    <Button asChild>
+                      <Link href="/dashboard/artist/upload">
+                        Upload your first track
+                      </Link>
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            </section>
+          </TabsContent>
 
-        {/* Content area */}
-        <main className="flex-1 overflow-y-auto p-6">
-          <div className="container mx-auto">
-            <div className="mb-6">
-              <h1 className="text-3xl font-bold">
-                {navItems.find((item) => item.id === activeSection)?.name ||
-                  'Dashboard'}
-              </h1>
-              <p className="text-gray-600 dark:text-gray-300">
-                Manage your artist profile and content
-              </p>
-            </div>
-            {renderContent()}
-          </div>
-        </main>
+          {/* Other tab content stays the same */}
+          <TabsContent value="analytics">
+            <Card>
+              <CardHeader>
+                <CardTitle>Analytics</CardTitle>
+                <CardDescription>
+                  View detailed performance metrics for your music
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="h-96 flex items-center justify-center">
+                <div className="text-center">
+                  <BarChart3 className="h-16 w-16 mx-auto mb-4 text-slate-300" />
+                  <p className="text-slate-500 dark:text-slate-400">
+                    Analytics dashboard is coming soon!
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          <TabsContent value="catalog">
+            <Card>
+              <CardHeader>
+                <CardTitle>Music Catalog</CardTitle>
+                <CardDescription>Manage your tracks and albums</CardDescription>
+              </CardHeader>
+              <CardContent className="h-96 flex items-center justify-center">
+                <div className="text-center">
+                  <Music className="h-16 w-16 mx-auto mb-4 text-slate-300" />
+                  <p className="text-slate-500 dark:text-slate-400">
+                    Your full catalog will appear here
+                  </p>
+                </div>
+              </CardContent>
+              <CardFooter>
+                <Button asChild>
+                  <Link href="/dashboard/artist/upload">Upload New Track</Link>
+                </Button>
+              </CardFooter>
+            </Card>
+          </TabsContent>
+
+          <TabsContent value="fans">
+            <Card>
+              <CardHeader>
+                <CardTitle>Fan Engagement</CardTitle>
+                <CardDescription>Connect with your audience</CardDescription>
+              </CardHeader>
+              <CardContent className="h-96 flex items-center justify-center">
+                <div className="text-center">
+                  <Users className="h-16 w-16 mx-auto mb-4 text-slate-300" />
+                  <p className="text-slate-500 dark:text-slate-400">
+                    Fan engagement tools are coming soon!
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+        </Tabs>
       </div>
     </div>
   );
-};
-
-export default ArtistDashboard;
+}

@@ -76,7 +76,7 @@ const AnalyticsDashboard = () => {
           <div className="flex items-center bg-white dark:bg-gray-800 border rounded-md p-1">
             <button
               onClick={() => setTimeRange('7d')}
-              className={`px-3 py-1 rounded-md text-sm ${
+              className={`px-3 py-1 rounded-md text-sm focus:ring-2 focus:ring-indigo-500 hover:bg-gray-100 dark:hover:bg-gray-700 ${
                 timeRange === '7d'
                   ? 'bg-indigo-600 text-white'
                   : 'text-gray-700 dark:text-gray-300'
@@ -86,7 +86,7 @@ const AnalyticsDashboard = () => {
             </button>
             <button
               onClick={() => setTimeRange('30d')}
-              className={`px-3 py-1 rounded-md text-sm ${
+              className={`px-3 py-1 rounded-md text-sm focus:ring-2 focus:ring-indigo-500 hover:bg-gray-100 dark:hover:bg-gray-700 ${
                 timeRange === '30d'
                   ? 'bg-indigo-600 text-white'
                   : 'text-gray-700 dark:text-gray-300'
@@ -96,7 +96,7 @@ const AnalyticsDashboard = () => {
             </button>
             <button
               onClick={() => setTimeRange('90d')}
-              className={`px-3 py-1 rounded-md text-sm ${
+              className={`px-3 py-1 rounded-md text-sm focus:ring-2 focus:ring-indigo-500 hover:bg-gray-100 dark:hover:bg-gray-700 ${
                 timeRange === '90d'
                   ? 'bg-indigo-600 text-white'
                   : 'text-gray-700 dark:text-gray-300'
@@ -106,7 +106,7 @@ const AnalyticsDashboard = () => {
             </button>
             <button
               onClick={() => setTimeRange('1y')}
-              className={`px-3 py-1 rounded-md text-sm ${
+              className={`px-3 py-1 rounded-md text-sm focus:ring-2 focus:ring-indigo-500 hover:bg-gray-100 dark:hover:bg-gray-700 ${
                 timeRange === '1y'
                   ? 'bg-indigo-600 text-white'
                   : 'text-gray-700 dark:text-gray-300'
@@ -115,15 +115,15 @@ const AnalyticsDashboard = () => {
               1Y
             </button>
           </div>
-          <button className="flex items-center gap-1 bg-white dark:bg-gray-800 border rounded-md px-3 py-2 text-sm">
+          <button className="flex items-center gap-1 bg-white dark:bg-gray-800 border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-gray-500 hover:bg-gray-100 dark:hover:bg-gray-700">
             <Calendar className="h-4 w-4" />
             <span>Custom</span>
           </button>
-          <button className="flex items-center gap-1 bg-white dark:bg-gray-800 border rounded-md px-3 py-2 text-sm">
+          <button className="flex items-center gap-1 bg-white dark:bg-gray-800 border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-gray-500 hover:bg-gray-100 dark:hover:bg-gray-700">
             <Filter className="h-4 w-4" />
             <span>Filters</span>
           </button>
-          <button className="flex items-center gap-1 bg-white dark:bg-gray-800 border rounded-md px-3 py-2 text-sm">
+          <button className="flex items-center gap-1 bg-white dark:bg-gray-800 border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-gray-500 hover:bg-gray-100 dark:hover:bg-gray-700">
             <Download className="h-4 w-4" />
             <span>Export</span>
           </button>
