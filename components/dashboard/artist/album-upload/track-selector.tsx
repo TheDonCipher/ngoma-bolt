@@ -3,7 +3,12 @@
 import { useState } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
+import {
+  DragDropContext,
+  Droppable,
+  Draggable,
+  DropResult,
+} from 'react-beautiful-dnd';
 import { GripVertical, Play, Pause } from 'lucide-react';
 import { usePlayerStore } from '@/lib/store/use-player-store';
 import { mockAlbumData } from '@/lib/mock-data';
@@ -23,7 +28,7 @@ export function TrackSelector({
   const { currentTrack, isPlaying, setTrack, setIsPlaying } = usePlayerStore();
   const [availableTracks] = useState(mockAlbumData.tracks);
 
-  const handleDragEnd = (result: any) => {
+  const handleDragEnd = (result: DropResult) => {
     if (!result.destination) return;
 
     const items = Array.from(value);
@@ -39,8 +44,7 @@ export function TrackSelector({
     } else {
       setTrack({
         ...track,
-        // Convert duration to string if it's a number
-        duration: track.duration.toString(),
+        duration: track.duration, // Remove toString() call
         // Add required properties with default values
         trackNumber: 0,
         isAvailable: true,

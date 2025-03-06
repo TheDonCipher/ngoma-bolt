@@ -1,33 +1,33 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
-import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
-import { Switch } from "@/components/ui/switch";
-import { Slider } from "@/components/ui/slider";
+import { useState } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { Button } from '@/components/ui/button';
+import { Label } from '@/components/ui/label';
+import { Switch } from '@/components/ui/switch';
+import { Slider } from '@/components/ui/slider';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { SearchFilters as SearchFiltersType } from "@/lib/types/search";
+} from '@/components/ui/select';
+import { SearchFilters as SearchFiltersType } from '@/lib/types/search';
 
 const GENRES = [
-  "Afrobeats",
-  "Afro-fusion",
-  "Amapiano",
-  "Highlife",
-  "Afro-soul",
+  'Afrobeats',
+  'Afro-fusion',
+  'Amapiano',
+  'Highlife',
+  'Afro-soul',
 ];
 
 export function SearchFilters() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [filters, setFilters] = useState<SearchFiltersType>({
-    category: "tracks",
+    category: 'tracks',
     genre: [],
     priceRange: { min: 0, max: 10 },
     verified: false,
@@ -37,10 +37,10 @@ export function SearchFilters() {
     const params = new URLSearchParams(searchParams);
     Object.entries(filters).forEach(([key, value]) => {
       if (Array.isArray(value)) {
-        value.forEach(v => params.append(key, v));
-      } else if (typeof value === "object") {
+        value.forEach((v) => params.append(key, v));
+      } else if (typeof value === 'object') {
         Object.entries(value).forEach(([k, v]) => {
-          params.set(`${key}_${k}`, v.toString());
+          params.set(`${key}_${k}`, v !== undefined ? String(v) : '');
         });
       } else {
         params.set(key, value.toString());
@@ -51,12 +51,12 @@ export function SearchFilters() {
 
   const resetFilters = () => {
     setFilters({
-      category: "tracks",
+      category: 'tracks',
       genre: [],
       priceRange: { min: 0, max: 10 },
       verified: false,
     });
-    router.push("/search");
+    router.push('/search');
   };
 
   return (
@@ -66,8 +66,11 @@ export function SearchFilters() {
           <Label>Category</Label>
           <Select
             value={filters.category}
-            onValueChange={(value) => 
-              setFilters({ ...filters, category: value as SearchFiltersType["category"] })
+            onValueChange={(value) =>
+              setFilters({
+                ...filters,
+                category: value as SearchFiltersType['category'],
+              })
             }
           >
             <SelectTrigger>
@@ -85,8 +88,8 @@ export function SearchFilters() {
         <div className="space-y-2">
           <Label>Genre</Label>
           <Select
-            value={filters.genre?.[0] || ""}
-            onValueChange={(value) => 
+            value={filters.genre?.[0] || ''}
+            onValueChange={(value) =>
               setFilters({ ...filters, genre: [value] })
             }
           >
@@ -107,7 +110,10 @@ export function SearchFilters() {
           <Label>Price Range (ETH)</Label>
           <div className="pt-2">
             <Slider
-              value={[filters.priceRange?.min || 0, filters.priceRange?.max || 10]}
+              value={[
+                filters.priceRange?.min || 0,
+                filters.priceRange?.max || 10,
+              ]}
               min={0}
               max={10}
               step={0.1}

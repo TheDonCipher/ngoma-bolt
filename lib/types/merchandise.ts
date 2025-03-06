@@ -1,4 +1,4 @@
-export type MerchType = "PHYSICAL" | "DIGITAL";
+export type MerchType = 'PHYSICAL' | 'DIGITAL';
 
 export interface Merchandise {
   id: string;
@@ -24,4 +24,10 @@ export interface ShippingDetails {
   country: string;
   postalCode: string;
   phone: string;
+}
+
+export interface VariantOption {
+  value: string;
+  stock: number;
+  price: number | undefined; // Allow price to be undefined
 }

@@ -1,39 +1,39 @@
-"use client";
+'use client';
 
-import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Plus, X } from "lucide-react";
+import { Card } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Plus, X } from 'lucide-react';
 
-interface VariantOption {
+export interface VariantOption {
   value: string;
-  price: number;
   stock: number;
+  price: number; // This must be a number, not undefined
 }
 
-interface Variant {
+export interface Variant {
   name: string;
   options: VariantOption[];
 }
 
-interface VariantManagerProps {
+export interface VariantManagerProps {
   value: Variant[];
-  onChange: (value: Variant[]) => void;
+  onChange: (variants: Variant[]) => void;
   disabled?: boolean;
 }
 
 export function VariantManager({
   value,
   onChange,
-  disabled
+  disabled,
 }: VariantManagerProps) {
   const addVariant = () => {
     onChange([
       ...value,
       {
-        name: "",
-        options: [{ value: "", price: 0, stock: 0 }]
-      }
+        name: '',
+        options: [{ value: '', price: 0, stock: 0 }],
+      },
     ]);
   };
 
@@ -45,7 +45,7 @@ export function VariantManager({
 
   const addOption = (variantIndex: number) => {
     const newValue = [...value];
-    newValue[variantIndex].options.push({ value: "", price: 0, stock: 0 });
+    newValue[variantIndex].options.push({ value: '', price: 0, stock: 0 });
     onChange(newValue);
   };
 
@@ -55,7 +55,11 @@ export function VariantManager({
     onChange(newValue);
   };
 
-  const updateVariant = (index: number, field: keyof Variant, newValue: any) => {
+  const updateVariant = (
+    index: number,
+    field: keyof Variant,
+    newValue: string | VariantOption[]
+  ) => {
     const variants = [...value];
     variants[index] = { ...variants[index], [field]: newValue };
     onChange(variants);
@@ -65,12 +69,17 @@ export function VariantManager({
     variantIndex: number,
     optionIndex: number,
     field: keyof VariantOption,
-    newValue: any
+    newValue: string | number
   ) => {
     const variants = [...value];
+    const processedValue =
+      field === 'price' && (newValue === undefined || newValue === '')
+        ? 0
+        : newValue;
+
     variants[variantIndex].options[optionIndex] = {
       ...variants[variantIndex].options[optionIndex],
-      [field]: newValue
+      [field]: processedValue,
     };
     onChange(variants);
   };
@@ -80,14 +89,19 @@ export function VariantManager({
       <Card className="p-4">
         <div className="space-y-6">
           {value.map((variant, variantIndex) => (
-            <div key={variantIndex} className="space-y-4 pb-4 border-b last:border-0">
+            <div
+              key={variantIndex}
+              className="space-y-4 pb-4 border-b last:border-0"
+            >
               <div className="flex items-center justify-between">
                 <div className="space-y-2 flex-1 mr-4">
                   <label className="text-sm font-medium">Variant Name</label>
                   <Input
                     placeholder="e.g., Size, Color"
                     value={variant.name}
-                    onChange={(e) => updateVariant(variantIndex, "name", e.target.value)}
+                    onChange={(e) =>
+                      updateVariant(variantIndex, 'name', e.target.value)
+                    }
                     disabled={disabled}
                   />
                 </div>
@@ -107,7 +121,14 @@ export function VariantManager({
                     <Input
                       placeholder="Option value"
                       value={option.value}
-                      onChange={(e) => updateOption(variantIndex, optionIndex, "value", e.target.value)}
+                      onChange={(e) =>
+                        updateOption(
+                          variantIndex,
+                          optionIndex,
+                          'value',
+                          e.target.value
+                        )
+                      }
                       disabled={disabled}
                     />
                     <Input
@@ -115,14 +136,28 @@ export function VariantManager({
                       step="0.01"
                       placeholder="Price adjustment"
                       value={option.price}
-                      onChange={(e) => updateOption(variantIndex, optionIndex, "price", parseFloat(e.target.value))}
+                      onChange={(e) =>
+                        updateOption(
+                          variantIndex,
+                          optionIndex,
+                          'price',
+                          parseFloat(e.target.value)
+                        )
+                      }
                       disabled={disabled}
                     />
                     <Input
                       type="number"
                       placeholder="Stock"
                       value={option.stock}
-                      onChange={(e) => updateOption(variantIndex, optionIndex, "stock", parseInt(e.target.value))}
+                      onChange={(e) =>
+                        updateOption(
+                          variantIndex,
+                          optionIndex,
+                          'stock',
+                          parseInt(e.target.value)
+                        )
+                      }
                       disabled={disabled}
                     />
                     <Button

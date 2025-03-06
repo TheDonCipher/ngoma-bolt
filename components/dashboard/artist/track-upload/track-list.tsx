@@ -1,35 +1,41 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Search, Filter, Play, Pause, MoreHorizontal } from "lucide-react";
+import { useState } from 'react';
+import { Card } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Search, Filter, Play, Pause, MoreHorizontal } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { formatDuration } from "@/lib/utils";
-import { formatEther } from "ethers/lib/utils";
-import { usePlayerStore } from "@/lib/store/use-player-store";
-import { mockAlbumData } from "@/lib/mock-data";
+} from '@/components/ui/dropdown-menu';
+import { formatDuration } from '@/lib/utils';
+import { formatEther } from 'ethers/lib/utils';
+import { usePlayerStore } from '@/lib/store/use-player-store';
+import { mockAlbumData } from '@/lib/mock-data';
 
 export function TrackList() {
-  const [searchQuery, setSearchQuery] = useState("");
+  const [searchQuery, setSearchQuery] = useState('');
   const { currentTrack, isPlaying, setTrack, setIsPlaying } = usePlayerStore();
 
-  const tracks = mockAlbumData.tracks.filter(track =>
-    track.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    track.artist.name.toLowerCase().includes(searchQuery.toLowerCase())
+  const tracks = mockAlbumData.tracks.filter(
+    (track) =>
+      track.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      track.artist.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  const handlePlay = (track: typeof tracks[0]) => {
+  const handlePlay = (track: (typeof tracks)[0]) => {
     if (currentTrack?.id === track.id) {
       setIsPlaying(!isPlaying);
     } else {
-      setTrack(track);
+      setTrack({
+        ...track,
+        trackNumber: 1,
+        isAvailable: true,
+        duration: track.duration, // Keep as number, don't convert to string
+      });
     }
   };
 

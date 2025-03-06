@@ -37,12 +37,19 @@ export interface Album {
   }[];
 }
 
+// Update the Track interface to match our lib/types/track.ts
 export interface Track {
   id: string;
   title: string;
-  duration: string;  // Changed from number to string to match your other Track interfaces
+  artist: {
+    id: string;
+    name: string;
+  };
+  duration: string | number; // Modified to accept both string and number
   audioUrl?: string;
+  previewUrl?: string;
   trackNumber: number;
   isAvailable: boolean;
-  previewUrl?: string;
+  price: string;
+  streamCount: number;
 }

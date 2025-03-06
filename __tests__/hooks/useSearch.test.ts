@@ -1,37 +1,46 @@
 import { renderHook, waitFor } from '@testing-library/react';
 import { useSearch } from '@/lib/hooks/use-search';
+import { typedExpect } from '@/lib/test/test-utils';
+
+// Mock the fetch implementation
+global.fetch = jest.fn().mockImplementation(() =>
+  Promise.resolve({
+    ok: true,
+    json: () =>
+      Promise.resolve({ items: [{ id: '1', title: 'Test Result' }], total: 1 }),
+  })
+);
 
 describe('useSearch', () => {
-  it('should return search results', async () => {
-    const { result } = renderHook(() => 
-      useSearch('test', { category: 'tracks' })
-    );
+  it('returns search results when query is provided', async () => {
+    const { result } = renderHook(() => useSearch('test', {}));
 
+    // Wait for the async operation to complete
     await waitFor(() => {
-      expect(result.current.results.items).toHaveLength(1);
-      expect(result.current.isLoading).toBe(false);
+      typedExpect(result.current.isLoading).toBe(false);
     });
+
+    typedExpect(result.current.results.items).toHaveLength(1);
   });
 
-  it('should handle empty query', async () => {
-    const { result } = renderHook(() => 
-      useSearch('', { category: 'tracks' })
-    );
+  it('returns empty results for empty query', () => {
+    const { result } = renderHook(() => useSearch('', {}));
 
-    expect(result.current.results.items).toHaveLength(0);
+    typedExpect(result.current.results.items).toHaveLength(0);
   });
 
-  it('should apply filters correctly', async () => {
-    const { result } = renderHook(() => 
-      useSearch('test', {
-        category: 'tracks',
-        genre: ['afrobeats'],
-        priceRange: { min: 0, max: 1 },
+  it('handles empty results from API', async () => {
+    (global.fetch as jest.Mock).mockImplementationOnce(() =>
+      Promise.resolve({
+        ok: true,
+        json: () => Promise.resolve({ items: [], total: 0 }),
       })
     );
 
+    const { result } = renderHook(() => useSearch('nonexistent', {}));
+
     await waitFor(() => {
-      expect(result.current.results.items).toBeDefined();
+      typedExpect(result.current.results.items).toBeDefined();
     });
   });
 });

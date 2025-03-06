@@ -55,6 +55,13 @@ export function AuditLogFilters({ onSearch }: AuditLogFiltersProps) {
     onSearch({});
   };
 
+  const onFilterChange = (key: string, value: any) => {
+    setFilters((prevFilters) => ({
+      ...prevFilters,
+      [key]: value,
+    }));
+  };
+
   return (
     <div className="space-y-4">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -73,10 +80,12 @@ export function AuditLogFilters({ onSearch }: AuditLogFiltersProps) {
               <PopoverContent className="w-auto p-0">
                 <Calendar
                   mode="single"
-                  selected={filters.startDate}
-                  onSelect={(date: Date | null) =>
-                    setFilters({ ...filters, startDate: date })
+                  selected={filters.startDate ?? undefined}
+                  onSelect={(date) => onFilterChange('startDate', date)}
+                  disabled={(date) =>
+                    filters.endDate ? date > filters.endDate : false
                   }
+                  initialFocus
                 />
               </PopoverContent>
             </Popover>
@@ -91,10 +100,12 @@ export function AuditLogFilters({ onSearch }: AuditLogFiltersProps) {
               <PopoverContent className="w-auto p-0">
                 <Calendar
                   mode="single"
-                  selected={filters.endDate}
-                  onSelect={(date: Date | null) =>
-                    setFilters({ ...filters, endDate: date })
+                  selected={filters.endDate ?? undefined}
+                  onSelect={(date) => onFilterChange('endDate', date)}
+                  disabled={(date) =>
+                    filters.startDate ? date < filters.startDate : false
                   }
+                  initialFocus
                 />
               </PopoverContent>
             </Popover>

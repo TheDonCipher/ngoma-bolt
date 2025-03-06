@@ -1,20 +1,27 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { Track } from "@/lib/types";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Search, Filter } from "lucide-react";
-import { CollectionGrid } from "./collection-grid";
-import { mockAlbumData } from "@/lib/mock-data";
+import { useState } from 'react';
+import { Track } from '@/lib/types/track'; // Import from correct path
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Search, Filter } from 'lucide-react';
+import { CollectionGrid } from './collection-grid';
+import { mockAlbumData } from '@/lib/mock-data';
 
 export function FanCollection() {
-  const [searchQuery, setSearchQuery] = useState("");
-  const [tracks] = useState<Track[]>(mockAlbumData.tracks);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [tracks] = useState<Track[]>(
+    mockAlbumData.tracks.map((track, index) => ({
+      ...track,
+      isAvailable: true,
+      trackNumber: index + 1, // Set track number based on index instead of accessing non-existent property
+    }))
+  );
 
-  const filteredTracks = tracks.filter(track =>
-    track.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    track.artist.name.toLowerCase().includes(searchQuery.toLowerCase())
+  const filteredTracks = tracks.filter(
+    (track) =>
+      track.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      track.artist.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   return (

@@ -1,16 +1,16 @@
-"use client";
+'use client';
 
-import { useState, useEffect } from "react";
-import { useBadgeContract } from "./use-badge-contract";
-import { BadgeType } from "@/lib/types/badges";
-import { useAddress } from "@thirdweb-dev/react";
+import { useState, useEffect } from 'react';
+import { useBadgeContract } from './use-badge-contract';
+import { BadgeType } from '@/lib/types/badges';
+import { useAddress } from '@thirdweb-dev/react';
 
 export function useBadgeProgress(type: BadgeType) {
   const [progress, setProgress] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const address = useAddress();
   const { useUserProgress } = useBadgeContract();
-  const { data: userProgress } = useUserProgress(address || "", type);
+  const { data: userProgress } = useUserProgress(address || '', type);
 
   useEffect(() => {
     if (userProgress) {
@@ -22,9 +22,13 @@ export function useBadgeProgress(type: BadgeType) {
       };
 
       const currentValue = Number(userProgress);
-      const nextThreshold = thresholds[type].find(t => t > currentValue) || thresholds[type][0];
+      // Fix accessing type as string property
+      const nextThreshold =
+        thresholds[type.toUpperCase() as keyof typeof thresholds].find(
+          (t: number) => t > currentValue
+        ) || thresholds[type.toUpperCase() as keyof typeof thresholds][0];
       const percentage = Math.min((currentValue / nextThreshold) * 100, 100);
-      
+
       setProgress(percentage);
       setIsLoading(false);
     }

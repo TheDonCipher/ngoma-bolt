@@ -1,17 +1,22 @@
-"use client";
+'use client';
 
-import { useWebSocket } from "./websocket.service";
-import { useToast } from "@/hooks/use-toast";
-import { Notification, NotificationPreferences } from "@/lib/types/notifications";
+import { useWebSocket } from './websocket.service';
+import { useToast } from '@/hooks/use-toast';
+import type {
+  Notification,
+  NotificationPreferences,
+} from '@/lib/types/notifications';
 
 export function useNotificationService() {
   const { emit } = useWebSocket();
   const { toast } = useToast();
 
-  const sendNotification = async (notification: Omit<Notification, "id" | "timestamp" | "read">) => {
+  const sendNotification = async (
+    notification: Omit<Notification, 'id' | 'timestamp' | 'read'>
+  ) => {
     try {
       // In production, this would be an API call
-      emit("notification", {
+      emit('notification', {
         ...notification,
         id: crypto.randomUUID(),
         timestamp: new Date(),
@@ -19,25 +24,27 @@ export function useNotificationService() {
       });
       return true;
     } catch (error) {
-      console.error("Error sending notification:", error);
+      console.error('Error sending notification:', error);
       return false;
     }
   };
 
-  const updatePreferences = async (preferences: Partial<NotificationPreferences>) => {
+  const updatePreferences = async (
+    preferences: Partial<NotificationPreferences>
+  ) => {
     try {
       // In production, this would be an API call
       toast({
-        title: "Success",
-        description: "Notification preferences updated",
+        title: 'Success',
+        description: 'Notification preferences updated',
       });
       return true;
     } catch (error) {
-      console.error("Error updating preferences:", error);
+      console.error('Error updating preferences:', error);
       toast({
-        title: "Error",
-        description: "Failed to update preferences",
-        variant: "destructive",
+        title: 'Error',
+        description: 'Failed to update preferences',
+        variant: 'destructive',
       });
       return false;
     }
@@ -46,9 +53,9 @@ export function useNotificationService() {
   const requestPushPermission = async () => {
     try {
       const permission = await Notification.requestPermission();
-      return permission === "granted";
+      return permission === 'granted';
     } catch (error) {
-      console.error("Error requesting push permission:", error);
+      console.error('Error requesting push permission:', error);
       return false;
     }
   };

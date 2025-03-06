@@ -34,10 +34,13 @@ export default function AlbumDetailsPage({
           albumData = adaptToAlbumType(rawData);
         }
         setAlbum(albumData);
-      } catch (error: any) {
+      } catch (error: unknown) {
         toast({
           title: 'Error',
-          description: error.message || 'Failed to load album details',
+          description:
+            error instanceof Error
+              ? error.message
+              : 'Failed to load album details',
           variant: 'destructive',
         });
       } finally {
@@ -68,7 +71,14 @@ export default function AlbumDetailsPage({
     <div className="container px-4 py-8">
       <AlbumHeader album={album} />
       <AlbumActions album={album} />
-      <TrackList tracks={album.tracks} />
+      <TrackList
+        tracks={album.tracks.map((track) => ({
+          ...track,
+          artist: album.artist, // Use the album's artist
+          price: '0.00', // Add default price
+          streamCount: 0, // Add default stream count
+        }))}
+      />
     </div>
   );
 }

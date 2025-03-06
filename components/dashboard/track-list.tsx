@@ -1,18 +1,18 @@
-"use client";
+'use client';
 
-import { useState, useEffect } from "react";
-import { Track } from "@/lib/types";
-import { Button } from "@/components/ui/button";
-import { Play, Pause, MoreHorizontal } from "lucide-react";
+import { useState, useEffect } from 'react';
+import { Track } from '@/lib/types/track'; // Update import to use correct path
+import { Button } from '@/components/ui/button';
+import { Play, Pause, MoreHorizontal } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { formatDuration } from "@/lib/utils";
-import { formatEther } from "ethers/lib/utils";
-import { mockAlbumData } from "@/lib/mock-data";
+} from '@/components/ui/dropdown-menu';
+import { formatDuration } from '@/lib/utils';
+import { formatEther } from 'ethers/lib/utils';
+import { mockAlbumData } from '@/lib/mock-data';
 
 interface TrackListProps {
   artistId: string;
@@ -24,7 +24,13 @@ export function TrackList({ artistId }: TrackListProps) {
 
   useEffect(() => {
     // Simulating API call with mock data
-    setTracks(mockAlbumData.tracks);
+    setTracks(
+      mockAlbumData.tracks.map((track, index) => ({
+        ...track,
+        isAvailable: true,
+        trackNumber: index + 1, // Set track number based on index instead of accessing non-existent property
+      }))
+    );
   }, [artistId]);
 
   const handlePlay = (trackId: string) => {
@@ -55,7 +61,7 @@ export function TrackList({ artistId }: TrackListProps) {
             <div className="flex-1">
               <p className="font-medium">{track.title}</p>
               <p className="text-sm text-muted-foreground">
-                {formatDuration(track.duration)}
+                {formatDuration(Number(track.duration))}
               </p>
             </div>
             <div className="text-sm font-medium">

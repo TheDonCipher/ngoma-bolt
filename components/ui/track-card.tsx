@@ -1,21 +1,21 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Track } from "@/lib/types";
-import { Play, Pause, Heart, Share2, MoreHorizontal } from "lucide-react";
-import { formatDuration } from "@/lib/utils";
-import { formatEther } from "ethers/lib/utils";
-import Image from "next/image";
+import { useState } from 'react';
+import { Card } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Track } from '@/lib/types/track'; // Make sure to import from the correct file
+import { Play, Pause, Heart, Share2, MoreHorizontal } from 'lucide-react';
+import { formatDuration } from '@/lib/utils/format'; // Update to correct path
+import { formatEther } from '@/lib/utils/format'; // Update to use our custom formatEther
+import Image from 'next/image';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { usePlayerStore } from "@/lib/store/use-player-store";
-import { useToast } from "@/hooks/use-toast";
+} from '@/components/ui/dropdown-menu';
+import { usePlayerStore } from '@/lib/store/player'; // Update to correct path
+import { useToast } from '@/hooks/use-toast';
 
 interface TrackCardProps {
   track: Track;
@@ -24,7 +24,12 @@ interface TrackCardProps {
 
 export function TrackCard({ track, showArtist = true }: TrackCardProps) {
   const [isLiked, setIsLiked] = useState(false);
-  const { currentTrack, isPlaying, setTrack, setIsPlaying } = usePlayerStore();
+  const {
+    currentTrack,
+    isPlaying,
+    setCurrentTrack: setTrack,
+    setIsPlaying,
+  } = usePlayerStore();
   const { toast } = useToast();
 
   const handlePlay = () => {
@@ -39,14 +44,14 @@ export function TrackCard({ track, showArtist = true }: TrackCardProps) {
     try {
       await navigator.share({
         title: track.title,
-        text: `Check out ${track.title} by ${track.artist.name}`,
+        text: `Check out ${track.title} by ${track.artist?.name || 'Unknown Artist'}`,
         url: `/tracks/${track.id}`,
       });
     } catch (error) {
       toast({
-        title: "Share failed",
-        description: "Could not share track",
-        variant: "destructive",
+        title: 'Share failed',
+        description: 'Could not share track',
+        variant: 'destructive',
       });
     }
   };
@@ -56,7 +61,7 @@ export function TrackCard({ track, showArtist = true }: TrackCardProps) {
       <div className="flex items-center gap-4">
         <div className="relative aspect-square w-16 h-16 rounded-lg overflow-hidden">
           <Image
-            src={track.artist.image}
+            src={track.artist?.image || '/images/default-artist.jpg'}
             alt={track.title}
             fill
             className="object-cover"
@@ -79,13 +84,19 @@ export function TrackCard({ track, showArtist = true }: TrackCardProps) {
           <h3 className="font-medium truncate">{track.title}</h3>
           {showArtist && (
             <p className="text-sm text-muted-foreground truncate">
-              {track.artist.name}
+              {track.artist?.name || 'Unknown Artist'}
             </p>
           )}
           <div className="flex items-center gap-2 text-sm text-muted-foreground mt-1">
-            <span>{formatDuration(track.duration)}</span>
+            <span>
+              {formatDuration(
+                typeof track.duration === 'string'
+                  ? parseInt(track.duration, 10)
+                  : track.duration
+              )}
+            </span>
             <span>•</span>
-            <span>{formatEther(track.price)} ETH</span>
+            <span>{track.price ? formatEther(track.price) : '0.00'} ETH</span>
           </div>
         </div>
 
@@ -93,7 +104,7 @@ export function TrackCard({ track, showArtist = true }: TrackCardProps) {
           <Button
             variant="ghost"
             size="icon"
-            className={isLiked ? "text-primary" : "text-muted-foreground"}
+            className={isLiked ? 'text-primary' : 'text-muted-foreground'}
             onClick={() => setIsLiked(!isLiked)}
           >
             <Heart className="w-4 h-4" />
@@ -108,7 +119,11 @@ export function TrackCard({ track, showArtist = true }: TrackCardProps) {
           </Button>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="icon" className="text-muted-foreground">
+              <Button
+                variant="ghost"
+                size="icon"
+                className="text-muted-foreground"
+              >
                 <MoreHorizontal className="w-4 h-4" />
               </Button>
             </DropdownMenuTrigger>

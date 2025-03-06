@@ -1,31 +1,31 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { usePlayerStore } from "@/lib/store/use-player-store";
-import { Play, Pause, Plus } from "lucide-react";
-import { formatDuration } from "@/lib/utils";
-import { formatEther } from "ethers/lib/utils";
-import { mockAlbumData } from "@/lib/mock-data";
+import { useState } from 'react';
+import { Card } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { usePlayerStore } from '@/lib/store/use-player-store';
+import { Play, Pause, Plus } from 'lucide-react';
+import { formatDuration } from '@/lib/utils';
+import { formatEther } from 'ethers/lib/utils';
+import { mockAlbumData } from '@/lib/mock-data';
 
 export function TrendingSongs() {
   const [hoveredTrackId, setHoveredTrackId] = useState<string | null>(null);
-  const { 
-    currentTrack, 
-    isPlaying, 
-    setTrack, 
-    setIsPlaying,
-    addToPlaylist 
-  } = usePlayerStore();
+  const { currentTrack, isPlaying, setTrack, setIsPlaying, addToPlaylist } =
+    usePlayerStore();
 
   const tracks = mockAlbumData.tracks;
 
-  const handlePlay = (track: typeof tracks[0]) => {
+  const handlePlay = (track: (typeof tracks)[0]) => {
     if (currentTrack?.id === track.id) {
       setIsPlaying(!isPlaying);
     } else {
-      setTrack(track);
+      setTrack({
+        ...track,
+        trackNumber: 1,
+        isAvailable: true,
+        duration: track.duration, // Keep as number, don't convert to string
+      });
     }
   };
 
@@ -34,9 +34,7 @@ export function TrendingSongs() {
       <div className="flex justify-between items-center mb-6">
         <div>
           <h2 className="text-2xl font-bold mb-1">Trending Songs</h2>
-          <p className="text-muted-foreground">
-            Most popular tracks this week
-          </p>
+          <p className="text-muted-foreground">Most popular tracks this week</p>
         </div>
       </div>
 
@@ -80,7 +78,14 @@ export function TrendingSongs() {
               <Button
                 variant="ghost"
                 size="icon"
-                onClick={() => addToPlaylist(track)}
+                onClick={() =>
+                  addToPlaylist({
+                    ...track,
+                    trackNumber: 1,
+                    isAvailable: true,
+                    duration: track.duration, // Keep as number, don't convert to string
+                  })
+                }
               >
                 <Plus className="w-4 h-4" />
               </Button>

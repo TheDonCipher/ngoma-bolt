@@ -1,14 +1,15 @@
-"use client";
+'use client';
 
-import { Button } from "@/components/ui/button";
-import { Calendar } from "@/components/ui/calendar";
+import { Button } from '@/components/ui/button';
+import { Calendar } from '@/components/ui/calendar';
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover";
-import { CalendarIcon } from "lucide-react";
-import { format } from "date-fns";
+} from '@/components/ui/popover';
+import { CalendarIcon } from 'lucide-react';
+import { format } from 'date-fns';
+import { DateRange } from 'react-day-picker';
 
 interface DateRangePickerProps {
   value: [Date, Date];
@@ -21,7 +22,7 @@ export function DateRangePicker({ value, onChange }: DateRangePickerProps) {
       <PopoverTrigger asChild>
         <Button variant="outline" className="min-w-[240px] justify-start">
           <CalendarIcon className="w-4 h-4 mr-2" />
-          {format(value[0], "MMM d, yyyy")} - {format(value[1], "MMM d, yyyy")}
+          {format(value[0], 'MMM d, yyyy')} - {format(value[1], 'MMM d, yyyy')}
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-auto p-0" align="end">
@@ -31,7 +32,7 @@ export function DateRangePicker({ value, onChange }: DateRangePickerProps) {
             from: value[0],
             to: value[1],
           }}
-          onSelect={(range: { from?: Date; to?: Date }) => {
+          onSelect={(range: DateRange | undefined) => {
             if (range?.from && range?.to) {
               onChange([range.from, range.to]);
             }

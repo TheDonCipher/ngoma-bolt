@@ -1,27 +1,39 @@
-"use client";
+'use client';
 
-import { useNetwork, useSwitchChain } from "@thirdweb-dev/react";
+import { useNetwork, useSwitchChain } from '@thirdweb-dev/react';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { Card } from "@/components/ui/card";
-import { Network } from "lucide-react";
+} from '@/components/ui/select';
+import { Card } from '@/components/ui/card';
+import { Network } from 'lucide-react';
 
 const SUPPORTED_NETWORKS = [
-  { id: 1, name: "Ethereum" },
-  { id: 137, name: "Polygon" },
-  { id: 80001, name: "Mumbai" },
+  { id: 1, name: 'Ethereum' },
+  { id: 137, name: 'Polygon' },
+  { id: 80001, name: 'Mumbai' },
 ];
 
 export function NetworkSwitcher() {
-  const { chain } = useNetwork();
+  const networkData = useNetwork();
+  const chainInfo = networkData[0]; // Access the first element in the tuple
   const switchChain = useSwitchChain();
 
-  if (!chain) return null;
+  // Type-safe access to chain ID - default to Ethereum (1)
+  const currentChainId =
+    chainInfo &&
+    typeof chainInfo === 'object' &&
+    'chain' in chainInfo &&
+    chainInfo.chain &&
+    typeof chainInfo.chain === 'object' &&
+    'id' in chainInfo.chain
+      ? chainInfo.chain.id
+      : 1;
+
+  if (!chainInfo) return null;
 
   return (
     <Card className="p-6">
@@ -31,7 +43,7 @@ export function NetworkSwitcher() {
       </div>
 
       <Select
-        value={chain.chainId.toString()}
+        value={String(currentChainId)}
         onValueChange={(value) => switchChain(parseInt(value))}
       >
         <SelectTrigger>
@@ -39,10 +51,7 @@ export function NetworkSwitcher() {
         </SelectTrigger>
         <SelectContent>
           {SUPPORTED_NETWORKS.map((network) => (
-            <SelectItem
-              key={network.id}
-              value={network.id.toString()}
-            >
+            <SelectItem key={network.id} value={network.id.toString()}>
               {network.name}
             </SelectItem>
           ))}

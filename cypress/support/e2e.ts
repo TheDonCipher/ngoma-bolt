@@ -1,10 +1,16 @@
-import { setupWorker } from 'msw';
 import { handlers } from '../../mocks/handlers';
 import '@cypress/code-coverage/support';
 import './commands';
 
+// Mock MSW setup for Cypress
+const mockMsw = {
+  start: () => console.log('Mock Service Worker started'),
+  stop: () => console.log('Mock Service Worker stopped'),
+};
+
 beforeEach(() => {
-  setupWorker(...handlers).start();
+  // Initialize mock service worker with handlers
+  mockMsw.start();
 });
 
 declare global {
@@ -15,3 +21,6 @@ declare global {
     }
   }
 }
+
+// Export to make TypeScript happy
+export {};

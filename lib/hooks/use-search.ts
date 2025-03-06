@@ -1,9 +1,15 @@
-"use client";
+'use client';
 
-import { useState, useEffect } from "react";
-import { SearchFilters, SearchResults } from "@/lib/types/search";
-import { Track, Album, Artist } from "@/lib/types";
-import { mockAlbumData, mockFeaturedArtists } from "@/lib/mock-data";
+import { useState, useEffect } from 'react';
+import { SearchFilters, SearchResults } from '@/lib/types/search';
+import { Track } from '@/lib/types/track';
+import { Album } from '@/lib/types/album';
+import { Artist } from '@/lib/types/artist';
+import {
+  mockTracks,
+  mockAlbumData,
+  mockFeaturedArtists,
+} from '@/lib/mocks/mock-data';
 
 type SearchResult = Track | Album | Artist;
 
@@ -36,43 +42,63 @@ export function useSearch(query: string, filters: Partial<SearchFilters>) {
 
       try {
         // In production, this would be an API call
-        await new Promise(resolve => setTimeout(resolve, 1000));
+        await new Promise((resolve) => setTimeout(resolve, 1000));
 
         // Mock search results based on filters
         let items: SearchResult[] = [];
-        
+
         switch (filters.category) {
-          case "tracks":
-            items = mockAlbumData.tracks.filter(track =>
+          case 'tracks': {
+            items = mockTracks.filter((track) =>
               track.title.toLowerCase().includes(query.toLowerCase())
-            );
+            ) as unknown as SearchResult[];
             break;
-          case "albums":
-            items = [mockAlbumData].filter(album =>
+          }
+          case 'albums': {
+            items = [mockAlbumData].filter((album) =>
               album.title.toLowerCase().includes(query.toLowerCase())
-            );
+            ) as unknown as SearchResult[];
             break;
-          case "artists":
-            items = mockFeaturedArtists.filter(artist =>
+          }
+          case 'artists': {
+            items = mockFeaturedArtists.filter((artist: Artist) =>
               artist.name.toLowerCase().includes(query.toLowerCase())
-            );
+            ) as SearchResult[];
             break;
-          default:
-            items = [];
+          }
+          default: {
+            // If no category specified, search all types
+            const trackResults = mockTracks.filter((track) =>
+              track.title.toLowerCase().includes(query.toLowerCase())
+            ) as unknown as SearchResult[];
+
+            const albumResults = [mockAlbumData].filter((album) =>
+              album.title.toLowerCase().includes(query.toLowerCase())
+            ) as unknown as SearchResult[];
+
+            const artistResults = mockFeaturedArtists.filter((artist: Artist) =>
+              artist.name.toLowerCase().includes(query.toLowerCase())
+            ) as SearchResult[];
+
+            items = [...trackResults, ...albumResults, ...artistResults];
+          }
         }
 
         // Apply filters
         if (filters.genre?.length) {
-          items = items.filter(item => 
-            "genre" in item && filters.genre?.includes(item.genre.toLowerCase())
+          items = items.filter(
+            (item) =>
+              'genre' in item &&
+              filters.genre?.includes((item.genre as string).toLowerCase())
           );
         }
 
         if (filters.priceRange) {
-          items = items.filter(item =>
-            "price" in item && 
-            Number(item.price) >= filters.priceRange!.min &&
-            Number(item.price) <= filters.priceRange!.max
+          items = items.filter(
+            (item) =>
+              'price' in item &&
+              Number(item.price) >= filters.priceRange!.min &&
+              Number(item.price) <= filters.priceRange!.max
           );
         }
 
@@ -84,8 +110,8 @@ export function useSearch(query: string, filters: Partial<SearchFilters>) {
           hasMore: false,
         });
       } catch (error) {
-        console.error("Error searching:", error);
-        setError("Failed to fetch search results");
+        console.error('Error searching:', error);
+        setError('Failed to fetch search results');
       } finally {
         setIsLoading(false);
       }

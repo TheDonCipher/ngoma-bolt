@@ -1,21 +1,16 @@
-"use client";
+'use client';
 
-import { useEffect, useRef, useState } from "react";
-import { usePlayerStore } from "@/lib/store/use-player-store";
-import Hls from "hls.js";
-import { useContract } from "@thirdweb-dev/react";
-import { MUSIC_NFT_CONTRACT_ADDRESS } from "@/lib/constants";
+import { useEffect, useRef, useState } from 'react';
+import { usePlayerStore } from '@/lib/store/use-player-store';
+import Hls from 'hls.js';
+import { useContract } from '@thirdweb-dev/react';
+import { MUSIC_NFT_CONTRACT_ADDRESS } from '@/lib/constants';
 
 export function useAudioPlayer() {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const hlsRef = useRef<Hls | null>(null);
-  const {
-    currentTrack,
-    isPlaying,
-    volume,
-    setPlaybackProgress,
-    playNext,
-  } = usePlayerStore();
+  const { currentTrack, isPlaying, volume, setPlaybackProgress, playNext } =
+    usePlayerStore();
   const [isBuffering, setIsBuffering] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -27,7 +22,7 @@ export function useAudioPlayer() {
       const balance = await contract?.erc721.balanceOf(trackId);
       return balance?.gt(0);
     } catch (error) {
-      console.error("Error checking NFT ownership:", error);
+      console.error('Error checking NFT ownership:', error);
       return false;
     }
   };
@@ -38,7 +33,7 @@ export function useAudioPlayer() {
     const setupAudio = async () => {
       const hasAccess = await checkOwnership(currentTrack.id);
       if (!hasAccess) {
-        setError("You need to own this NFT to play the full track");
+        setError('You need to own this NFT to play the full track');
         return;
       }
 
@@ -54,7 +49,10 @@ export function useAudioPlayer() {
       }
 
       // Setup HLS if the source is an m3u8 stream
-      if (currentTrack.previewUrl.includes('.m3u8')) {
+      if (
+        currentTrack?.previewUrl &&
+        currentTrack.previewUrl.includes('.m3u8')
+      ) {
         if (Hls.isSupported()) {
           const hls = new Hls({
             enableWorker: true,
@@ -62,30 +60,39 @@ export function useAudioPlayer() {
           });
           hlsRef.current = hls;
 
-          hls.loadSource(currentTrack.previewUrl);
+          if (currentTrack?.previewUrl) {
+            hls.loadSource(currentTrack.previewUrl);
+          }
+
           hls.attachMedia(audio);
 
           hls.on(Hls.Events.ERROR, (event, data) => {
             if (data.fatal) {
-              setError("Error loading stream");
+              setError('Error loading stream');
             }
           });
         } else if (audio.canPlayType('application/vnd.apple.mpegurl')) {
           // For Safari
-          audio.src = currentTrack.previewUrl;
+          if (currentTrack?.previewUrl) {
+            audio.src = currentTrack.previewUrl;
+          }
         }
       } else {
         // Regular audio file
-        audio.src = currentTrack.previewUrl;
+        if (currentTrack?.previewUrl) {
+          audio.src = currentTrack.previewUrl;
+        } else {
+          audio.src = ''; // Set empty string as fallback
+        }
       }
 
       audio.volume = volume;
-      
+
       if (isPlaying) {
         try {
           await audio.play();
         } catch (error) {
-          console.error("Playback error:", error);
+          console.error('Playback error:', error);
         }
       }
 

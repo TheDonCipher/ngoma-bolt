@@ -13,6 +13,8 @@ import {
   MessageSquare,
   HelpCircle,
   LogOut,
+  BarChart3,
+  DollarSign,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -62,16 +64,19 @@ export function DashboardNav() {
           title: 'Overview',
           href: '/dashboard/artist/analytics/overview',
           isActive: pathname === '/dashboard/artist/analytics/overview',
+          icon: <BarChart3 className="w-5 h-5" />,
         },
         {
           title: 'Audience',
           href: '/dashboard/artist/analytics/audience',
           isActive: pathname === '/dashboard/artist/analytics/audience',
+          icon: <Users className="w-5 h-5" />,
         },
         {
           title: 'Revenue',
           href: '/dashboard/artist/analytics/revenue',
           isActive: pathname === '/dashboard/artist/analytics/revenue',
+          icon: <DollarSign className="w-5 h-5" />,
         },
       ],
     },
@@ -136,6 +141,7 @@ export function DashboardNav() {
                                 : 'text-gray-700 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800'
                             )}
                           >
+                            {child.icon}
                             {child.title}
                           </Link>
                         </li>

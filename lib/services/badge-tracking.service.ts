@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { useBadgeContract } from "@/lib/hooks/use-badge-contract";
-import { BadgeType } from "@/lib/types/badges";
-import { useToast } from "@/hooks/use-toast";
+import { useBadgeContract } from '@/lib/hooks/use-badge-contract';
+import { BadgeType } from '@/lib/types/badges';
+import { useToast } from '@/hooks/use-toast';
 
 export function useBadgeTracking() {
   const { useUpdateProgress } = useBadgeContract();
@@ -16,31 +16,31 @@ export function useBadgeTracking() {
   ) => {
     try {
       await updateProgress({ args: [address, type, amount] });
-      
+
       toast({
-        title: "Progress Updated",
+        title: 'Progress Updated',
         description: `Your ${type.toLowerCase()} progress has been updated!`,
       });
     } catch (error) {
-      console.error("Error updating progress:", error);
+      console.error('Error updating progress:', error);
       toast({
-        title: "Error",
-        description: "Failed to update progress",
-        variant: "destructive",
+        title: 'Error',
+        description: 'Failed to update progress',
+        variant: 'destructive',
       });
     }
   };
 
   const trackPurchase = async (address: string) => {
-    await trackProgress(address, "COLLECTOR", 1);
+    await trackProgress(address, 'COLLECTOR' as BadgeType, 1);
   };
 
   const trackListening = async (address: string) => {
-    await trackProgress(address, "LISTENER", 1);
+    await trackProgress(address, 'LISTENER' as BadgeType, 1);
   };
 
   const trackSpecialAchievement = async (address: string) => {
-    await trackProgress(address, "SPECIAL", 1);
+    await trackProgress(address, 'SPECIAL' as BadgeType, 1);
   };
 
   return {

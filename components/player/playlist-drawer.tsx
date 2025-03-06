@@ -1,25 +1,20 @@
-"use client";
+'use client';
 
-import { usePlayerStore } from "@/lib/store/use-player-store";
+import { usePlayerStore } from '@/lib/store/use-player-store';
 import {
   Sheet,
   SheetContent,
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from "@/components/ui/sheet";
-import { Button } from "@/components/ui/button";
-import { ListMusic, Play, Pause, X } from "lucide-react";
-import { formatDuration } from "@/lib/utils";
+} from '@/components/ui/sheet';
+import { Button } from '@/components/ui/button';
+import { ListMusic, Play, Pause, X } from 'lucide-react';
+import { formatDuration } from '@/lib/utils';
 
 export function PlaylistDrawer() {
-  const { 
-    playlist,
-    currentTrack,
-    isPlaying,
-    setTrack,
-    removeFromPlaylist
-  } = usePlayerStore();
+  const { playlist, currentTrack, isPlaying, setTrack, removeFromPlaylist } =
+    usePlayerStore();
 
   if (playlist.length === 0) return null;
 
@@ -39,7 +34,7 @@ export function PlaylistDrawer() {
             <div
               key={track.id}
               className={`flex items-center gap-3 p-2 rounded-lg hover:bg-muted/50 ${
-                currentTrack?.id === track.id ? "bg-muted" : ""
+                currentTrack?.id === track.id ? 'bg-muted' : ''
               }`}
             >
               <Button
@@ -57,11 +52,12 @@ export function PlaylistDrawer() {
               <div className="flex-1 min-w-0">
                 <p className="font-medium truncate">{track.title}</p>
                 <p className="text-sm text-muted-foreground truncate">
-                  {track.artist.name}
+                  {/* Using type assertion since 'artist' is not formally in the Track type */}
+                  {(track as any).artist?.name || 'Unknown Artist'}
                 </p>
               </div>
               <div className="text-sm text-muted-foreground">
-                {formatDuration(track.duration)}
+                {formatDuration(Number(track.duration))}
               </div>
               <Button
                 variant="ghost"

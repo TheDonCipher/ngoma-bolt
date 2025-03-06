@@ -1,43 +1,58 @@
 'use client';
 
-import { useState } from 'react';
+import React, { Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { SearchBar } from '@/components/search/search-bar';
-import { SearchResults } from '@/components/search/search-results';
-import { LoadingState } from '@/components/shared/loading-state';
-import { ApiError } from '@/components/shared/api-error';
 import { useSearch } from '@/lib/hooks/use-search';
-import { SearchCategory } from '@/lib/types/search'; // Add this import
+import { SearchFilters } from '@/components/search/search-filters';
+import { Track } from '@/lib/types/track';
+import { Album, Artist } from '@/lib/types/album';
+import { useState } from 'react';
 
-export default function SearchPage() {
+// Import the components we created
+import { SearchPage } from '@/components/search/search-page';
+import { SearchResults } from '@/components/search/search-results';
+import { LoadingState } from '@/components/ui/loading-state';
+import { SearchEmptyState } from '@/components/search/search-empty-state';
+
+// Helper type for SearchResult to match the track, album, artist types used in SearchResults
+type SearchResult = Track | Album | Artist;
+
+// Create a client component that uses useSearchParams
+function SearchContent() {
   const searchParams = useSearchParams();
   const query = searchParams.get('q') || '';
-  const categoryParam = searchParams.get('category') || 'tracks';
+  const [filters, setFilters] = useState({});
 
-  // Ensure category is a valid SearchCategory
-  const category = categoryParam as SearchCategory;
-
-  const { results, isLoading, error } = useSearch(query, {
-    category,
-    genre: searchParams.getAll('genre'),
-    priceRange: {
-      min: Number(searchParams.get('priceRange_min')) || 0,
-      max: Number(searchParams.get('priceRange_max')) || 10,
-    },
-    verified: searchParams.get('verified') === 'true',
-  });
-
-  if (error) {
-    return <ApiError message={error} />;
-  }
+  const { results, isLoading } = useSearch(query, filters);
 
   return (
-    <div className="container px-4 py-8">
-      <div className="max-w-4xl mx-auto">
-        <SearchBar />
+    <SearchPage
+      query={query}
+      renderFilters={() => <SearchFilters />}
+      renderResults={() =>
+        isLoading ? (
+          <LoadingState />
+        ) : results.items.length > 0 ? (
+          <SearchResults results={results as any} />
+        ) : (
+          <SearchEmptyState query={query} />
+        )
+      }
+    />
+  );
+}
 
-        {isLoading ? <LoadingState /> : <SearchResults results={results} />}
-      </div>
-    </div>
+// Create a wrapper component with Suspense
+export default function Search() {
+  return (
+    <Suspense
+      fallback={
+        <div className="flex items-center justify-center min-h-screen">
+          Loading search results...
+        </div>
+      }
+    >
+      <SearchContent />
+    </Suspense>
   );
 }
