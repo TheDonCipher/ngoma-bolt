@@ -186,17 +186,17 @@ export default function ArtistPage() {
                   {
                     title: 'Summer Music Festival',
                     date: 'July 15',
-                    location: 'Central Park, NY',
+                    location: 'Durban, SA',
                   },
                   {
                     title: 'Album Release Party',
                     date: 'August 3',
-                    location: 'The Blue Room, LA',
+                    location: 'Gaborone, BW',
                   },
                   {
                     title: 'Live Radio Interview',
                     date: 'August 10',
-                    location: 'KEXP Studio',
+                    location: 'Overview Radio',
                   },
                 ].map((event, i) => (
                   <div key={i} className="py-3">

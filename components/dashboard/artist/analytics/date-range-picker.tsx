@@ -31,7 +31,7 @@ export function DateRangePicker({ value, onChange }: DateRangePickerProps) {
             from: value[0],
             to: value[1],
           }}
-          onSelect={(range) => {
+          onSelect={(range: { from?: Date; to?: Date }) => {
             if (range?.from && range?.to) {
               onChange([range.from, range.to]);
             }

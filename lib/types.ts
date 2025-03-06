@@ -6,26 +6,43 @@ export interface Artist {
   totalTracks: number;
   floorPrice: number;
   previewTrack: string;
+  // Add these properties to match what's used in DashboardStats
+  totalListeners?: number;
+  revenue?: number;
+  totalStreams?: number;
 }
 
 export interface Album {
   id: string;
   title: string;
-  description: string;
+  artist: {
+    id: string;
+    name: string;
+    profileImage: string;
+  };
   coverImage: string;
-  price: bigint;
-  royaltyFee: number;
+  releaseDate: string | Date; // Allow both string and Date
+  description: string;
   trackCount: number;
-  releaseDate: Date;
-  artist: Artist;
+  price: string | bigint; // Allow both string and bigint
+  royaltyFee: number;
+  tracks: {
+    id: string;
+    title: string;
+    duration: string;
+    audioUrl?: string;
+    trackNumber: number;
+    isAvailable: boolean;
+    previewUrl?: string;
+  }[];
 }
 
 export interface Track {
   id: string;
   title: string;
-  artist: Artist;
-  duration: number;
-  previewUrl: string;
-  price: bigint;
-  albumId?: string;
+  duration: string;  // Changed from number to string to match your other Track interfaces
+  audioUrl?: string;
+  trackNumber: number;
+  isAvailable: boolean;
+  previewUrl?: string;
 }

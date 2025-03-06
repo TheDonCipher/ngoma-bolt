@@ -17,6 +17,7 @@ import {
   DollarSign,
   Link as LinkIcon,
   Save,
+  Plus, // Add the Plus icon here
 } from 'lucide-react';
 import { Switch } from '@/components/ui/switch';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';

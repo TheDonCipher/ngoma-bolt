@@ -1,35 +1,25 @@
+import React from 'react';
 import { Artist } from "@/lib/types";
 import { Button } from "@/components/ui/button";
 import { Settings } from "lucide-react";
 import Image from "next/image";
 
-interface DashboardHeaderProps {
-  artist: Artist;
+export interface DashboardHeaderProps {
+  title: string;
+  subtitle?: string;
+  actions?: React.ReactNode;
 }
 
-export function DashboardHeader({ artist }: DashboardHeaderProps) {
+export function DashboardHeader({ title, subtitle, actions }: DashboardHeaderProps) {
   return (
-    <div className="flex items-center justify-between">
-      <div className="flex items-center gap-6">
-        <div className="relative w-24 h-24 rounded-full overflow-hidden">
-          <Image
-            src={artist.image}
-            alt={artist.name}
-            fill
-            className="object-cover"
-          />
-        </div>
-        <div>
-          <h1 className="text-3xl font-bold mb-2">{artist.name}</h1>
-          <p className="text-muted-foreground">
-            {artist.genre} • {artist.totalTracks} Tracks
-          </p>
-        </div>
+    <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4">
+      <div>
+        <h1 className="text-3xl font-bold tracking-tight">{title}</h1>
+        {subtitle && <p className="text-muted-foreground mt-1">{subtitle}</p>}
       </div>
-      
-      <Button variant="outline" size="icon">
-        <Settings className="w-4 h-4" />
-      </Button>
+      {actions && <div className="flex items-center gap-2">{actions}</div>}
     </div>
   );
 }
+
+export default DashboardHeader;

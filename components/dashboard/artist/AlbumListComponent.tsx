@@ -70,7 +70,12 @@ const AlbumListComponent = () => {
             <div className="mt-4">
               <h2 className="text-2xl font-bold">{currentAlbum.title}</h2>
               <p className="text-gray-600 dark:text-gray-400 mt-1">
-                Released on {formatDate(currentAlbum.releaseDate)}
+                Released on{' '}
+                {formatDate(
+                  typeof currentAlbum.releaseDate === 'string'
+                    ? new Date(currentAlbum.releaseDate)
+                    : currentAlbum.releaseDate
+                )}
               </p>
               <p className="text-sm text-gray-500 dark:text-gray-500 mt-2">
                 {currentAlbum.trackCount} tracks •{' '}

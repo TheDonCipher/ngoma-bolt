@@ -71,15 +71,19 @@ export function MainNav() {
         </div>
 
         <div className="flex items-center space-x-4">
-          <Link href="/dashboard" className="hidden md:flex">
-            <Button variant="outline" size="sm">
-              Dashboard
-            </Button>
-          </Link>
+          {/* Full Dashboard menu - desktop only */}
+          <div className="hidden md:block">
+            <Link href="/dashboard">
+              <Button variant="outline" size="sm">
+                Dashboard
+              </Button>
+            </Link>
+          </div>
 
-          <Link href="/dashboard" className="md:hidden">
-            <Button variant="outline" size="icon">
-              <User size={18} />
+          {/* Artist Dashboard only - mobile only */}
+          <Link href="/dashboard/artist" className="md:hidden">
+            <Button variant="outline" size="sm">
+              Artist Dashboard
             </Button>
           </Link>
 
@@ -113,6 +117,8 @@ export function MainNav() {
                 {route.label}
               </Link>
             ))}
+
+            {/* No additional dashboard links in mobile menu */}
           </nav>
         </div>
       )}

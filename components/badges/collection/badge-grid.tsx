@@ -1,40 +1,43 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { Badge, BadgeType } from "@/lib/types/badges";
-import { BadgeCard } from "./badge-card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Trophy, Music, Star } from "lucide-react";
+import { useState } from 'react';
+import { Badge, BadgeType } from '@/lib/types/badges';
+import { BadgeCard } from './badge-card';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Trophy, Music, Star } from 'lucide-react';
 
 interface BadgeGridProps {
   badges: Badge[];
 }
 
 export function BadgeGrid({ badges }: BadgeGridProps) {
-  const [selectedType, setSelectedType] = useState<BadgeType>("COLLECTOR");
+  const [selectedType, setSelectedType] = useState<BadgeType>('collector');
 
-  const filteredBadges = badges.filter(badge => badge.type === selectedType);
+  const filteredBadges = badges.filter((badge) => badge.type === selectedType);
 
   const tabs = [
     {
-      value: "COLLECTOR",
-      label: "Collector",
+      value: 'collector',
+      label: 'Collector',
       icon: <Trophy className="w-4 h-4" />,
     },
     {
-      value: "LISTENER",
-      label: "Listener",
+      value: 'listener',
+      label: 'Listener',
       icon: <Music className="w-4 h-4" />,
     },
     {
-      value: "SPECIAL",
-      label: "Special",
+      value: 'special',
+      label: 'Special',
       icon: <Star className="w-4 h-4" />,
     },
   ] as const;
 
   return (
-    <Tabs value={selectedType} onValueChange={(value) => setSelectedType(value as BadgeType)}>
+    <Tabs
+      value={selectedType}
+      onValueChange={(value) => setSelectedType(value as BadgeType)}
+    >
       <TabsList>
         {tabs.map((tab) => (
           <TabsTrigger

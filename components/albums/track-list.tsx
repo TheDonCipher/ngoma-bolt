@@ -1,17 +1,21 @@
-"use client";
+'use client';
 
-import { Track } from "@/lib/types";
-import { Button } from "@/components/ui/button";
-import { Play, Pause } from "lucide-react";
-import { formatDuration } from "@/lib/utils";
-import { formatEther } from "ethers/lib/utils";
-import { useState } from "react";
+import { Track } from '@/lib/types';
+import { Button } from '@/components/ui/button';
+import { Play, Pause } from 'lucide-react';
+import { formatDuration } from '@/lib/utils';
+import { formatEther } from 'ethers/lib/utils';
+import { useState } from 'react';
 
 interface TrackListProps {
   tracks: Track[];
+  albumArtistName?: string; // Add albumArtistName prop
 }
 
-export function TrackList({ tracks }: TrackListProps) {
+export function TrackList({
+  tracks,
+  albumArtistName = 'Various Artists',
+}: TrackListProps) {
   const [playingTrackId, setPlayingTrackId] = useState<string | null>(null);
 
   const handlePlay = (trackId: string) => {
@@ -44,15 +48,18 @@ export function TrackList({ tracks }: TrackListProps) {
             </Button>
             <div className="flex-1">
               <p className="font-medium">{track.title}</p>
-              <p className="text-sm text-muted-foreground">
-                {track.artist.name}
-              </p>
+              <p className="text-sm text-muted-foreground">{albumArtistName}</p>
             </div>
             <div className="text-sm text-muted-foreground">
-              {formatDuration(track.duration)}
+              {formatDuration(
+                typeof track.duration === 'string'
+                  ? parseInt(track.duration, 10)
+                  : track.duration
+              )}
             </div>
             <div className="text-sm font-medium">
-              {formatEther(track.price)} ETH
+              {(track as any).price ? formatEther((track as any).price) : '0'}{' '}
+              ETH
             </div>
           </div>
         ))}

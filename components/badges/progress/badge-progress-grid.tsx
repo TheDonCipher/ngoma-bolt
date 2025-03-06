@@ -1,27 +1,27 @@
-"use client";
+'use client';
 
-import { Trophy, Music, Star } from "lucide-react";
-import { BadgeProgressCard } from "./badge-progress-card";
+import { Trophy, Music, Star } from 'lucide-react';
+import { BadgeProgressCard } from './badge-progress-card';
 
 export function BadgeProgressGrid() {
   const progressCards = [
     {
-      type: "COLLECTOR",
+      type: 'collector',
       icon: <Trophy className="w-6 h-6" />,
-      title: "Collector Progress",
-      description: "Track your NFT collection milestones",
+      title: 'Collector Progress',
+      description: 'Track your NFT collection milestones',
     },
     {
-      type: "LISTENER",
+      type: 'listener',
       icon: <Music className="w-6 h-6" />,
-      title: "Listener Progress",
-      description: "Your music streaming achievements",
+      title: 'Listener Progress',
+      description: 'Your music streaming achievements',
     },
     {
-      type: "SPECIAL",
+      type: 'special',
       icon: <Star className="w-6 h-6" />,
-      title: "Special Achievements",
-      description: "Exclusive and limited-time badges",
+      title: 'Special Achievements',
+      description: 'Exclusive and limited-time badges',
     },
   ] as const;
 

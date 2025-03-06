@@ -55,7 +55,7 @@ export default function DashboardLayout({
             href="/"
             className="font-bold text-xl text-amber-600 dark:text-amber-400"
           >
-            Ngoma Bolt
+            Artist Dashboard
           </Link>
           <Button
             variant="ghost"

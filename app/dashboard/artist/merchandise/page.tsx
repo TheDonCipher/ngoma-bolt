@@ -36,7 +36,7 @@ const merchandiseItems = [
     price: 29.99,
     inventory: 45,
     sold: 55,
-    imageUrl: '/placeholder.jpg',
+    imageUrl: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=500&auto=format&fit=crop&q=60',
     status: 'active',
     category: 'apparel',
   },
@@ -46,7 +46,7 @@ const merchandiseItems = [
     price: 24.99,
     inventory: 30,
     sold: 70,
-    imageUrl: '/placeholder.jpg',
+    imageUrl: 'https://images.unsplash.com/photo-1603048588665-791ca8aea617?w=500&auto=format&fit=crop&q=60',
     status: 'active',
     category: 'music',
   },
@@ -56,17 +56,17 @@ const merchandiseItems = [
     price: 49.99,
     inventory: 25,
     sold: 25,
-    imageUrl: '/placeholder.jpg',
+    imageUrl: 'https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=500&auto=format&fit=crop&q=60',
     status: 'active',
     category: 'apparel',
   },
   {
     id: '4',
-    name: 'Limited Tour Poster',
+    name: 'Signature World Tour Poster',
     price: 19.99,
     inventory: 0,
     sold: 100,
-    imageUrl: '/placeholder.jpg',
+    imageUrl: 'https://images.unsplash.com/photo-1561070791-2526d30994b5?w=500&auto=format&fit=crop&q=60',
     status: 'sold_out',
     category: 'accessories',
   },
@@ -76,7 +76,7 @@ const merchandiseItems = [
     price: 9.99,
     inventory: 999,
     sold: 250,
-    imageUrl: '/placeholder.jpg',
+    imageUrl: 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=500&auto=format&fit=crop&q=60',
     status: 'active',
     category: 'digital',
   },
@@ -86,7 +86,7 @@ const merchandiseItems = [
     price: 22.99,
     inventory: 15,
     sold: 35,
-    imageUrl: '/placeholder.jpg',
+    imageUrl: 'https://images.unsplash.com/photo-1588850561407-ed78c282e89b?w=500&auto=format&fit=crop&q=60',
     status: 'active',
     category: 'apparel',
   },
@@ -177,12 +177,26 @@ export default function MerchandisePage() {
   );
 }
 
-function MerchandiseCard({ item }) {
+// Update the interface to match the actual data structure
+interface MerchandiseItem {
+  id: string;
+  name: string;
+  price: number;
+  imageUrl: string; // Changed from 'image' to 'imageUrl'
+  inventory: number; // Changed from 'stock' to 'inventory'
+  sold: number;
+  category: string;
+  status: string; // Added 'status' property
+  description?: string;
+  isPublished?: boolean;
+}
+
+function MerchandiseCard({ item }: { item: MerchandiseItem }) {
   return (
     <Card className="overflow-hidden">
       <div className="relative">
         <img
-          src={item.imageUrl || '/placeholder.jpg'}
+          src={item.imageUrl || 'https://images.unsplash.com/photo-1526947425960-945c6e72858f?w=500&auto=format&fit=crop&q=60'}
           alt={item.name}
           className="w-full h-48 object-cover"
         />

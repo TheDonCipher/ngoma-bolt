@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import { Album } from "@/lib/types";
-import Image from "next/image";
-import { formatEther } from "ethers/lib/utils";
-import { formatDate } from "@/lib/utils";
+import { Album } from '@/lib/types';
+import Image from 'next/image';
+import { formatEther } from 'ethers/lib/utils';
+import { formatDate } from '@/lib/utils';
 
 interface AlbumHeaderProps {
   album: Album;
@@ -24,10 +24,17 @@ export function AlbumHeader({ album }: AlbumHeaderProps) {
       <div className="flex-1">
         <h1 className="text-3xl font-bold mb-2">{album.title}</h1>
         <div className="flex items-center gap-2 mb-4">
-          <p className="text-lg text-muted-foreground">By {album.artist.name}</p>
+          <p className="text-lg text-muted-foreground">
+            By {album.artist.name}
+          </p>
           <span className="text-muted-foreground">•</span>
           <p className="text-muted-foreground">
-            Released {formatDate(album.releaseDate)}
+            Released{' '}
+            {formatDate(
+              typeof album.releaseDate === 'string'
+                ? new Date(album.releaseDate)
+                : album.releaseDate
+            )}
           </p>
         </div>
 
@@ -50,7 +57,10 @@ export function AlbumHeader({ album }: AlbumHeaderProps) {
           </div>
           <div className="bg-card p-4 rounded-lg">
             <p className="text-sm text-muted-foreground mb-1">Genre</p>
-            <p className="text-lg font-semibold">{album.artist.genre}</p>
+            <p className="text-lg font-semibold">
+              {/* Use optional chaining and provide fallback value */}
+              {(album as any).genre || 'Not specified'}
+            </p>
           </div>
         </div>
       </div>

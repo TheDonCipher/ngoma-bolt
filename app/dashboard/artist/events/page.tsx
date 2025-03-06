@@ -37,9 +37,11 @@ const upcomingEvents = [
     date: '2023-07-15',
     time: '18:00',
     venue: 'Central Park',
-    location: 'New York, NY',
+    location: 'Durban, South Africa',
     attendees: 145,
-    imageUrl: '/placeholder.jpg',
+    imageUrl:
+      'https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?w=500&auto=format&fit=crop&q=60',
+    status: 'upcoming' as const,
   },
   {
     id: '2',
@@ -47,9 +49,11 @@ const upcomingEvents = [
     date: '2023-08-02',
     time: '21:00',
     venue: 'The Blue Note',
-    location: 'Chicago, IL',
+    location: 'Palapye, Botswana',
     attendees: 75,
-    imageUrl: '/placeholder.jpg',
+    imageUrl:
+      'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=500&auto=format&fit=crop&q=60',
+    status: 'upcoming' as const,
   },
   {
     id: '3',
@@ -57,9 +61,11 @@ const upcomingEvents = [
     date: '2023-09-10',
     time: '20:00',
     venue: 'Studio 54',
-    location: 'Los Angeles, CA',
+    location: 'Gaborone, Botswana',
     attendees: 210,
-    imageUrl: '/placeholder.jpg',
+    imageUrl:
+      'https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?w=500&auto=format&fit=crop&q=60',
+    status: 'upcoming' as const,
   },
 ];
 
@@ -70,9 +76,11 @@ const pastEvents = [
     date: '2023-02-20',
     time: '19:00',
     venue: 'Symphony Hall',
-    location: 'Boston, MA',
+    location: 'Cape Town, South Africa',
     attendees: 320,
-    imageUrl: '/placeholder.jpg',
+    imageUrl:
+      'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=500&auto=format&fit=crop&q=60',
+    status: 'past' as const,
   },
   {
     id: '5',
@@ -80,9 +88,11 @@ const pastEvents = [
     date: '2023-03-15',
     time: '16:00',
     venue: 'University Auditorium',
-    location: 'Austin, TX',
+    location: 'Luanda, Angola',
     attendees: 185,
-    imageUrl: '/placeholder.jpg',
+    imageUrl:
+      'https://images.unsplash.com/photo-1501281668745-f7f57925c3b4?w=500&auto=format&fit=crop&q=60',
+    status: 'past' as const,
   },
 ];
 
@@ -93,6 +103,21 @@ function formatDate(dateString: string) {
     year: 'numeric',
   };
   return new Date(dateString).toLocaleDateString('en-US', options);
+}
+
+// Define an interface for the event object
+interface Event {
+  id: string;
+  title: string;
+  date: string;
+  time?: string;
+  venue: string;
+  location: string;
+  imageUrl: string;
+  attendees: number;
+  status: 'upcoming' | 'past' | 'canceled';
+  ticketsSold?: number;
+  ticketsTotal?: number;
 }
 
 export default function ArtistEventsPage() {
@@ -163,7 +188,8 @@ export default function ArtistEventsPage() {
   );
 }
 
-function EventCard({ event }) {
+// Add the type annotation to the EventCard component
+function EventCard({ event }: { event: Event }) {
   return (
     <Card>
       <CardHeader>

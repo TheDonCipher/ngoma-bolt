@@ -364,38 +364,40 @@ export default function AnalyticsOverviewPage() {
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              {[
-                {
-                  type: 'play',
-                  user: 'New listener',
-                  track: 'Summer Vibes',
-                  time: '10 minutes ago',
-                },
-                {
-                  type: 'follow',
-                  user: 'New fan',
-                  track: null,
-                  time: '1 hour ago',
-                },
-                {
-                  type: 'purchase',
-                  user: 'Fan',
-                  track: 'Midnight Drive',
-                  time: '3 hours ago',
-                },
-                {
-                  type: 'share',
-                  user: 'Influencer',
-                  track: 'Lost in Sound',
-                  time: '5 hours ago',
-                },
-                {
-                  type: 'comment',
-                  user: 'Fan',
-                  track: 'Urban Dreams',
-                  time: 'Yesterday',
-                },
-              ].map((activity, i) => (
+              {(
+                [
+                  {
+                    type: 'play' as const,
+                    user: 'New listener',
+                    track: 'Summer Vibes',
+                    time: '10 minutes ago',
+                  },
+                  {
+                    type: 'follow' as const,
+                    user: 'New fan',
+                    track: null,
+                    time: '1 hour ago',
+                  },
+                  {
+                    type: 'purchase' as const,
+                    user: 'Fan',
+                    track: 'Midnight Drive',
+                    time: '3 hours ago',
+                  },
+                  {
+                    type: 'share' as const,
+                    user: 'Influencer',
+                    track: 'Lost in Sound',
+                    time: '5 hours ago',
+                  },
+                  {
+                    type: 'comment' as const,
+                    user: 'Fan',
+                    track: 'Urban Dreams',
+                    time: 'Yesterday',
+                  },
+                ] as ActivityType[]
+              ).map((activity, i) => (
                 <div key={i} className="flex items-start space-x-3">
                   <div className="h-8 w-8 rounded-full bg-amber-100 dark:bg-amber-900/30 flex items-center justify-center text-amber-600 dark:text-amber-400">
                     {activity.type === 'play' && <Play className="h-4 w-4" />}
@@ -432,7 +434,24 @@ export default function AnalyticsOverviewPage() {
   );
 }
 
-function StatsCard({ title, value, change, trend, icon: Icon, description }) {
+// Define the props interface for StatsCard
+interface StatsCardProps {
+  title: string;
+  value: string | number;
+  change: string; // Changed from 'number' to 'string' to accept percentage strings
+  trend: 'up' | 'down' | 'neutral';
+  icon: React.ElementType;
+  description: string;
+}
+
+function StatsCard({
+  title,
+  value,
+  change,
+  trend,
+  icon: Icon,
+  description,
+}: StatsCardProps) {
   return (
     <Card>
       <CardContent className="p-6">
@@ -472,7 +491,15 @@ function StatsCard({ title, value, change, trend, icon: Icon, description }) {
   );
 }
 
-function getActivityDescription(activity) {
+// Define an ActivityType interface
+interface ActivityType {
+  type: 'play' | 'follow' | 'purchase' | 'share' | 'comment';
+  user: string;
+  track: string | null;
+  time: string;
+}
+
+function getActivityDescription(activity: ActivityType) {
   switch (activity.type) {
     case 'play':
       return 'listened to';

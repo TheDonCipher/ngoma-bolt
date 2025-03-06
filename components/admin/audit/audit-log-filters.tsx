@@ -1,24 +1,24 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { useState } from 'react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { Calendar } from "@/components/ui/calendar";
+} from '@/components/ui/select';
+import { Calendar } from '@/components/ui/calendar';
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover";
-import { format } from "date-fns";
-import { Calendar as CalendarIcon } from "lucide-react";
-import { AuditAction, AuditCategory, AuditSeverity } from "@/lib/types/audit";
+} from '@/components/ui/popover';
+import { format } from 'date-fns';
+import { Calendar as CalendarIcon } from 'lucide-react';
+import { AuditAction, AuditCategory, AuditSeverity } from '@/lib/types/audit';
 
 interface AuditLogFiltersProps {
   onSearch: (filters: any) => void;
@@ -28,15 +28,17 @@ export function AuditLogFilters({ onSearch }: AuditLogFiltersProps) {
   const [filters, setFilters] = useState({
     startDate: null as Date | null,
     endDate: null as Date | null,
-    userId: "",
-    action: "" as AuditAction | "",
-    category: "" as AuditCategory | "",
-    severity: "" as AuditSeverity | "",
+    userId: '',
+    action: '' as AuditAction | '',
+    category: '' as AuditCategory | '',
+    severity: '' as AuditSeverity | '',
   });
 
   const handleSearch = () => {
     const activeFilters = Object.fromEntries(
-      Object.entries(filters).filter(([_, value]) => value !== "" && value !== null)
+      Object.entries(filters).filter(
+        ([_, value]) => value !== '' && value !== null
+      )
     );
     onSearch(activeFilters);
   };
@@ -45,10 +47,10 @@ export function AuditLogFilters({ onSearch }: AuditLogFiltersProps) {
     setFilters({
       startDate: null,
       endDate: null,
-      userId: "",
-      action: "",
-      category: "",
-      severity: "",
+      userId: '',
+      action: '',
+      category: '',
+      severity: '',
     });
     onSearch({});
   };
@@ -63,18 +65,18 @@ export function AuditLogFilters({ onSearch }: AuditLogFiltersProps) {
               <PopoverTrigger asChild>
                 <Button variant="outline" className="w-full justify-start">
                   <CalendarIcon className="w-4 h-4 mr-2" />
-                  {filters.startDate ? (
-                    format(filters.startDate, "PP")
-                  ) : (
-                    "Start Date"
-                  )}
+                  {filters.startDate
+                    ? format(filters.startDate, 'PP')
+                    : 'Start Date'}
                 </Button>
               </PopoverTrigger>
               <PopoverContent className="w-auto p-0">
                 <Calendar
                   mode="single"
                   selected={filters.startDate}
-                  onSelect={(date) => setFilters({ ...filters, startDate: date })}
+                  onSelect={(date: Date | null) =>
+                    setFilters({ ...filters, startDate: date })
+                  }
                 />
               </PopoverContent>
             </Popover>
@@ -83,18 +85,16 @@ export function AuditLogFilters({ onSearch }: AuditLogFiltersProps) {
               <PopoverTrigger asChild>
                 <Button variant="outline" className="w-full justify-start">
                   <CalendarIcon className="w-4 h-4 mr-2" />
-                  {filters.endDate ? (
-                    format(filters.endDate, "PP")
-                  ) : (
-                    "End Date"
-                  )}
+                  {filters.endDate ? format(filters.endDate, 'PP') : 'End Date'}
                 </Button>
               </PopoverTrigger>
               <PopoverContent className="w-auto p-0">
                 <Calendar
                   mode="single"
                   selected={filters.endDate}
-                  onSelect={(date) => setFilters({ ...filters, endDate: date })}
+                  onSelect={(date: Date | null) =>
+                    setFilters({ ...filters, endDate: date })
+                  }
                 />
               </PopoverContent>
             </Popover>
@@ -114,7 +114,9 @@ export function AuditLogFilters({ onSearch }: AuditLogFiltersProps) {
           <label className="text-sm font-medium">Action</label>
           <Select
             value={filters.action}
-            onValueChange={(value) => setFilters({ ...filters, action: value as AuditAction })}
+            onValueChange={(value) =>
+              setFilters({ ...filters, action: value as AuditAction })
+            }
           >
             <SelectTrigger>
               <SelectValue placeholder="Select action" />
@@ -134,7 +136,9 @@ export function AuditLogFilters({ onSearch }: AuditLogFiltersProps) {
           <label className="text-sm font-medium">Category</label>
           <Select
             value={filters.category}
-            onValueChange={(value) => setFilters({ ...filters, category: value as AuditCategory })}
+            onValueChange={(value) =>
+              setFilters({ ...filters, category: value as AuditCategory })
+            }
           >
             <SelectTrigger>
               <SelectValue placeholder="Select category" />
@@ -153,7 +157,9 @@ export function AuditLogFilters({ onSearch }: AuditLogFiltersProps) {
           <label className="text-sm font-medium">Severity</label>
           <Select
             value={filters.severity}
-            onValueChange={(value) => setFilters({ ...filters, severity: value as AuditSeverity })}
+            onValueChange={(value) =>
+              setFilters({ ...filters, severity: value as AuditSeverity })
+            }
           >
             <SelectTrigger>
               <SelectValue placeholder="Select severity" />
@@ -173,9 +179,7 @@ export function AuditLogFilters({ onSearch }: AuditLogFiltersProps) {
         <Button variant="outline" onClick={handleReset}>
           Reset
         </Button>
-        <Button onClick={handleSearch}>
-          Search
-        </Button>
+        <Button onClick={handleSearch}>Search</Button>
       </div>
     </div>
   );

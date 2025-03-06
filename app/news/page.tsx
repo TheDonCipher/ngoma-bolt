@@ -9,9 +9,11 @@ import { NewsFilter } from '@/components/news/news-filter';
 import { NewsletterSignup } from '@/components/news/newsletter-signup';
 import { NewsHero } from '@/components/news/news-hero';
 import { Footer } from '@/components/layout/footer';
+import { useMediaQuery } from '@/hooks/use-media-query';
 
 export default function NewsPage() {
   const [selectedFilter, setSelectedFilter] = useState<string>('all');
+  const isMobile = useMediaQuery('(max-width: 640px)');
 
   return (
     <>
@@ -27,6 +29,8 @@ export default function NewsPage() {
             duration: 30,
             repeat: Infinity,
             ease: 'linear',
+            // Reduce animation complexity on mobile
+            ...(isMobile && { duration: 45 }),
           }}
         />
 
@@ -34,24 +38,28 @@ export default function NewsPage() {
           {/* Hero Section with Featured News */}
           <NewsHero />
 
-          <div className="container px-6 py-12 space-y-12">
-            {/* Category Filter - Updated container styling */}
+          <div className="container mx-auto px-4 sm:px-6 py-6 sm:py-12 space-y-6 sm:space-y-12">
+            {/* Category Filter - Enhanced mobile styling */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
-              className="bg-white rounded-xl border border-gray-200 p-6 shadow-lg"
+              className="bg-white rounded-xl border border-gray-200 p-3 sm:p-6 shadow-lg overflow-hidden"
             >
-              <NewsFilter
-                selected={selectedFilter}
-                onFilterChange={setSelectedFilter}
-              />
+              <div className="overflow-x-auto scrollbar-hide -mx-1 px-1">
+                <div className="min-w-max">
+                  <NewsFilter
+                    selected={selectedFilter}
+                    onFilterChange={setSelectedFilter}
+                  />
+                </div>
+              </div>
             </motion.div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
               {/* Main News Feed */}
               <motion.div
-                className="lg:col-span-2"
+                className="md:col-span-2"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3 }}
@@ -59,16 +67,28 @@ export default function NewsPage() {
                 <NewsFeed filter={selectedFilter} />
               </motion.div>
 
-              {/* Sidebar Content */}
+              {/* Sidebar Content - Enhanced mobile styling */}
               <motion.div
-                className="space-y-8 lg:sticky lg:top-24 lg:self-start"
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
+                className="space-y-6 sm:space-y-8 md:sticky md:top-24 md:self-start"
+                initial={{
+                  opacity: 0,
+                  x: isMobile ? 0 : 20,
+                  y: isMobile ? 20 : 0,
+                }}
+                animate={{ opacity: 1, x: 0, y: 0 }}
                 transition={{ delay: 0.4 }}
               >
-                <TrendingArtists />
-                <UpcomingEvents />
-                <NewsletterSignup />
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:grid-cols-1 sm:gap-6">
+                  <div className="bg-white rounded-xl border border-gray-200 p-4 shadow-md">
+                    <TrendingArtists />
+                  </div>
+                  <div className="bg-white rounded-xl border border-gray-200 p-4 shadow-md">
+                    <UpcomingEvents />
+                  </div>
+                </div>
+                <div className="bg-gradient-to-br from-purple-100 to-pink-50 rounded-xl border border-gray-200 p-4 sm:p-6 shadow-md">
+                  <NewsletterSignup />
+                </div>
               </motion.div>
             </div>
           </div>
